@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <style>
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); }
+
+    /* Layout */
+    .ds { display: grid; grid-template-columns: 200px 1fr; min-height: 100vh; }
+
+    /* Sidebar */
+    .ds-sidebar {
+      position: sticky; top: 0; height: 100vh; padding: var(--space-xl) var(--space-lg);
+      border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: var(--space-xs);
+      overflow-y: auto;
+    }
+    .ds-sidebar-title {
+      font-size: 13px; font-weight: var(--weight-medium); color: var(--text);
+      margin-bottom: var(--space-md); padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--border);
+    }
+    .ds-sidebar a {
+      font-size: 13px; color: var(--text-muted); padding: 6px 12px;
+      border-radius: 8px; transition: all 0.15s; display: block;
+    }
+    .ds-sidebar a:hover { color: var(--text); background: var(--surface); }
+    .ds-sidebar a.active { color: var(--text); background: var(--surface); font-weight: var(--weight-medium); }
+    .ds-sidebar-back {
+      margin-top: auto; padding-top: var(--space-md);
+      font-size: 12px; color: var(--text-muted);
+    }
+    .ds-sidebar-back:hover { color: var(--text); }
+
+    /* Content */
+    .ds-content { padding: var(--space-3xl) var(--space-3xl) var(--space-4xl); max-width: 720px; }
+
+    /* Sections */
+    section { margin-bottom: 64px; scroll-margin-top: 32px; }
+    section > h2 {
+      font-size: 24px; font-weight: var(--weight-medium); letter-spacing: var(--tracking-tight);
+      margin-bottom: 4px; line-height: 1.3;
+    }
+    .sec-desc { font-size: 14px; color: var(--text-muted); margin-bottom: var(--space-xl); line-height: var(--leading-normal); }
+    .sub { margin-bottom: var(--space-2xl); }
+    .sub-title {
+      font-size: 11px; font-weight: var(--weight-medium); color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--space-md);
+    }
+
+    /* Spec table */
+    .spec { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .spec th {
+      text-align: left; padding: 8px 12px; font-size: 11px; font-weight: var(--weight-medium);
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border); background: var(--bg-alt);
+    }
+    .spec td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    .spec tr:last-child td { border-bottom: none; }
+    .spec .token { font-family: monospace; font-size: 12px; color: var(--text-muted); }
+    .spec .val { font-variant-numeric: tabular-nums; }
+
+    /* Color dot */
+    .color-dot {
+      display: inline-block; width: 16px; height: 16px; border-radius: 4px;
+      border: 1px solid var(--border); vertical-align: middle; margin-right: 8px;
+    }
+
+    /* Swatches grid */
+    .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+    .swatch { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+    .swatch-color { height: 56px; }
+    .swatch-meta { padding: 8px 10px; background: var(--bg-alt); }
+    .swatch-name { font-size: 12px; font-weight: var(--weight-medium); }
+    .swatch-val { font-size: 10px; color: var(--text-muted); margin-top: 1px; font-family: monospace; }
+
+    /* Type specimen */
+    .specimen { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .specimen:last-child { border-bottom: none; }
+    .specimen-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; display: flex; justify-content: space-between; }
+    .specimen-label span { font-family: monospace; text-transform: none; letter-spacing: 0; }
+
+    /* Spacing scale */
+    .scale-row { display: flex; align-items: center; gap: 12px; padding: 4px 0; }
+    .scale-bar { height: 16px; background: var(--surface); border-radius: 4px; min-width: 4px; }
+    .scale-label { font-size: 12px; color: var(--text-muted); min-width: 32px; text-align: right; font-variant-numeric: tabular-nums; }
+    .scale-token { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+
+    /* Radius preview */
+    .radius-grid { display: flex; gap: var(--space-xl); flex-wrap: wrap; }
+    .radius-item { text-align: center; }
+    .radius-box { width: 72px; height: 72px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 6px; }
+    .radius-name { font-size: 12px; font-weight: var(--weight-medium); }
+    .radius-val { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+
+    /* Component preview */
+    .preview {
+      background: var(--bg-alt); border: 1px solid var(--border); border-radius: 12px;
+      padding: var(--space-xl); margin-bottom: 8px;
+      display: flex; flex-wrap: wrap; gap: var(--space-md); align-items: center;
+    }
+    .preview-label { font-size: 11px; color: var(--text-muted); margin-bottom: var(--space-sm); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* Motion */
+    .motion-row { display: flex; align-items: center; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .motion-row:last-child { border-bottom: none; }
+    .motion-name { font-size: 13px; min-width: 64px; }
+    .motion-bar { width: 40px; height: 6px; background: var(--text-muted); border-radius: 3px; transition-property: width, background; transition-timing-function: ease; }
+    .motion-row:hover .motion-bar { width: 180px; background: var(--text); }
+    .motion-val { font-size: 12px; color: var(--text-muted); font-family: monospace; }
+    .motion-use { font-size: 12px; color: var(--text-muted); }
+
+    /* Anatomy inspect panel */
+    .anatomy { cursor: pointer; transition: border-color 0.2s; }
+    .anatomy:hover { border-color: rgba(110,168,254,0.3); }
+    #ds-inspect-panel {
+      position: fixed; z-index: 100;
+      background: #1e1e22; border: 1px solid #2e2e34; border-radius: 10px;
+      min-width: 240px; max-width: 280px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      font-size: 12px; line-height: 1.4; pointer-events: none;
+      display: none; overflow: hidden;
+    }
+    #ds-inspect-panel.pinned { pointer-events: auto; }
+    .ap-top { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px solid #2a2a30; }
+    .ap-copy { font-size: 10px; color: #666; cursor: pointer; padding: 2px 8px; border-radius: 6px; transition: all 0.15s; pointer-events: auto; }
+    .ap-copy:hover { color: #aaa; background: #2a2a30; }
+    .ap-copy.copied { color: #7ec699; background: rgba(126,198,153,0.1); }
+    .ap-section { padding: 8px 12px; border-bottom: 1px solid #2a2a30; }
+    .ap-section:last-child { border-bottom: none; }
+    .ap-header { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: #666; margin-bottom: 4px; font-weight: 500; }
+    .ap-row { display: flex; justify-content: space-between; align-items: center; padding: 2px 0; }
+    .ap-label { color: #888; font-size: 11px; }
+    .ap-val { color: #ddd; font-size: 11px; font-family: monospace; font-variant-numeric: tabular-nums; }
+    .ap-color-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
+    .ap-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+    .ap-color-info { display: flex; flex-direction: column; }
+    .ap-color-name { font-size: 11px; color: #888; }
+    .ap-color-hex { font-size: 11px; color: #ddd; font-family: monospace; }
+
+    /* Responsive */
+    @media (max-width: 699px) {
+      .ds { grid-template-columns: 1fr; }
+      .ds-sidebar { display: none; }
+      .ds-content { padding: var(--space-xl) var(--space-lg); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="ds">
+
+  <!-- Sidebar -->
+  <nav class="ds-sidebar">
+    <div class="ds-sidebar-title">Design System</div>
+    <a href="#color">Color</a>
+    <a href="#typography">Typography</a>
+    <a href="#spacing">Spacing</a>
+    <a href="#shape">Shape</a>
+    <a href="#elevation">Elevation</a>
+    <a href="#components">Components</a>
+    <a href="#motion">Motion</a>
+    <a href="#layout">Layout</a>
+    <a href="index.html" class="ds-sidebar-back">&larr; Back to site</a>
+  </nav>
+
+  <!-- Content -->
+  <main class="ds-content">
+
+    <!-- ═══ COLOR ═══ -->
+    <section id="color">
+      <h2>Color</h2>
+      <p class="sec-desc">Theme-aware palette. All colors switch automatically between light and dark.</p>
+
+      <div class="sub">
+        <div class="sub-title">Surface colors</div>
+        <table class="spec">
+          <thead><tr><th>Role</th><th>Token</th><th>Light</th><th>Dark</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Background</td><td class="token">--bg</td><td>#faf9f6</td><td>#111110</td><td><span class="color-dot" style="background:var(--bg)"></span></td></tr>
+            <tr><td>Container</td><td class="token">--bg-alt</td><td>#f0eee9</td><td>#1a1918</td><td><span class="color-dot" style="background:var(--bg-alt)"></span></td></tr>
+            <tr><td>Surface</td><td class="token">--surface</td><td>#eceae4</td><td>#222120</td><td><span class="color-dot" style="background:var(--surface)"></span></td></tr>
+            <tr><td>Outline</td><td class="token">--border</td><td>#e0ddd6</td><td>#2a2928</td><td><span class="color-dot" style="background:var(--border)"></span></td></tr>
+            <tr><td>Outline variant</td><td class="token">--border-strong</td><td>#ccc9c0</td><td>#3a3938</td><td><span class="color-dot" style="background:var(--border-strong)"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title">Content colors</div>
+        <table class="spec">
+          <thead><tr><th>Role</th><th>Token</th><th>Light</th><th>Dark</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>On Surface</td><td class="token">--text</td><td>#1a1816</td><td>#f0ece4</td><td><span class="color-dot" style="background:var(--text)"></span></td></tr>
+            <tr><td>On Surface Variant</td><td class="token">--text-muted</td><td>#6b6660</td><td>#7a7670</td><td><span class="color-dot" style="background:var(--text-muted)"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title">Glass overlay</div>
+        <table class="spec">
+          <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td class="token">--glass-surface</td><td>solid surface</td><td>rgba(30,29,28,0.75)</td><td>Nav bar, cards</td></tr>
+            <tr><td class="token">--glass-surface-hover</td><td>solid border</td><td>rgba(40,39,38,0.85)</td><td>Hover state</td></tr>
+            <tr><td class="token">--glass-blur</td><td>none</td><td>blur(40px) saturate(150%)</td><td>Backdrop filter</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══ TYPOGRAPHY ═══ -->
+    <section id="typography">
+      <h2>Typography</h2>
+      <p class="sec-desc">Inter, 5 type roles. Weight 400 default, 500 for emphasis.</p>
+
+      <div class="sub">
+        <div class="sub-title">Type scale</div>
+        <div class="specimen">
+          <div class="specimen-label">Display <span>40px / 1.15</span></div>
+          <div style="font-size:var(--text-display);line-height:var(--leading-tight);letter-spacing:var(--tracking-tight);">Hero headlines</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-label">Headline <span>32px / 1.3</span></div>
+          <div style="font-size:var(--text-heading);line-height:var(--leading-snug);letter-spacing:var(--tracking-tight);">Section titles</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-label">Title <span>20px / 1.3</span></div>
+          <div style="font-size:var(--text-title);line-height:var(--leading-snug);">Card titles, nav logo, body (tablet+)</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-label">Body <span>16px / 1.5</span></div>
+          <div style="font-size:var(--text-body);line-height:var(--leading-normal);">Paragraphs, navigation, descriptions</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-label">Label <span>12px / 1.5</span></div>
+          <div style="font-size:var(--text-caption);line-height:var(--leading-normal);">Meta, captions, footer text</div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title">Responsive overrides</div>
+        <table class="spec">
+          <thead><tr><th>Element</th><th>Mobile</th><th>Tablet</th><th>Desktop</th></tr></thead>
+          <tbody>
+            <tr><td>Hero</td><td>32px</td><td>clamp(32–40px)</td><td>72px</td></tr>
+            <tr><td>About heading</td><td>32px</td><td>32px</td><td>48px</td></tr>
+            <tr><td>Section title</td><td>20px</td><td>32px</td><td>32px</td></tr>
+            <tr><td>Body text</td><td>16px</td><td>20px</td><td>20px</td></tr>
+            <tr><td>Nav logo</td><td>18px</td><td>20px</td><td>22px</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══ SPACING ═══ -->
+    <section id="spacing">
+      <h2>Spacing</h2>
+      <p class="sec-desc">8px base unit. Consistent scale from micro to macro.</p>
+
+      <div class="scale-row"><div class="scale-label">8</div><div class="scale-bar" style="width:8px"></div><div class="scale-token">--space-xs</div></div>
+      <div class="scale-row"><div class="scale-label">12</div><div class="scale-bar" style="width:12px"></div><div class="scale-token">--space-sm</div></div>
+      <div class="scale-row"><div class="scale-label">16</div><div class="scale-bar" style="width:16px"></div><div class="scale-token">--space-md</div></div>
+      <div class="scale-row"><div class="scale-label">24</div><div class="scale-bar" style="width:24px"></div><div class="scale-token">--space-lg</div></div>
+      <div class="scale-row"><div class="scale-label">32</div><div class="scale-bar" style="width:32px"></div><div class="scale-token">--space-xl</div></div>
+      <div class="scale-row"><div class="scale-label">40</div><div class="scale-bar" style="width:40px"></div><div class="scale-token">--space-2xl</div></div>
+      <div class="scale-row"><div class="scale-label">48</div><div class="scale-bar" style="width:48px"></div><div class="scale-token">--space-3xl</div></div>
+      <div class="scale-row"><div class="scale-label">80</div><div class="scale-bar" style="width:80px"></div><div class="scale-token">--space-4xl</div></div>
+      <div class="scale-row"><div class="scale-label">120</div><div class="scale-bar" style="width:120px"></div><div class="scale-token">--space-section</div></div>
+      <div class="scale-row"><div class="scale-label">200</div><div class="scale-bar" style="width:200px"></div><div class="scale-token">--space-section-lg</div></div>
+
+      <div class="sub" style="margin-top:var(--space-xl);">
+        <div class="sub-title">Container padding</div>
+        <table class="spec">
+          <thead><tr><th>Token</th><th>Mobile</th><th>Tablet</th><th>Desktop</th></tr></thead>
+          <tbody>
+            <tr><td class="token">--container-px</td><td>24px</td><td>48px</td><td>240px</td></tr>
+            <tr><td class="token">--container-wide-px</td><td>24px</td><td>48px</td><td>48px</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══ SHAPE ═══ -->
+    <section id="shape">
+      <h2>Shape</h2>
+      <p class="sec-desc">Two corner styles.</p>
+
+      <div class="radius-grid">
+        <div class="radius-item"><div class="radius-box" style="border-radius:var(--radius)"></div><div class="radius-name">Rounded</div><div class="radius-val">20px</div></div>
+        <div class="radius-item"><div class="radius-box" style="border-radius:var(--radius-pill);width:120px;height:48px"></div><div class="radius-name">Full</div><div class="radius-val">999px</div></div>
+      </div>
+    </section>
+
+    <!-- ═══ ELEVATION ═══ -->
+    <section id="elevation">
+      <h2>Elevation</h2>
+      <p class="sec-desc">Shadows and borders create depth hierarchy.</p>
+
+      <table class="spec">
+        <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+        <tbody>
+          <tr><td class="token">--shadow-sm</td><td class="val">0 1px 4px</td><td>FAQ card, subtle</td></tr>
+          <tr><td class="token">--shadow-md</td><td class="val">0 1px 8px</td><td>Nav, work cards, testimonials</td></tr>
+          <tr><td class="token">--border-thin</td><td class="val">0.5px</td><td>Glass element borders</td></tr>
+        </tbody>
+      </table>
+
+      <div style="display:flex;gap:var(--space-xl);margin-top:var(--space-xl);flex-wrap:wrap;align-items:end;">
+        <div style="text-align:center;">
+          <div style="width:120px;height:72px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-muted);margin-bottom:6px;">Level 0</div>
+          <div style="font-size:11px;color:var(--text-muted);">Flat</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:120px;height:72px;background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow-sm);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-muted);margin-bottom:6px;">Level 1</div>
+          <div style="font-size:11px;color:var(--text-muted);">shadow-sm</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:120px;height:72px;background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-muted);margin-bottom:6px;">Level 2</div>
+          <div style="font-size:11px;color:var(--text-muted);">shadow-md</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ COMPONENTS ═══ -->
+    <section id="components">
+      <h2>Components</h2>
+      <p class="sec-desc">Reusable building blocks.</p>
+
+      <div class="sub">
+        <div class="preview-label">Navigation</div>
+        <div class="preview anatomy">
+          <div style="display:inline-flex;gap:var(--space-xs);padding:var(--space-xs) var(--space-sm);background:var(--glass-surface);backdrop-filter:var(--glass-blur);border:var(--border-thin) solid var(--glass-border);border-radius:var(--radius-pill);box-shadow:var(--shadow-md);">
+            <a href="#" style="font-size:var(--text-body);color:var(--text);padding:var(--space-sm) var(--space-md);border-radius:var(--radius-pill);background:var(--glass-surface-hover);">Active</a>
+            <a href="#" style="font-size:var(--text-body);color:var(--text);padding:var(--space-sm) var(--space-md);border-radius:var(--radius-pill);">Link</a>
+            <div style="width:36px;height:36px;border-radius:50%;border:var(--border-thin) solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3a6.364 6.364 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <div class="preview-label">Tags</div>
+        <div class="preview anatomy">
+          <span style="padding:var(--space-sm) var(--space-lg);border-radius:var(--radius-pill);border:1px solid var(--tag-border);font-size:var(--text-body);color:var(--text-muted);">Default</span>
+          <span style="padding:var(--space-sm) var(--space-lg);border-radius:var(--radius-pill);border:1px solid var(--tag-border);font-size:var(--text-body);color:var(--text-muted);">Skill</span>
+        </div>
+      </div>
+
+      <div class="sub">
+        <div class="preview-label">Buttons</div>
+        <div class="preview anatomy">
+          <a href="#" style="display:inline-flex;align-items:center;gap:var(--space-sm);padding:var(--space-sm) var(--space-lg);border-radius:var(--radius-pill);background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:var(--text-body);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="opacity:0.5;"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            Email
+          </a>
+        </div>
+      </div>
+
+      <div class="sub">
+        <div class="preview-label">Card</div>
+        <div class="preview anatomy" style="max-width:320px;flex-direction:column;align-items:stretch;">
+          <p style="font-size:var(--text-body);line-height:var(--leading-normal);text-indent:-0.4em;">"A superb designer."</p>
+          <div style="display:flex;align-items:center;gap:var(--space-sm);margin-top:4px;">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--surface);border:1px solid var(--border);flex-shrink:0;"></div>
+            <div>
+              <div style="font-size:12px;font-weight:var(--weight-medium);">First Last</div>
+              <div style="font-size:12px;color:var(--text-muted);">Company</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ MOTION ═══ -->
+    <section id="motion">
+      <h2>Motion</h2>
+      <p class="sec-desc">Duration tokens. Hover to preview.</p>
+
+      <div class="motion-row"><div class="motion-name">Fast</div><div class="motion-bar" style="transition-duration:0.15s"></div><div class="motion-val">150ms</div><div class="motion-use">Hover, toggle</div></div>
+      <div class="motion-row"><div class="motion-name">Normal</div><div class="motion-bar" style="transition-duration:0.2s"></div><div class="motion-val">200ms</div><div class="motion-use">Buttons, links</div></div>
+      <div class="motion-row"><div class="motion-name">Medium</div><div class="motion-bar" style="transition-duration:0.3s"></div><div class="motion-val">300ms</div><div class="motion-use">Panels, nav glass</div></div>
+      <div class="motion-row"><div class="motion-name">Slow</div><div class="motion-bar" style="transition-duration:0.5s"></div><div class="motion-val">500ms</div><div class="motion-use">Page transitions</div></div>
+    </section>
+
+    <!-- ═══ LAYOUT ═══ -->
+    <section id="layout">
+      <h2>Layout</h2>
+      <p class="sec-desc">Two breakpoints. Mobile-first.</p>
+
+      <div class="sub">
+        <div class="sub-title">Breakpoints</div>
+        <table class="spec">
+          <thead><tr><th>Name</th><th>min-width</th><th>Range</th></tr></thead>
+          <tbody>
+            <tr><td>Mobile</td><td>—</td><td>0 – 699px</td></tr>
+            <tr><td>Tablet</td><td>700px</td><td>700 – 1279px</td></tr>
+            <tr><td>Desktop</td><td>1280px</td><td>1280px+</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title">Grid patterns</div>
+        <table class="spec">
+          <thead><tr><th>Pattern</th><th>Usage</th></tr></thead>
+          <tbody>
+            <tr><td>1fr / 2fr</td><td>About section (desktop)</td></tr>
+            <tr><td>1fr / 1fr</td><td>About section (tablet)</td></tr>
+            <tr><td>repeat(3, 1fr)</td><td>Approach cards (desktop)</td></tr>
+            <tr><td>repeat(6, 1fr)</td><td>Case study grid (tablet+)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title">Component adaptations</div>
+        <table class="spec">
+          <thead><tr><th>Component</th><th>Mobile</th><th>Tablet+</th></tr></thead>
+          <tbody>
+            <tr><td>Navigation</td><td>Bottom bar (fixed)</td><td>Top right (fixed)</td></tr>
+            <tr><td>Work cards</td><td>85vw scroll</td><td>358–403px</td></tr>
+            <tr><td>About</td><td>Stacked</td><td>Side by side</td></tr>
+            <tr><td>Approach</td><td>1 column</td><td>2–3 columns</td></tr>
+            <tr><td>Testimonials</td><td>Swipe + dots</td><td>Horizontal scroll</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="js/theme.js"></script>
+<script>
+// Anatomy inspect panels
+(function () {
+  function rgbToHex(rgb) {
+    if (!rgb || rgb === 'transparent' || rgb === 'rgba(0, 0, 0, 0)') return null;
+    var m = rgb.match(/[\d.]+/g);
+    if (!m || m.length < 3) return null;
+    var r = Math.round(parseFloat(m[0])), g = Math.round(parseFloat(m[1])), b = Math.round(parseFloat(m[2]));
+    var hex = '#' + [r,g,b].map(function(v) { return v.toString(16).padStart(2,'0'); }).join('').toUpperCase();
+    if (m.length >= 4 && parseFloat(m[3]) < 1) {
+      return hex + ' (' + Math.round(parseFloat(m[3]) * 100) + '%)';
+    }
+    return hex;
+  }
+
+  function px(v) { return Math.round(parseFloat(v)); }
+
+  function buildPanel(target) {
+    var cs = getComputedStyle(target);
+    var rect = target.getBoundingClientRect();
+    var html = '';
+
+    // Collect CSS text for copy
+    var cssText = '';
+    cssText += 'width: ' + Math.round(rect.width) + 'px;\n';
+    cssText += 'height: ' + Math.round(rect.height) + 'px;\n';
+
+    // Top bar
+    html += '<div class="ap-top"><span style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:0.06em;">Inspect</span><span class="ap-copy" data-css="">Copy</span></div>';
+
+    // Size
+    html += '<div class="ap-section"><div class="ap-header">Size</div>';
+    html += '<div class="ap-row"><span class="ap-label">W</span><span class="ap-val">' + Math.round(rect.width) + 'px</span></div>';
+    html += '<div class="ap-row"><span class="ap-label">H</span><span class="ap-val">' + Math.round(rect.height) + 'px</span></div>';
+    html += '</div>';
+
+    // Spacing
+    var pt = px(cs.paddingTop), pr = px(cs.paddingRight), pb = px(cs.paddingBottom), pl = px(cs.paddingLeft);
+    var gap = cs.gap !== 'normal' && cs.gap !== '0px' ? cs.gap : null;
+    if (pt || pr || pb || pl || gap) {
+      html += '<div class="ap-section"><div class="ap-header">Spacing</div>';
+      if (pt || pr || pb || pl) { html += '<div class="ap-row"><span class="ap-label">Padding</span><span class="ap-val">' + pt + ' ' + pr + ' ' + pb + ' ' + pl + '</span></div>'; cssText += 'padding: ' + pt + 'px ' + pr + 'px ' + pb + 'px ' + pl + 'px;\n'; }
+      if (gap) { html += '<div class="ap-row"><span class="ap-label">Gap</span><span class="ap-val">' + gap + '</span></div>'; cssText += 'gap: ' + gap + ';\n'; }
+      html += '</div>';
+    }
+
+    // Typography
+    var font = cs.fontFamily.split(',')[0].replace(/['"]/g, '');
+    var fontSize = cs.fontSize;
+    html += '<div class="ap-section"><div class="ap-header">Typography</div>';
+    html += '<div class="ap-row"><span class="ap-label">Font</span><span class="ap-val">' + font + '</span></div>';
+    html += '<div class="ap-row"><span class="ap-label">Size</span><span class="ap-val">' + fontSize + '</span></div>';
+    html += '<div class="ap-row"><span class="ap-label">Weight</span><span class="ap-val">' + cs.fontWeight + '</span></div>';
+    html += '<div class="ap-row"><span class="ap-label">Line height</span><span class="ap-val">' + cs.lineHeight + '</span></div>';
+    html += '</div>';
+
+    // Colors
+    var textHex = rgbToHex(cs.color);
+    var bgHex = rgbToHex(cs.backgroundColor);
+    var borderHex = rgbToHex(cs.borderColor);
+    if (textHex || bgHex) {
+      html += '<div class="ap-section"><div class="ap-header">Fill & Color</div>';
+      if (bgHex) html += '<div class="ap-color-row"><span class="ap-swatch" style="background:' + cs.backgroundColor + '"></span><div class="ap-color-info"><span class="ap-color-name">Background</span><span class="ap-color-hex">' + bgHex + '</span></div></div>';
+      if (textHex) html += '<div class="ap-color-row"><span class="ap-swatch" style="background:' + cs.color + '"></span><div class="ap-color-info"><span class="ap-color-name">Text</span><span class="ap-color-hex">' + textHex + '</span></div></div>';
+      if (borderHex && cs.borderWidth !== '0px') html += '<div class="ap-color-row"><span class="ap-swatch" style="background:' + cs.borderColor + '"></span><div class="ap-color-info"><span class="ap-color-name">Border</span><span class="ap-color-hex">' + borderHex + '</span></div></div>';
+      html += '</div>';
+    }
+
+    // Shape
+    var radius = cs.borderRadius;
+    if (radius && radius !== '0px') {
+      html += '<div class="ap-section"><div class="ap-header">Shape</div>';
+      html += '<div class="ap-row"><span class="ap-label">Radius</span><span class="ap-val">' + radius + '</span></div>';
+      html += '</div>';
+    }
+
+    return { html: html, css: cssText };
+  }
+
+  // Create floating panel
+  var panel = document.createElement('div');
+  panel.id = 'ds-inspect-panel';
+  document.body.appendChild(panel);
+  var pinned = false;
+  var currentCss = '';
+
+  function positionPanel(e) {
+    var pw = panel.offsetWidth || 260, ph = panel.offsetHeight || 300;
+    var x = e.clientX + 16, y = e.clientY + 16;
+    if (x + pw > window.innerWidth) x = e.clientX - pw - 16;
+    if (y + ph > window.innerHeight) y = e.clientY - ph - 16;
+    if (x < 8) x = 8; if (y < 8) y = 8;
+    panel.style.left = x + 'px';
+    panel.style.top = y + 'px';
+  }
+
+  function attachCopy() {
+    var copyBtn = panel.querySelector('.ap-copy');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        navigator.clipboard.writeText(currentCss).catch(function(){});
+        copyBtn.textContent = 'Copied';
+        copyBtn.classList.add('copied');
+        setTimeout(function() { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 1200);
+      });
+    }
+  }
+
+  document.querySelectorAll('.anatomy').forEach(function (el) {
+    el.addEventListener('mousemove', function (e) {
+      if (pinned) return;
+      var target = el.querySelector('[style]') || el.firstElementChild;
+      if (target) {
+        var result = buildPanel(target);
+        panel.innerHTML = result.html;
+        currentCss = result.css;
+        panel.style.display = 'block';
+        positionPanel(e);
+      }
+    });
+
+    el.addEventListener('mouseleave', function () {
+      if (!pinned) panel.style.display = 'none';
+    });
+
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (pinned) {
+        pinned = false;
+        panel.classList.remove('pinned');
+        panel.style.display = 'none';
+      } else {
+        pinned = true;
+        panel.classList.add('pinned');
+        var target = el.querySelector('[style]') || el.firstElementChild;
+        if (target) {
+          var result = buildPanel(target);
+          panel.innerHTML = result.html;
+          currentCss = result.css;
+          panel.style.display = 'block';
+          positionPanel(e);
+          attachCopy();
+        }
+      }
+    });
+  });
+
+  // Esc to unpin
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && pinned) {
+      pinned = false;
+      panel.classList.remove('pinned');
+      panel.style.display = 'none';
+    }
+  });
+
+  // Click outside to unpin
+  document.addEventListener('click', function (e) {
+    if (pinned && !panel.contains(e.target) && !e.target.closest('.anatomy')) {
+      pinned = false;
+      panel.classList.remove('pinned');
+      panel.style.display = 'none';
+    }
+  });
+})();
+
+(function () {
+  var links = document.querySelectorAll('.ds-sidebar a[href^="#"]');
+  var sections = [];
+  links.forEach(function (a) {
+    var el = document.getElementById(a.getAttribute('href').replace('#', ''));
+    if (el) sections.push({ link: a, el: el });
+  });
+  function update() {
+    var scrollY = window.scrollY + 100;
+    var active = null;
+    sections.forEach(function (s) { if (s.el.offsetTop <= scrollY) active = s; });
+    links.forEach(function (a) { a.classList.remove('active'); });
+    if (active) active.link.classList.add('active');
+  }
+  window.addEventListener('scroll', update);
+  update();
+})();
+</script>
+</body>
+</html>

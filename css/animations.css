@@ -1,0 +1,94 @@
+/* ── PAGE & SCROLL ANIMATIONS ──────────────────── */
+
+/* Page entrance — opacity only (transform on body breaks position:fixed children) */
+@keyframes pageIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+body {
+  animation: pageIn 0.6s ease both;
+}
+
+/* Scroll reveal — elements fade up when entering viewport */
+.reveal {
+  opacity: 0;
+  transform: translateY(var(--space-md));
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(var(--space-sm));
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal-stagger.visible > *:nth-child(1) { transition-delay: 0s; }
+.reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.08s; }
+.reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.16s; }
+.reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.24s; }
+.reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.32s; }
+.reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.4s; }
+.reveal-stagger.visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Case study — sections fade in on scroll */
+.cs-grid > div {
+  opacity: 0;
+  transform: translateY(var(--space-md));
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.cs-grid > div.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Case study — intro elements */
+.cs-hero-title {
+  opacity: 0;
+  transform: translateY(var(--space-lg));
+  animation: pageIn 0.7s 0.1s ease both;
+}
+.cs-intro {
+  opacity: 0;
+  transform: translateY(var(--space-md));
+  animation: pageIn 0.6s 0.25s ease both;
+}
+
+/* Hover lift for cards */
+.work-card,
+.testimonial-card {
+  transition: transform var(--duration-medium) var(--ease-default),
+              box-shadow var(--duration-medium) var(--ease-default);
+}
+
+/* Media frames fade in */
+.cs-media {
+  opacity: 0;
+  transform: translateY(var(--space-sm));
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.cs-media.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Phone frames stagger */
+.cs-phones .cs-phone-frame {
+  opacity: 0;
+  transform: translateY(var(--space-md));
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.cs-phones .cs-phone-frame:nth-child(1) { transition-delay: 0s; }
+.cs-phones .cs-phone-frame:nth-child(2) { transition-delay: 0.1s; }
+.cs-phones .cs-phone-frame:nth-child(3) { transition-delay: 0.2s; }
+.cs-phones.visible .cs-phone-frame {
+  opacity: 1;
+  transform: translateY(0);
+}

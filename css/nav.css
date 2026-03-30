@@ -1,0 +1,193 @@
+/* ── NAVIGATION ─────────────────────────────────── */
+
+/* ══ MOBILE ══ */
+
+/* Navbar container */
+nav, .cs-topbar {
+  display: flex;
+  align-items: center;
+  padding: var(--space-xl) var(--container-wide-px) var(--space-lg);
+}
+
+/* Logo */
+.nav-logo, .cs-topbar-logo {
+  font-family: var(--font-body);
+  font-size: 18px;
+  padding-top: 18px;
+  font-weight: var(--weight-normal);
+  line-height: 1;
+  letter-spacing: var(--tracking-tight);
+  color: var(--text);
+  opacity: var(--opacity-mid);
+}
+
+/* Mobile bottom bar — nav */
+.nav-right li { display: flex; align-items: center; }
+.nav-right {
+  position: fixed;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  top: auto; right: auto;
+  z-index: 100;
+  display: flex;
+  gap: var(--space-xs);
+  list-style: none;
+  align-items: center;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--glass-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-pill);
+  border: var(--border-thin) solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+}
+
+/* Mobile — close circle top-right, aligned with logo */
+.cs-topbar-close {
+  position: fixed;
+  top: 39px;
+  right: var(--container-wide-px);
+  bottom: auto; left: auto;
+  transform: none;
+  z-index: 100;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  border: var(--border-thin) solid var(--glass-border);
+  cursor: pointer;
+  background: var(--glass-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-md);
+  color: var(--text);
+  transition: background var(--duration-normal);
+  text-decoration: none;
+}
+.cs-close-text { display: none; }
+
+/* Pills */
+.nav-right a {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: var(--weight-normal);
+  line-height: 1;
+  color: var(--text);
+  display: flex;
+  padding: var(--space-sm) var(--space-md);
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  border: none;
+  transition: background var(--duration-normal) var(--ease-default);
+}
+.nav-right a:hover,
+.cs-topbar-close:hover {
+  background: var(--glass-surface-hover);
+}
+.nav-right a.active {
+  background: var(--glass-surface-hover);
+}
+
+/* Theme toggle — subtle circle */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: var(--border-thin) solid var(--border);
+  background: transparent;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color var(--duration-normal), color var(--duration-normal), background var(--duration-normal);
+}
+.theme-toggle svg { display: block; opacity: 0.9; }
+.theme-toggle:hover svg { opacity: 1; }
+.theme-toggle:hover {
+  border-color: var(--border-strong);
+  background: var(--glass-surface-hover);
+}
+
+/* ══ TABLET+ (700px) ══ */
+@media (min-width: 700px) {
+  nav, .cs-topbar {
+    padding: 34px var(--container-wide-px) var(--space-lg);
+  }
+
+  .nav-logo, .cs-topbar-logo {
+    font-size: var(--text-title);
+  }
+
+  /* Fixed nav — top-right */
+  .nav-right {
+    position: fixed;
+    top: 34px;
+    bottom: auto;
+    left: auto;
+    right: var(--container-wide-px);
+    transform: none;
+    z-index: 100;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-pill);
+    border: var(--border-thin) solid transparent;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    transition: background var(--duration-medium),
+                border-color var(--duration-medium),
+                box-shadow var(--duration-medium);
+  }
+  .nav-right.scrolled {
+    background: var(--glass-surface);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-color: var(--glass-border);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Close — 40x40 circle, always glass */
+  .cs-topbar-close {
+    position: fixed;
+    top: 40px;
+    bottom: auto;
+    left: auto;
+    right: var(--container-wide-px);
+    transform: none;
+    z-index: 100;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass-surface);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: var(--border-thin) solid var(--glass-border);
+    box-shadow: var(--shadow-md);
+  }
+
+  .cs-topbar-close svg { margin: 0; }
+  .cs-close-text { display: none; }
+
+  .nav-right a {
+    padding: var(--space-sm) var(--space-md);
+  }
+}
+
+/* ══ DESKTOP (1280px+) ══ */
+@media (min-width: 1280px) {
+  .nav-logo, .cs-topbar-logo {
+    font-size: 22px;
+  }
+}

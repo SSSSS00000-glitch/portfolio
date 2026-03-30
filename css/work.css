@@ -1,0 +1,111 @@
+/* ── WORK CAROUSEL ──────────────────────────────── */
+.work-section { padding: 0; }
+.work-scroll {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--space-xs) var(--container-wide-px);
+  scrollbar-width: none;
+  background: transparent;
+}
+.work-scroll::-webkit-scrollbar { display: none; }
+.work-card {
+  flex-shrink: 0;
+  width: 75vw;
+  max-width: 448px;
+  scroll-snap-align: center;
+  cursor: pointer;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--glass-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--border-thin) solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--duration-medium) var(--ease-default);
+  padding: var(--space-xs);
+  display: flex;
+  flex-direction: column;
+}
+.work-card:hover {
+  transform: scale(1.01);
+}
+img.work-card-img,
+div.work-card-img {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius);
+  transition: transform var(--duration-slow) var(--ease-default);
+  background: transparent;
+  opacity: 1;
+}
+/* Icon placeholder for project cards */
+.work-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-alt);
+  color: var(--text-muted);
+  mix-blend-mode: normal;
+}
+.work-card-icon svg { opacity: var(--opacity-mid); }
+.work-card:hover .work-card-img { transform: scale(1.03); }
+.work-card-overlay {
+  padding: var(--space-md) var(--space-xs);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.work-card-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-title);
+  font-weight: var(--weight-normal);
+  letter-spacing: var(--tracking-tight);
+}
+.work-card-desc {
+  font-size: var(--text-body);
+  color: var(--text-muted);
+}
+.work-card-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--space-sm);
+  background: var(--bg-alt);
+  color: var(--text-muted);
+  border-radius: var(--radius);
+  aspect-ratio: 1;
+  height: 100%;
+}
+.work-card-index .folder-icon {
+  font-size: 2rem;
+  opacity: var(--opacity-mid);
+}
+.work-card-index span {
+  font-size: var(--text-caption);
+  font-weight: var(--weight-normal);
+}
+
+@media (min-width: 700px) {
+  .work-scroll { gap: var(--space-lg); }
+  .work-card { width: 315px; }
+  .work-card-title { font-size: var(--text-title); }
+  .work-card-overlay { padding: var(--space-md) var(--space-sm); }
+}
+
+@media (min-width: 1280px) {
+  .work-scroll { gap: var(--space-xl); }
+  .work-card { width: 403px; }
+  .work-card-title { font-size: var(--text-heading); }
+  .work-card-index { aspect-ratio: auto; }
+}

@@ -1,0 +1,26 @@
+/* ── HERO ───────────────────────────────────────── */
+.hero {
+  padding: 0 var(--container-wide-px);
+}
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-normal);
+  color: var(--text);
+}
+
+@media (min-width: 700px) {
+  .hero-title {
+    font-size: clamp(32px, 5vw, var(--text-display));
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-title {
+    font-size: 72px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+}

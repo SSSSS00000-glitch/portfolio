@@ -1,0 +1,65 @@
+/* ── CLIENTS MARQUEE ────────────────────────────── */
+.clients-section { padding: 0; }
+.clients-inner {
+  padding: 0 var(--container-wide-px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+.clients-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.clients-slider {
+  position: relative;
+  overflow: hidden;
+}
+.clients-slider::before,
+.clients-slider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--space-3xl);
+  z-index: 2;
+  pointer-events: none;
+}
+.clients-slider::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg), transparent);
+}
+.clients-slider::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg), transparent);
+}
+.marquee-track {
+  display: flex;
+  gap: var(--space-3xl);
+  align-items: center;
+  animation: marquee 80s linear infinite;
+  width: max-content;
+  flex-wrap: nowrap;
+}
+.marquee-track span {
+  font-size: var(--text-body);
+  font-weight: var(--weight-normal);
+  color: var(--text);
+  opacity: var(--opacity-mid);
+  white-space: nowrap;
+  transition: opacity var(--duration-medium) var(--ease-default);
+}
+.marquee-track span:hover { opacity: var(--opacity-high); }
+
+@media (min-width: 700px) {
+  .clients-slider::before,
+  .clients-slider::after { width: var(--space-4xl); }
+}
+
+@media (min-width: 1280px) {
+  .clients-inner { padding: 0 var(--container-px); gap: var(--space-2xl); }
+  .clients-slider::before,
+  .clients-slider::after { width: var(--space-section); }
+  .marquee-track span { font-size: var(--text-title); }
+  .marquee-track { gap: var(--space-4xl); }
+}
