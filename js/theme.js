@@ -11,12 +11,10 @@ function toggleTheme() {
   localStorage.setItem('theme', isDark ? 'light' : 'dark');
 }
 
-// Restore saved theme on load
+// Restore saved theme on load (default: dark)
 (function () {
-  var saved = localStorage.getItem('theme');
-  if (saved) {
-    document.documentElement.setAttribute('data-theme', saved);
-    var icon = document.getElementById('theme-icon');
-    if (icon) icon.innerHTML = saved === 'dark' ? _sunSVG : _moonSVG;
-  }
+  var saved = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  var icon = document.getElementById('theme-icon');
+  if (icon) icon.innerHTML = saved === 'dark' ? _sunSVG : _moonSVG;
 })();
