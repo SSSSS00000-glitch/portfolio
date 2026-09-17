@@ -1,0 +1,518 @@
+/* ── MENDI — CHAPTER 2: PRODUCT EXPERIENCE ──────────
+   Figma: node 396:34297. Nav/footer/"more work" grid are the shared
+   components (see caree.html etc.) — this file only owns the hero
+   glow and the sections unique to this chapter. The repeating
+   "frosted panel with 2-3 phone mockups" sections reuse .proj-panel
+   (project-page.css) + .phone-mockup/.phone-mockup-row (phone-
+   mockup.css) as-is rather than duplicating that recipe here. */
+
+/* Nav overlay — same treatment as body.mh #nav (mendi.css) / body.mch1
+   #nav (mendi-user-problems.css): the nav sits transparently on top
+   of the hero's own glow instead of being a row that pushes it down,
+   matching the hub page's hero. */
+body.mch2 #nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background: transparent;
+}
+
+/* Root fill — same gradient as the hub page (body.mh, mendi.css) and
+   Chapter 1 (.mch1, mendi-user-problems.css), confirmed by sampling
+   the Figma render directly: #0d141b fading to #0b1016, not flat. */
+.mch2 {
+  background: linear-gradient(to bottom, #0d141b, #0b1016);
+  color: #fff;
+}
+
+/* ── Hero ambient glow (top-anchored, ln-studio.com-inspired) ──
+   .glow-group's own size is clamp()'d to viewport width (never below
+   420px, never above 620px, ~32vw between) so it scales moderately
+   instead of either shrinking to nothing on a big monitor or taking
+   over the screen on a small one. Every ellipse dimension below is a
+   percentage OF THE GROUP (a box with a definite size), not of the
+   viewport — that's what makes the proportions hold at any size.
+   Don't convert these back to fixed px/vw values. The blur amount
+   scales via its own clamp() tied to the same viewport width so the
+   glow-size:blur-softness ratio stays constant everywhere — hardcode
+   it to one pixel value and it reads as a flat blob at small sizes or
+   a hard-edged shape at large ones. */
+.mch2-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 140px var(--container-wide-px) var(--space-4xl);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.glow-group {
+  position: absolute;
+  left: 50%;
+  top: -6%;
+  width: clamp(420px, 32vw, 620px);
+  aspect-ratio: 466.5 / 456;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 1;
+}
+.glow-ellipse {
+  position: absolute;
+  width: 94.86%; /* 442.5 / 466.5 — proportional to the group, not the viewport */
+  height: 67.32%; /* 307 / 456 */
+  border-radius: 50%;
+  filter: blur(clamp(170px, 14vw, 230px));
+}
+.glow-ellipse--warm {
+  left: 5.14%; /* 24 / 466.5 */
+  top: 0;
+  background: rgb(255, 176, 108);
+  opacity: 0.5;
+}
+.glow-ellipse--purple {
+  left: 0;
+  top: 32.68%; /* 149 / 456 */
+  background: rgb(159, 57, 255);
+  opacity: 0.6;
+}
+.mch2-hero-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+  width: 100%;
+}
+.mch2-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: 700px;
+}
+.mch2-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 4px var(--space-sm); /* Figma space-4 — no matching token */
+  background: var(--overlay-08);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(12.5px);
+  -webkit-backdrop-filter: blur(12.5px);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 16px; /* Figma fixed Label size, not the responsive --text-body token */
+  color: #fff;
+}
+.mch2-hero-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 40px;
+  letter-spacing: -1px;
+  line-height: 1.18;
+  color: #fff;
+}
+.mch2-hero-intro {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-title);
+  line-height: 1.21; /* was falling back to the inherited 1.5 — same fix as .mch1-intro */
+  color: rgba(255, 255, 255, var(--opacity-80));
+  max-width: 600px;
+}
+.mch2-note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-width: 600px;
+}
+.mch2-note-label {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  line-height: 1.21; /* Figma leading-[1.21] — matches .mch2-note-text below */
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+.mch2-note-text {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-body);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-mid));
+}
+
+/* ── Titled section (shared shape for every "## + intro" section
+   on this page — training tab / brain training / from profile to
+   settings, each followed by its own media block). ── */
+.mch2-section {
+  padding: var(--space-4xl) var(--container-wide-px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+}
+.mch2-section-intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 600px;
+}
+.mch2-section-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 32px;
+  letter-spacing: -1px;
+  line-height: 1.18;
+  color: #fff;
+}
+.mch2-section-body {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-md);
+  line-height: 1.18;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+
+/* ── Compare row (Session preparation) — two real "iPhone 14 Pro"
+   mockups (Figma's own isolated render — get_screenshot with
+   contentsOnly:true — tight-cropped to the opaque phone body, then
+   composited with Figma's high-res screen-content layer pasted over
+   the on-screen area, same recipe as .mch1-hero-phone on the User
+   Problems chapter) rather than raw un-bezeled screenshots, so this
+   panel matches the other bezeled-mockup sections on this page
+   instead of looking like a different component.
+   The "Original" mockup already has Figma's own top-crop baked into
+   the exported pixels (its Figma layer sits partly above the panel,
+   clipped by the panel's own overflow) — confirmed against a
+   pixel-accurate render of the whole panel, not the layout numbers
+   alone (Figma's own coordinate math didn't fully add up on its own).
+   Vertical stagger between the two columns (0 vs 70px) and the
+   phone-to-label gap (--space-2xl, Figma's literal 40px) are both
+   measured off that same reference render. */
+.mch2-compare-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 58px;
+  /* The phones themselves already carry Figma's intended top/bottom
+     spacing (the "Original" mockup's own top-crop, the column's
+     vertical stagger) — .proj-panel's shared top/bottom padding just
+     adds redundant space on top of that here, so it's zeroed out at
+     every breakpoint while keeping the shared left/right padding. */
+  padding-top: 0;
+  padding-bottom: 0;
+  /* .proj-panel doesn't clip by default — needed here since the
+     "Original" mockup's top-crop and the zeroed top/bottom padding
+     above both rely on the panel's own rounded edge doing the
+     cropping, not just extra whitespace. */
+  overflow: hidden;
+}
+.mch2-compare-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xl); /* 40px, Figma literal */
+}
+.mch2-compare-col--redesigned {
+  margin-top: 70px;
+}
+.mch2-compare-phone {
+  display: block;
+  width: 312px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Peek-media row (Session Outro) — two cropped phone/device
+   exports side by side inside .proj-panel. Each image already has
+   Figma's own "peek from behind the card edge" crop baked in from
+   the export, so this is just a flex row sized to each image's own
+   natural proportions — not a forced-equal grid. ── */
+/* Figma's panel for this section (node 411:38350) uses the same
+   rgba(255,255,255,0.1→0.02) gradient as the other mockup cards on
+   this page, not .proj-panel's flat overlay-02 — scoped here rather
+   than changed on .proj-panel itself, since that class is shared by
+   plain single-image panels elsewhere that don't use this gradient. */
+.mch2-outro-panel {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+}
+.mch2-peek-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--space-xl);
+  width: 100%;
+}
+.mch2-peek-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+.mch2-peek-caption {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-title);
+  color: #fff;
+}
+.mch2-peek-row img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+/* ── Key feature (Device status / Mendi Score / Rethinking the
+   Profile tab) — a kicker+title+body intro followed by a row of
+   gradient feature cards, each a cropped device peeking out of a
+   soft glass card with a real-text caption at the bottom. Card
+   sizes come straight from Figma per card (they're genuinely
+   different, not a uniform grid) via inline width/aspect-ratio on
+   each .mch2-feature-card instance. ── */
+.mch2-feature-cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-xl);
+  width: 100%;
+}
+.mch2-feature-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02)); /* Figma card fill — confirmed against design reference */
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+}
+.mch2-feature-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.mch2-feature-card-caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-lg) var(--space-lg); /* 32px top gap from the image above, per feedback */
+}
+.mch2-feature-card-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--fs-home-md);
+  letter-spacing: 0.1px;
+  line-height: 1.2; /* matches .mch1-subhead — same family/size/weight/tracking */
+  color: #fff;
+}
+.mch2-feature-card-desc {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-md);
+  line-height: 1.18; /* matches .mch2-section-body — identical font/size/weight */
+  color: rgba(255, 255, 255, var(--opacity-70, 0.7));
+}
+/* Cards that stack two device images side by side above one shared caption */
+.mch2-feature-card-media-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--space-lg);
+  padding-top: var(--space-xl);
+}
+.mch2-feature-card-media-row img {
+  width: auto;
+  max-height: 340px;
+}
+
+/* ── Bezel card (Device status, Rethinking the Profile tab) ── a real
+   "iPhone 14 Pro" mockup (same recipe as .mch2-score-card-insights)
+   bleeding out of a fixed-height card, with the caption living in its
+   own "Container" layer over the phone rather than below it as normal
+   flow. Device status clips the phone at the TOP (caption at the
+   bottom, phone pinned top:0) — Rethinking the Profile tab clips it
+   at the BOTTOM instead (caption at the top via
+   .mch2-bezel-card--caption-top, phone pinned top:161px, Figma
+   literal, since here the phone's own top/notch is fully visible and
+   it's the card's bottom edge doing the cropping). Below 1280px both
+   fall back to plain stacked flow — putting the caption markup before
+   the img in the two Rethinking cards is what makes that flow put the
+   text above the image on mobile too, no extra CSS needed. */
+.mch2-bezel-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+  border-radius: var(--radius-lg);
+}
+.mch2-bezel-card-phone {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.mch2-bezel-card-caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-lg) var(--space-lg);
+}
+@media (min-width: 1280px) {
+  .mch2-bezel-card--battery { flex: 1 0 0; width: auto; height: 477px; }
+  .mch2-bezel-card--details { flex: 1 0 0; width: auto; height: 663px; }
+  .mch2-bezel-card--entry { flex: 1 0 0; width: auto; height: 390px; }
+  .mch2-bezel-card--settings { flex: 1 0 0; width: auto; height: 708px; }
+  .mch2-bezel-card-phone {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 364px; /* Figma literal */
+    height: auto;
+  }
+  .mch2-bezel-card--entry .mch2-bezel-card-phone { width: 349px; top: 161px; }
+  .mch2-bezel-card--settings .mch2-bezel-card-phone { width: 316px; top: 161px; }
+  .mch2-bezel-card-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 24px 24px 32px;
+  }
+  .mch2-bezel-card--caption-top .mch2-bezel-card-caption {
+    top: 0;
+    bottom: auto;
+  }
+}
+
+/* ── Mendi Score cards ── Figma has these two cards at deliberately
+   different heights (777px vs 480px) with the phone mockups bleeding
+   out the top edge and getting clipped by the card's own overflow —
+   not two equal-height cards with normally-flowed images. Below the
+   1280px breakpoint (where the fixed Figma-literal px values stop
+   making sense) this falls back to the same simple stacked-flow
+   layout as the other .mch2-feature-card sections. */
+.mch2-score-cards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-xl);
+  width: 100%;
+}
+.mch2-score-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.mch2-score-phones {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--space-lg);
+  padding-top: var(--space-xl);
+}
+.mch2-score-phones img {
+  display: block;
+  width: auto;
+  max-width: 45%;
+  height: auto;
+  max-height: 340px;
+}
+.mch2-score-insights-phone {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.mch2-score-caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-xl) var(--space-lg) var(--space-lg);
+}
+
+@media (min-width: 700px) {
+  .mch2-hero-title { font-size: 52px; }
+  .mch2-feature-card { flex: 1 1 320px; }
+}
+
+@media (min-width: 1280px) {
+  .mch2-hero { height: 1024px; min-height: 0; padding: var(--space-section); }
+  .mch2-hero-text { max-width: 760px; } /* wide enough for the title's ~711px single-line width at 57px */
+  .mch2-hero-title { font-size: 57px; white-space: nowrap; }
+  .mch2-section { padding: var(--space-section) var(--container-px); }
+  .mch2-section-title { font-size: 48px; }
+
+  /* Figma literal — node 403:37073. Card 1 (Device details) is fixed
+     at 777px tall; Card 2 (Score insights) is fixed at 480px — the
+     height difference is the point, not a bug to normalize away. */
+  .mch2-score-card--details {
+    flex: 1 0 0;
+    height: 777px;
+  }
+  .mch2-score-card--insights {
+    flex: 0 0 422px;
+    width: 422px;
+    height: 480px;
+  }
+  .mch2-score-phones {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%); /* center the phone pair — equal margin on both sides regardless of the card's actual (flex: 1 0 0) rendered width */
+    padding-top: 0;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 44px;
+  }
+  /* Both images are pre-cropped composites (real Figma bezel export +
+     high-res screen content pasted in) sized to their own correct
+     aspect ratio — NOT the raw 316×663 phone frame. Forcing that
+     fixed height with object-fit:cover re-cropped an image that was
+     already exactly cropped, which is what caused the over-zoomed /
+     clipped-at-the-sides look. Width + height:auto lets each image
+     display at its own true proportions. */
+  .mch2-score-phones img {
+    width: 316px;
+    height: auto;
+    max-width: none;
+    max-height: none;
+  }
+  .mch2-score-insights-phone {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 349px;
+    height: auto;
+    max-width: none; /* override the global img{max-width:100%} reset */
+  }
+  .mch2-score-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 24px 24px 32px;
+  }
+  /* Caption position, nudged a few px past Figma's literal 655.63/
+     358.63 (node 403:37073's "Container" layers) so the phone-to-
+     caption gap reads the same ~36px as the other bezel/score cards —
+     the tightly-cropped (shadow-free) mockups sit a little higher in
+     their fixed-height card than Figma's own asset did, so matching
+     Figma's raw px here left this pair visibly tighter/looser than
+     their siblings. Both still leave a strip of the card's own
+     gradient visible above the caption. */
+  .mch2-score-card--details .mch2-score-caption {
+    top: 666px;
+  }
+  .mch2-score-card--insights .mch2-score-caption {
+    top: 363px;
+  }
+}

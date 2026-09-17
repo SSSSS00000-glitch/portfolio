@@ -1,3 +1,25 @@
+// ── CONTACT LINK: SCROLL TO PAGE BOTTOM ───────────
+// #contact is the <footer>, and .footer-contact-row sits at its very
+// bottom — the footer is tall enough (934px at desktop) that the
+// default #contact anchor (top of the footer + scroll-margin-top)
+// can leave the contact row below the fold on viewports shorter than
+// ~830px. Scrolling to the true document bottom instead guarantees
+// the contact row is in view, since the footer is always the last
+// thing on the page.
+(function () {
+  var contactLinks = document.querySelectorAll('a[href="#contact"]');
+  contactLinks.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+      });
+      history.pushState(null, '', '#contact');
+    });
+  });
+})();
+
 // ── NAV GLASS ON SCROLL + ACTIVE SECTION ──────────
 (function () {
   var navRight = document.getElementById('nav-buttons');

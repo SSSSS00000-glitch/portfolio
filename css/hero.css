@@ -1,26 +1,121 @@
 /* ── HERO ───────────────────────────────────────── */
-.hero {
-  padding: 0 var(--container-wide-px);
+/* .glow-zone wraps hero + quote: one continuous ambient-light
+   layer sits behind both sections (not re-created per section).
+   No overflow property here on purpose: setting overflow-x:hidden
+   alone forces the browser to compute overflow-y as auto (a CSS
+   quirk — mixing hidden/visible on the two axes isn't allowed), which
+   turned this into its own internal scroll container and broke page
+   scrolling entirely. body already clips horizontal overflow
+   (base.css), so this needs no clipping of its own — the blur is
+   simply left free to bleed down past the quote section into #work. */
+.glow-zone {
+  position: relative;
 }
-.hero-title {
-  font-family: var(--font-heading);
-  font-size: 32px;
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
-  font-weight: var(--weight-normal);
-  color: var(--text);
+/* Figma's own exported SVG fill for this glow (node 756:15742), not
+   a CSS reconstruction — three solid-color blurred ellipses via CSS
+   filter:blur() got the color/position math right (verified against
+   the node's own SVG defs) but still diverged from Figma visually:
+   CSS blur vs. SVG feGaussianBlur don't composite identically. Using
+   Figma's actual filter markup as a live SVG <img> sidesteps that
+   entirely — no banding to fight, no dither/seam trade-off.
+   (A flattened PNG export was tried too: Figma's download_assets
+   "export" for this node renders clipped to the page's own 1440px
+   artboard width rather than the SVG fill's wider 2464px bleed
+   canvas, leaving a hard vertical edge on viewports wider than 1440;
+   a PNG rendered from the wide SVG directly avoided that but baked
+   the result into a static snapshot that stops tracking the Figma
+   file. Reverted to the live SVG.)
+   .glow-frame is the tight 1264x655 box at Figma's literal
+   hero-relative offset (left:88, top:854); .glow-frame-img is pushed
+   out by the same negative insets Figma's own node uses (top:-600/
+   left:-600, padded to the fill's native 2464x1742 canvas) so the
+   blur that extends past the tight box in the source file bleeds
+   exactly as far in the page. */
+.glow-frame {
+  position: absolute;
+  left: 88px;
+  top: 854px;
+  width: 1264px;
+  height: 655px;
+  pointer-events: none;
+  z-index: 0;
+}
+.glow-frame-img {
+  position: absolute;
+  left: -600px;
+  top: -600px;
+  width: 2464px;
+  height: 1742px;
+  max-width: none;
 }
 
-@media (min-width: 700px) {
+.hero {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 140px var(--container-wide-px) var(--space-4xl);
+  position: relative;
+  z-index: 1; /* own stacking context — without it Chrome hard-clips
+    the glow children's blur at their unblurred box edge instead of
+    feathering it out; see .featured-project's matching z-index:1
+    below for how it still ends up on top despite this */
+}
+
+/* .center-col (base.css) handles the shared width/centering —
+   this class only owns the hero's own type layout. Title and
+   body copy diverge here: the headline is center-set, the
+   subline stays left-aligned within the same centered column. */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Hero headline ──
+   Manrope, mixed weight: .weight-light for connector words,
+   default (semibold) for the emphasized ones. */
+.hero-title {
+  text-align: center;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-semibold);
+  font-size: var(--fs-home-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+  color: #fff;
+}
+.hero-title .weight-light {
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+
+@media (prefers-reduced-motion: no-preference) {
   .hero-title {
-    font-size: clamp(32px, 5vw, var(--text-display));
+    animation: fadeUp 0.7s 0.15s forwards;
   }
 }
 
+/* ── Hero subline (Instrument Serif) ── */
+.hero-subline {
+  text-align: center;
+  font-family: var(--font-accent);
+  font-style: normal;
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-serif-lg);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+
+@media (min-width: 700px) {
+  .hero { min-height: 70vh; padding-top: 160px; }
+}
+
 @media (min-width: 1280px) {
-  .hero-title {
-    font-size: 72px;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
+  .hero {
+    min-height: 90vh;
+  }
+  /* Nudge up off dead-center — the tall 90vh box centers the
+     content lower than feels right against the nav above it. */
+  .hero-content {
+    transform: translateY(-160px);
   }
 }

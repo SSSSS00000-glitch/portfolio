@@ -1,0 +1,85 @@
+/* ── TYPOGRAPHY SYSTEM ─────────────────────────────
+   Centralized, reusable type styles built on the --fs-*
+   scale defined in variables.css. Apply a class to set
+   family/size/weight/leading/tracking; component CSS
+   should only add color, spacing, and layout on top. ── */
+
+.type-display {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-medium);
+  font-size: var(--fs-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* Standalone accent statement — key insights, chapter
+   transitions, reflective moments. Not for inline words. */
+.type-display-accent {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-display-accent);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+}
+
+.type-h1 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-medium);
+  font-size: var(--fs-h1);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.type-h2 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-medium);
+  font-size: var(--fs-h2);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-heading);
+}
+
+.type-h3 {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-medium);
+  font-size: var(--fs-h3);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-heading);
+}
+
+.type-body-lg {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-body-lg);
+  line-height: var(--leading-normal);
+}
+
+.type-body {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-body);
+  line-height: var(--leading-normal);
+}
+
+.type-label {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--fs-label);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-label);
+}
+
+/* Mixed-weight Manrope headlines (Home redesign) — de-emphasized
+   connector words vs. the emphasized ones in the same line. */
+.weight-light { font-weight: var(--weight-light); }
+.weight-semibold { font-weight: var(--weight-semibold); }
+
+/* Inline accent word/phrase inside a Manrope headline —
+   inherits the surrounding size, only swaps voice. This is
+   the "selected words within large headlines" use case;
+   .type-display-accent is for standalone accent statements. */
+.accent-word {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: var(--weight-normal);
+}

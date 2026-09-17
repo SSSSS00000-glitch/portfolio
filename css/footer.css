@@ -1,24 +1,190 @@
-/* ── FOOTER ─────────────────────────────────────── */
-.site-footer {
-  padding: 28px var(--container-wide-px) 60px;
-  border-top: none;
+/* ── Coral CTA pill — shared look for "See full case study" / "Get in touch" ──
+   One fixed style, no glow by default, for both buttons — a crisp
+   outline. Lives here (not featured-project.css, where "See full
+   case study" is used) because footer.css is the one stylesheet
+   every page linking .btn-coral actually loads — featured-project.css
+   is only linked on index.html, which left every other page's footer
+   CTA with none of this button's padding, border, or radius. */
+.btn-coral {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: var(--space-sm) var(--space-lg);
+  border: var(--border-thin) solid var(--coral-border);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-title);
+  color: rgba(255, 255, 255, var(--opacity-high));
+  transition: background var(--duration-normal) var(--ease-default);
 }
+.btn-coral:hover {
+  background: rgba(255, 107, 104, 0.08);
+}
+
+/* ── FOOTER (base, shared) ──────────────────────── */
+.site-footer {
+  padding: 80px var(--container-wide-px) 48px;
+}
+
 .footer-inner {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
+  min-height: 440px;
+}
+
+@media (min-width: 1280px) {
+  .site-footer {
+    padding: 120px var(--container-wide-px) 72px;
+  }
+  .footer-inner {
+    min-height: 560px;
+  }
+}
+
+/* ── FOOTER (Home) ──────────────────────────────────
+   Scoped under .home-footer so the case-study footer (which
+   reuses .site-footer/.footer-inner with its own footer-top/
+   footer-bottom layout) is unaffected. */
+/* Bottom padding is deliberately much smaller than the top —
+   Figma's literal footer section padding is 32px all around;
+   the top keeps extra room to separate from testimonials above,
+   but the bottom should hug the contact row, not float 120px
+   above the page's actual edge. */
+.home-footer {
+  padding: var(--space-4xl) var(--space-lg) var(--space-xl);
+  gap: var(--space-section);
+}
+.home-footer .footer-inner {
+  min-height: 0;
+  gap: var(--space-section);
+}
+
+.footer-cta-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+}
+.footer-cta-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.footer-cta-headline {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-light);
+  font-size: var(--fs-home-display);
+  line-height: 1;
+  letter-spacing: -2px; /* Figma literal (node 626:12236), not the relative --tracking-tight */
+  color: #fff;
+  text-wrap: balance;
+}
+.footer-cta-subline {
+  font-family: var(--font-accent);
+  font-size: var(--fs-home-serif-lg);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+
+.footer-contact-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+  text-align: center;
+}
+.footer-contact-name-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-accent);
+  opacity: var(--opacity-high);
+}
+.footer-contact-name {
+  font-size: 32px;
+  line-height: 1;
+  color: #fff;
+}
+.footer-contact-location {
+  font-size: 24px;
+  color: rgba(255, 255, 255, var(--opacity-80));
+}
+.footer-contact-methods {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xl);
+}
+.footer-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-accent);
+  font-size: var(--fs-home-md);
+  color: var(--coral);
+}
+.footer-contact-link svg { flex-shrink: 0; }
+
+@media (min-width: 700px) {
+  .home-footer { padding: var(--space-xl) var(--container-wide-px); }
+  .footer-cta-headline { font-size: 64px; }
+}
+
+@media (min-width: 1280px) {
+  .home-footer {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-xl) var(--container-wide-px); /* Figma's literal 32px on all sides (node 626:12227) */
+    min-height: 934px; /* Figma's literal Footer section frame height (node 626:12227) */
+  }
+  /* .footer-inner stretches to fill the space .home-footer's padding
+     leaves (flex:1); its two real children (CTA block, contact row)
+     are then placed at Figma's own literal offsets (node 626:12228)
+     rather than centered or evenly spaced. Figma's frame also has an
+     invisible (opacity:0) row above the CTA block, contributing a
+     second 280px gap that we don't render — replicated as a single
+     304px margin-top on the CTA block (24px ghost-row height + 280px
+     gap) instead of adding a fake hidden element. The contact row's
+     margin-top:auto then pushes it to the bottom of the flex-1 box,
+     which lands it exactly var(--space-xl) (32px) above the section's
+     bottom edge — matching Figma's contact row ending flush with its
+     870px content box — for any actual CTA block height. */
+  .home-footer .footer-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .footer-cta-block { margin-top: 304px; }
+  .footer-cta-headline { font-size: 72px; }
+  .footer-contact-row { margin-top: auto; flex-direction: row; justify-content: space-between; text-align: left; }
+  .footer-contact-name-block { align-items: flex-start; }
+  /* Get in touch CTA (node 626:12238) — the coral outline was already
+     right, but the glow drop-shadow around it was never implemented.
+     Scoped to just the footer CTA, not .btn-coral globally, since the
+     other .btn-coral use ("See full case study") has its own separate
+     no-glow spec. */
+  .footer-cta-block .btn-coral {
+    box-shadow: var(--coral-glow);
+  }
+}
+
+/* ── FOOTER (case-study) ────────────────────────── */
+.footer-logo {
+  font-size: var(--text-body);
+  font-weight: var(--weight-normal);
+  color: var(--text);
+  opacity: var(--opacity-mid);
 }
 .footer-top {
   display: flex;
   align-items: center;
   gap: var(--space-lg);
   flex: 1;
-}
-.footer-logo {
-  font-size: var(--text-body);
-  font-weight: var(--weight-normal);
-  color: var(--text);
-  opacity: var(--opacity-mid);
 }
 .footer-nav {
   display: flex;
@@ -45,25 +211,4 @@
   width: 18px;
   height: 18px;
 }
-.footer-bottom {
-  display: none;
-}
-.footer-links {
-  display: flex;
-  gap: var(--space-md);
-}
-.footer-links a {
-  color: var(--text-muted);
-  transition: color var(--duration-normal);
-}
-.footer-links a:hover { color: var(--text); }
-
-@media (min-width: 700px) {
-}
-
-@media (min-width: 1280px) {
-  .site-footer {
-    padding: 28px var(--container-px) 28px;
-  }
-  .footer-bottom { padding-bottom: var(--space-lg); }
-}
+.footer-bottom { display: none; }

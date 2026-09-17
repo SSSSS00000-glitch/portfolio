@@ -1,155 +1,64 @@
-/* ── TESTIMONIALS ───────────────────────────────── */
-.testimonials-section { padding: 0; }
-.testimonials-inner {
-  padding: 0;
+/* ── TESTIMONIALS (People I've worked with) ────────
+   Static 3-card layout — one wider anchor quote plus two shorter
+   ones, matching the Figma grid. No carousel: three items reads
+   fine stacked on mobile, no need for scroll/dots mechanics. */
+.testimonials-section {
+  padding: var(--space-4xl) var(--container-wide-px);
+}
+.testimonials-kicker {
+  display: block;
+  padding: 0 var(--space-lg) var(--space-lg);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+
+.testimonials-grid {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var(--space-xl);
 }
-.testimonials-inner > .section-title {
-  padding: 0 var(--container-wide-px);
-  margin-bottom: var(--space-xl);
-}
-.testimonials-slider {
-  position: relative;
-  overflow: hidden;
-}
-.testimonials-slider::before,
-.testimonials-slider::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-.testimonials-slider::before {
-  left: 0;
-  background: linear-gradient(to right, var(--bg), transparent);
-  opacity: 0;
-  transition: opacity 0.4s var(--ease-default);
-}
-.testimonials-slider.has-scroll::before { opacity: 1; }
-.testimonials-slider::after {
-  right: 0;
-  background: linear-gradient(to left, var(--bg), transparent);
-}
-.testimonials-scroll {
-  display: flex;
-  gap: var(--space-md);
-  scroll-padding: 0 var(--container-wide-px);
-  overflow-x: scroll;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  padding: 0 var(--container-wide-px);
-  scrollbar-width: none;
-}
-.testimonials-scroll::-webkit-scrollbar { display: none; }
+
 .testimonial-card {
-  flex-shrink: 0;
-  width: calc(100vw - var(--container-wide-px) - var(--container-wide-px));
-  scroll-snap-align: center;
-  background: var(--glass-surface);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: var(--border-thin) solid var(--glass-border);
-  box-shadow: var(--shadow-md);
+  background: var(--overlay-02);
+  border: var(--border-thin) solid var(--overlay-05);
   border-radius: var(--radius);
   padding: var(--space-lg);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-lg);
-}
-.testimonial-quote {
-  font-size: var(--text-body);
-  line-height: var(--leading-normal);
-  color: var(--text);
-  text-indent: -0.4em;
-  font-weight: var(--weight-normal);
-}
-.testimonial-author {
-  display: flex;
-  align-items: center;
   gap: var(--space-md);
 }
-.testimonial-avatar {
-  width: var(--space-xl);
-  height: var(--space-xl);
-  border-radius: 50%;
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.testimonial-name {
-  font-size: var(--text-caption);
-  font-weight: var(--weight-medium);
-  color: var(--text);
-}
-.testimonial-role {
-  font-size: var(--text-caption);
-  color: var(--text-muted);
-}
 
-/* ── Dot indicators (mobile) ── */
-.testimonials-dots {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-lg) 0 0;
+.testimonial-quote {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-md);
+  line-height: 1.2;
+  letter-spacing: var(--tracking-tight);
+  color: #fff;
 }
-.testimonials-dots .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--text);
-  opacity: var(--opacity-low);
-  transition: opacity var(--duration-normal) var(--ease-default),
-              transform var(--duration-normal) var(--ease-default);
-  cursor: pointer;
-}
-.testimonials-dots .dot.active {
-  opacity: 0.6;
-  transform: scale(1.4);
+.testimonial-quote p + p { margin-top: var(--space-xs); }
+
+.testimonial-author {
+  font-family: var(--font-accent);
+  font-size: var(--text-body);
+  line-height: 1.18;
+  color: rgba(255, 255, 255, var(--opacity-high));
 }
 
 @media (min-width: 700px) {
-  .testimonials-dots { display: none; }
-  .testimonials-inner {
-    padding: 0 var(--container-wide-px);
-    gap: 0;
-  }
-  .testimonials-inner > .section-title {
-    padding: 0;
-    margin-bottom: var(--space-2xl);
-  }
-  .testimonials-scroll { padding: 0; }
-  .testimonials-slider::before,
-  .testimonials-slider::after { width: var(--space-4xl); }
-  .testimonial-card {
-    width: 340px;
-    padding: var(--space-xl);
-  }
-  .testimonial-avatar {
-    width: var(--space-3xl);
-    height: var(--space-3xl);
-  }
-  .testimonial-quote { font-size: var(--text-title); } /* 20px tablet */
-}
-
-@media (min-width: 700px) {
-  .testimonial-card { width: 400px; }
+  .testimonials-section { padding: var(--space-section) var(--container-wide-px); }
+  /* align-items: flex-start (not stretch) — each card sizes to
+     its own content instead of matching the tallest in the row,
+     so the longer Mustafa Hamada quote can be naturally taller
+     than its neighbors instead of forcing them to grow too. */
+  .testimonials-grid { flex-direction: row; align-items: flex-start; }
+  .testimonial-card { flex: 1; }
+  .testimonial-card.is-lead { flex: 1.4; }
 }
 
 @media (min-width: 1280px) {
-  .testimonials-inner { padding: 0 var(--container-px); }
-  .testimonials-slider::before,
-  .testimonials-slider::after { width: var(--space-section); }
-  .testimonial-card { width: 480px; }
-  .testimonial-name { font-size: var(--text-body); }
-  .testimonial-role { font-size: var(--text-body); }
-  .testimonial-quote { font-size: 22px; }
+  .testimonials-section { padding: var(--space-section) var(--space-section); }
+  .testimonial-card.is-lead { flex: 0 0 568px; }
 }

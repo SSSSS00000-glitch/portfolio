@@ -1,10 +1,7 @@
 /* ── CLIENTS MARQUEE ────────────────────────────── */
 .clients-section { padding: 0; }
 .clients-inner {
-  padding: 0 var(--container-wide-px);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xl);
+  display: none;
 }
 .clients-header {
   display: flex;

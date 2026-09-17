@@ -1,0 +1,278 @@
+/* ── NEUROSIGHT CASE STUDY ──────────────────────────
+   Shares hero/brief/selected-work/impact/footer patterns with the
+   other proj-* case studies (see css/project-page.css) — this file
+   only owns what's unique to this page: the 2-up work grid, the
+   "request → needed → support" flow diagram, and the two-jobs card
+   row. */
+
+/* Tighter gap between "What I worked on" and "A very different kind
+   of Mendi user": .proj-work and .proj-selected each carry the shared
+   --space-section (120px) on every side, so stock desktop padding
+   stacks to 240px between them. In Figma these two blocks actually
+   sit inside one shared outer group with a single 88px gap between
+   them (120px only applies once, at the very top of the group) — this
+   same doubled-padding pattern likely repeats across the other
+   case-study pages too, since .proj-work/.proj-selected are shared
+   classes, but that's a bigger site-wide cleanup; this override is
+   scoped to just this page's boundary for now. Split evenly (44+44). */
+@media (min-width: 1280px) {
+  .ns-work-section { padding-bottom: 44px; }
+  .ns-mendi-section { padding-top: 44px; }
+}
+
+/* ── Work grid (2 cards, not 3 — Caree/Baemingo's .proj-work-grid is
+   shared and tuned for 3 columns at desktop, so this page gets its
+   own 2-column variant instead of overriding a shared class). ── */
+.ns-work-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  width: 100%;
+}
+.ns-work-media {
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+.ns-work-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ns-work-media--website { max-width: 393px; aspect-ratio: 393 / 221; }
+
+/* Mobile app card: Figma's own flat export of this 3-phone group is
+   capped at its native 345×212px (get_screenshot can shrink a node's
+   render but not upscale past it), which reads as blurry at any
+   display size above 1x. The phone "bezel" in Figma is pure CSS
+   already (border-radius + inset box-shadow, no raster) — only the
+   screen content is a real image, and those source screens are
+   genuinely high-res (750–780px wide). Rebuilding the bezel as real
+   CSS and using those screens directly sidesteps the native-res
+   ceiling entirely instead of upscaling a small flat PNG. */
+.ns-phone-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg); /* space between the 3 phone bezels — unrelated to .ns-flow-row's arrow gap below */
+  width: 100%;
+}
+.ns-phone {
+  width: 96px;
+  aspect-ratio: 98.6 / 211.6;
+  border-radius: 15px;
+  border: 1px solid rgba(181, 181, 181, 0.5);
+  background: #000;
+  padding: 4px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(36, 34, 35, 0.6);
+}
+.ns-phone img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 11px;
+  display: block;
+}
+
+/* Larger size variant ("Capture in the moment" hero phone) — same
+   bezel recipe, scaled to Figma's literal 210×450 "Body" node instead
+   of the small triple-phone row's 96px width. Same blurry-flat-export
+   issue as the "Mobile app" card: swapped in the raw high-res screen
+   layer (was capped at 211px native) instead of upscaling. */
+.ns-phone--lg {
+  width: 210px;
+  border-radius: 30px;
+  padding: 8px;
+}
+.ns-phone--lg img { border-radius: 22px; }
+
+@media (min-width: 700px) {
+  .ns-work-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Request → needed → support flow (inside .proj-panel) ──
+   Same connector-line technique as Caree's .proj-journey (a real
+   exported vector, rotated, not hand-drawn), but this diagram is two
+   full-width card rows rather than a phones+icon composition. ── */
+.ns-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg); /* vertical rhythm between kicker/quote/connector/row blocks — unrelated to .ns-flow-row's arrow gap below */
+  width: 100%;
+}
+.ns-flow-kicker {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, var(--opacity-65));
+  text-align: center;
+}
+.ns-flow-quote {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: 32px;
+  line-height: 1;
+  color: #c0c0ff;
+  text-align: center;
+}
+.ns-flow-connector {
+  /* color (#9898FF) is baked into the SVG fill itself — no opacity
+     fade in Figma, so don't dim it here */
+  flex-shrink: 0;
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  transform: rotate(-90deg);
+}
+.ns-flow-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--space-md); /* THE arrow-to-card gap (16px) — the other 24px gaps in this file (.ns-phone-row, .ns-flow, .ns-flow-card--support) are unrelated spacing in other parts of the layout */
+  width: 100%;
+}
+.ns-flow-arrow {
+  display: flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 24px;
+  color: rgba(255, 255, 255, var(--opacity-mid));
+}
+.ns-flow-card {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 130px;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-md);
+  border-radius: var(--radius);
+  border: var(--border-thin) solid;
+}
+.ns-flow-card-icon { width: 40px; height: 40px; flex-shrink: 0; }
+.ns-flow-card-label {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  color: #fff;
+  text-align: center;
+}
+.ns-flow-card-desc {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-body);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-mid));
+  text-align: center;
+}
+/* Figma: the outer card keeps items-center (icon centered as a unit
+   with the text block below it) — only the text block's own children
+   are items-start, and that's a full-width wrapper so it doesn't
+   visibly shift anything. The label stays centered (Figma's own
+   text-center on the title); only the description is left-aligned. */
+.ns-flow-card--support {
+  gap: var(--space-lg); /* icon-to-text-block gap within a support card only — unrelated to .ns-flow-row's arrow gap below */
+}
+.ns-flow-card--support .ns-flow-card-desc { text-align: left; }
+.ns-flow-card--support > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+}
+.ns-flow-card--support .ns-flow-card-label { display: block; }
+
+/* Five recurring accent colours (literal Figma samples, one-off to
+   this diagram — same convention as Länsförsäkringar's process-step
+   colours in project-page.css). */
+.ns-flow-card--purple { background: rgba(141, 112, 255, 0.05); border-color: rgba(180, 178, 240, 0.05); }
+.ns-flow-card--blue   { background: rgba(99, 145, 255, 0.05);  border-color: rgba(173, 197, 255, 0.05); }
+.ns-flow-card--green  { background: rgba(166, 255, 214, 0.05); border-color: rgba(171, 221, 198, 0.05); }
+.ns-flow-card--pink   { background: rgba(248, 215, 224, 0.05); border-color: rgba(248, 215, 224, 0.05); }
+.ns-flow-card--yellow { background: rgba(253, 237, 195, 0.06); border-color: rgba(253, 237, 195, 0.05); }
+
+@media (min-width: 700px) {
+  .ns-flow-row { flex-wrap: nowrap; }
+}
+
+/* Tighter gap into "One product, two jobs": stock .proj-selected
+   desktop padding (120px) stacked on both sides of the section
+   boundary gives 240px of whitespace above the headline, which reads
+   as too loose. Starting point is 64px, matching the Figma-implied
+   intro-to-panel gap used elsewhere on this page (e.g. the "A very
+   different kind of Mendi user" intro → workflow-diagram panel) —
+   split evenly so each side's padding shrinks by the same amount. */
+@media (min-width: 1280px) {
+  .proj-selected:has(+ .ns-jobs-section) { padding-bottom: 32px; }
+  .ns-jobs-section { padding-top: 32px; }
+}
+
+/* Jobs row → impact: .proj-selected's shared gap (48px, --space-3xl)
+   applies between every child, but Figma's own gap here is 88px —
+   confirmed directly off the frame (jobs row bottom y=723, impact top
+   y=811). Adding the 40px difference as margin rather than touching
+   the shared gap, since that would also change the intro → jobs-row
+   gap above it, which isn't part of this change. */
+@media (min-width: 1280px) {
+  .ns-jobs-section .proj-impact { margin-top: 40px; }
+}
+
+/* ── Two-jobs card row ── */
+.ns-jobs-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+}
+.ns-jobs-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xl);
+  padding: var(--space-3xl) var(--space-xl);
+  background: var(--overlay-02);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.ns-jobs-card img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.ns-jobs-card--makesense img { width: 100%; max-width: 800px; }
+.ns-jobs-caption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  text-align: center;
+  color: #fff;
+}
+.ns-jobs-caption-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--fs-home-md);
+}
+.ns-jobs-caption-desc {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-body);
+  line-height: 1.28;
+  color: rgba(255, 255, 255, var(--opacity-80));
+}
+
+@media (min-width: 1280px) {
+  .ns-jobs-row { flex-direction: row; align-items: stretch; }
+  .ns-jobs-card--capture { flex: 1 1 0; min-width: 0; justify-content: center; }
+  .ns-jobs-card--makesense { flex: 2.2 0 0; min-width: 0; justify-content: center; }
+}
+
+/* Impact row (stats + body copy) now lives in the shared
+   .proj-impact-row / .proj-impact-lead (project-page.css) — Baemingo
+   reuses the same pattern, so it moved out of this page-specific file. */

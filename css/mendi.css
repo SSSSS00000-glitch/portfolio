@@ -1,0 +1,468 @@
+/* ── MENDI — main case study hub page ──────────────
+   Figma: node 306:16103. Distinct from the two "chapter" pages
+   (mendi-user-problems.html, mendi-product-experience.html), which
+   each use the site's standard #0b0906 flat dark. This hub frame's
+   own root fill in Figma is a literal two-stop gradient
+   (#0d141b → #0b1016) applied to the whole page — kept as authored
+   rather than normalized to #0b0906, since it's coupled to the hero
+   photo's own fade-to-background overlay (see .mh-hero-scrim). */
+body.mh {
+  background: linear-gradient(to bottom, #0d141b, #0b1016);
+}
+
+.mh-kicker {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+
+.mh-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 4px var(--space-sm);
+  background: var(--overlay-08);
+  border: var(--border-thin) solid var(--overlay-08);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  color: #fff;
+}
+
+/* ── Nav overlay ──
+   Figma: the nav frame (1980469368, 0,0-1440x173) sits directly on
+   top of the hero photo frame (both start at y=0) — an overlay, not
+   a row that pushes the photo down. #nav is taken out of flow here
+   so .mh-hero starts at the very top of the page underneath it, and
+   left transparent (no explicit background) so the photo shows
+   through behind the logo/nav-right pill. */
+body.mh #nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background: transparent;
+}
+
+/* ── Hero ──
+   Figma: opacity-20 photo, plus a gradient overlay fading from
+   transparent to the page's own bg color — that's the "glow" look in
+   the screenshot preview, not a colored blur shape (unlike the two
+   chapter pages' hero glows). mendi-hub-hero.png is the
+   AI-generated hands+phone cutout (node 752:15741, 1600x983) — a
+   proper alpha cutout with nothing baked in, replacing the earlier
+   Mockuuups Studio stock-photo cutout (node 750:15737) once that
+   one's patterned sleeve cuff turned out to read as an unwanted
+   denim-look patch at 20% opacity no matter how it was cropped or
+   positioned. Must stay a PNG for the cutout alpha — a JPEG
+   re-export would flatten the transparent surround onto white.
+   Opacity 0.2 on the <img> replicates the hero's own dimming since
+   this source has none baked in. .mh-hero-media locks to the Figma
+   frame's own 1440:1024 ratio (not a stretched fill of the section's
+   variable min-height:100vh box) so object-fit:cover crops the photo
+   the same way at any viewport width up to 1440 — otherwise a much
+   wider/shorter browser window forces a much bigger cover scale-up,
+   dragging the device up into the title/nav instead of sitting under
+   the title like node 306:16396. The max-height cap on top of that
+   stops the box from growing past Figma's own 1024px height on
+   screens wider than 1440px — without it, cover has to zoom out to
+   fill the extra width, which pulls the second (lower) hand into
+   frame that Figma's fixed-size crop never shows. The content block
+   (node 306:16397) sits centered horizontally within the 1440-wide
+   frame (133.5px margin each side), while its own children — title
+   and chip row — are left-aligned within that centered block, not
+   full-bleed to the viewport edges. min-height:100vh keeps the hero
+   filling the screen on mobile/tablet, but at the 1280px+ breakpoint
+   (below) it's pinned to Figma's literal 1024px frame height instead
+   — .mh-about (node 306:16128) starts at y:1024 right where that
+   frame ends, and a variable 100vh hero would push it down further
+   on any desktop screen taller than 1024px. */
+.mh-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 140px var(--space-xl) var(--space-4xl);
+  overflow: hidden;
+  text-align: left;
+}
+.mh-hero-media {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 1440 / 1024;
+  max-height: 1024px;
+  z-index: 0;
+}
+.mh-hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.2;
+  display: block;
+}
+.mh-hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(13, 20, 27, 0), #0d141b);
+}
+.mh-hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  width: fit-content;
+  max-width: 100%;
+}
+.mh-hero-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-light);
+  font-size: 32px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: #fff;
+}
+.mh-hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  width: 100%;
+}
+.mh-hero-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px var(--space-sm);
+  backdrop-filter: blur(12.5px);
+  -webkit-backdrop-filter: blur(12.5px);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  color: rgba(255, 255, 255, var(--opacity-high));
+  white-space: nowrap;
+}
+
+/* ── About / My role ──
+   Figma: single cyan glow (Ellipse 6, #6EF0FF, blur 200, no extra
+   opacity) at 294×204 near the divider between the two columns. */
+.mh-about {
+  position: relative;
+  padding: var(--space-4xl) var(--container-wide-px);
+}
+/* Figma literal position (left:587px top:300px) inside the 1249.5px
+   content column — only meaningful once that column is actually
+   centered at desktop width, so the glow is hidden below 1280px
+   rather than showing at a wrong relative position on narrower,
+   single-column layouts. */
+.mh-about-glow {
+  display: none;
+}
+.mh-about-grid {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+  max-width: 1250px;
+  margin: 0 auto;
+}
+.mh-about-intro {
+  flex: 1;
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-serif-lg);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+.mh-role {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+.mh-role-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.mh-role-heading {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 32px;
+  letter-spacing: -1px;
+  color: #fff;
+}
+.mh-role-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-title);
+  line-height: 1.21;
+  color: #fff;
+}
+.mh-role-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.mh-role-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.mh-role-meta-label {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+.mh-role-meta-value {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-title);
+  color: #fff;
+}
+
+/* ── Design challenges ──
+   Each of the three rows sizes to its own content (image at its own
+   aspect ratio, text column auto height) — no shared/forced sizing
+   across the three, matching what the other case-study pages got
+   corrected to. */
+.mh-challenges {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl); /* kicker-to-first-row gap: Figma literal 48px */
+  padding: var(--space-3xl) var(--container-wide-px) var(--space-section);
+}
+.mh-challenge {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 56px; /* Figma literal, doesn't land on the spacing scale */
+}
+.mh-challenge + .mh-challenge {
+  margin-top: var(--space-xl); /* tops up the 48px container gap to Figma's 80px between challenge rows */
+}
+.mh-challenge-media {
+  width: 100%;
+  aspect-ratio: 455 / 588;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(to bottom, rgba(38, 48, 58, 0.2), rgba(21, 29, 35, 0.2));
+}
+.mh-challenge-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mh-challenge-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-xl);
+}
+.mh-challenge-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.mh-challenge-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 32px;
+  letter-spacing: -1px;
+  line-height: 1.18;
+  color: #fff;
+}
+.mh-challenge-body {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-serif-lg);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+.mh-explore-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  width: fit-content;
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: 32px;
+  letter-spacing: -0.3px;
+  color: var(--coral);
+  text-decoration: none;
+}
+.mh-explore-link svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  transition: transform var(--duration-medium) var(--ease-default);
+}
+.mh-explore-link:hover svg {
+  transform: translateX(3px);
+}
+.mh-explore-link--muted {
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+
+/* ── My reflection ──
+   Figma: two overlapping cyan/magenta glows behind the section —
+   exact values from the exported shapes: Ellipse 5 #FC006D
+   opacity 0.5, Ellipse 6 #6EF0FF opacity 0.6, both blur 200 — same
+   real-blurred-div + mix-blend-mode:screen recipe as .glow-shape
+   (hero.css) / .about-glow-shape (about.css), not a flattened image. */
+.mh-reflection {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin: 0 auto;
+  padding: var(--space-4xl) var(--container-wide-px);
+}
+/* Figma literal positions (left:206px/348px, top:43px), meaningful
+   only once .mh-reflection is actually laid out at its Figma content
+   width (1200px column) — hidden below that so they don't show at
+   the wrong relative spot on narrower layouts, same reasoning as
+   .mh-about-glow. No overflow:hidden on .mh-reflection itself (that
+   was hard-clipping both glows to the text column's own box, reading
+   as a gradient trapped in a rectangle instead of Figma's soft bloom
+   spilling past the text into the empty right-hand space) — the
+   glows are free to bleed like .mh-about's, contained only by the
+   page's own body-level overflow-x:hidden. */
+.mh-reflection-glow {
+  display: none;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 0;
+}
+.mh-reflection-glow--a {
+  background: #fc006d;
+  opacity: 0.5;
+  filter: blur(200px);
+}
+.mh-reflection-glow--b {
+  background: #6ef0ff;
+  opacity: 0.6;
+  filter: blur(200px);
+}
+.mh-reflection > *:not(.mh-reflection-glow) {
+  position: relative;
+  z-index: 1;
+}
+.mh-reflection-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 48px;
+  letter-spacing: -1px;
+  line-height: 1.18;
+  color: #fff;
+  max-width: 825px;
+}
+.mh-reflection-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  max-width: 825px;
+}
+/* First paragraph only — Figma's serif "pull quote" treatment, full
+   white and much larger than the two Manrope paragraphs below it. */
+.mh-reflection-intro {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: 40px;
+  line-height: 1.21;
+  color: #fff;
+  max-width: 600px;
+}
+.mh-reflection-question {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 24px;
+  line-height: 1.31;
+  color: rgba(255, 255, 255, var(--opacity-75));
+}
+.mh-reflection-secondary {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 24px;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, var(--opacity-75));
+  max-width: 600px;
+}
+.mh-reflection-closing {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 24px;
+  line-height: 1.21;
+  max-width: 825px;
+  color: #fff;
+  margin-top: var(--space-xs); /* 24px body gap + 8px = Figma's 32px gap before the closing line */
+}
+
+@media (min-width: 700px) {
+  .mh-hero-title { font-size: 48px; }
+  .mh-about-grid { flex-direction: row; gap: var(--space-section); align-items: flex-start; }
+  .mh-about-intro { max-width: 480px; }
+  .mh-role { flex: 1; max-width: 565px; }
+  .mh-challenge { flex-direction: row; align-items: stretch; }
+  .mh-challenge-media { flex: 1 1 0; min-width: 0; max-width: 455px; }
+  .mh-challenge-text { flex: 1 1 0; min-width: 0; padding-bottom: var(--space-4xl); }
+  .mh-challenge-title { font-size: 40px; }
+}
+
+@media (min-width: 1280px) {
+  .mh-hero { min-height: 0; height: 1024px; }
+  .mh-hero-title { font-size: 64px; letter-spacing: -2px; white-space: nowrap; }
+  .mh-about { padding: var(--space-section) var(--container-wide-px); }
+  .mh-about-glow {
+    display: block;
+    position: absolute;
+    left: 587px;
+    top: 300px;
+    width: 294px;
+    height: 204px;
+    background: #6ef0ff;
+    filter: blur(200px);
+    pointer-events: none;
+  }
+  .mh-challenges { padding: var(--space-3xl) var(--container-px) var(--space-section-lg); gap: var(--space-3xl); }
+  .mh-challenge-title { font-size: 48px; }
+  .mh-reflection { padding: var(--space-section) var(--container-px); }
+  .mh-reflection-glow {
+    display: block;
+    position: absolute;
+    top: 163px; /* section's own top padding (120px) + Figma's 43px */
+  }
+  .mh-reflection-glow--a { left: calc(var(--container-px) + 206px); width: 803px; height: 494px; }
+  .mh-reflection-glow--b { left: calc(var(--container-px) + 348px); width: 745px; height: 453px; }
+}
+
+/* ── Explore more projects (node 306:16241) ──
+   Overridden here rather than in projects-grid.css: this page's own
+   label reads as a proper heading (32px, regular weight, full white,
+   -1px tracking) rather than the small eyebrow-style .projects-kicker
+   every other page uses for "More work, in brief" — scoping to
+   body.mh keeps those other pages' smaller treatment untouched.
+   Bottom padding stays at the shared --space-lg: Figma's own gap to
+   the card row below is 24px, the same value already in place. */
+body.mh .projects-kicker {
+  color: #fff;
+  font-weight: var(--weight-normal);
+  font-size: 32px;
+  letter-spacing: -1px;
+  line-height: 1.2;
+}

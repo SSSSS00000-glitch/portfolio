@@ -1,0 +1,11 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="lucide/chart-spline">
+<path id="Vector" d="M8 8V50.6667C8 52.0812 8.5619 53.4377 9.5621 54.4379C10.5623 55.4381 11.9188 56 13.3333 56H56M18.6667 42.6667C20 37.3333 22.6667 24 29.3333 24C34.6667 24 34.6667 32 40 32C46.6667 32 52 18.6667 53.3333 13.3333" stroke="url(#paint0_linear_0_7)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_7" x1="32" y1="8" x2="32" y2="56" gradientUnits="userSpaceOnUse">
+<stop stop-color="#A999FF"/>
+<stop offset="1" stop-color="#6151B5"/>
+</linearGradient>
+</defs>
+</svg>

@@ -2,12 +2,16 @@
 
 /* ══ MOBILE ══ */
 
-/* Navbar container */
-nav, .cs-topbar {
+/* Navbar container — scoped to #nav (not a bare `nav` element
+   selector) so other <nav> landmarks on the page (e.g. the
+   featured-project chapters list) don't inherit this styling. */
+#nav, .cs-topbar {
   display: flex;
   align-items: center;
   padding: var(--space-xl) var(--container-wide-px) var(--space-lg);
 }
+
+.theme-toggle { display: none; }
 
 /* Logo */
 .nav-logo, .cs-topbar-logo {
@@ -15,10 +19,73 @@ nav, .cs-topbar {
   font-size: 18px;
   padding-top: 18px;
   font-weight: var(--weight-normal);
-  line-height: 1;
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-heading);
   color: var(--text);
-  opacity: var(--opacity-mid);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.nav-logo-name {
+  line-height: 1;
+}
+.nav-logo-sub {
+  font-size: var(--text-body);
+  font-weight: var(--weight-normal);
+  color: var(--text-muted);
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+/* ── Home identity block (name + role + eyebrow) ──
+   Replaces .nav-logo on the Home page: Instrument Serif
+   name/role pair plus the shared .eyebrow chip underneath. */
+.nav-identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-top: 0;
+}
+.nav-identity-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-accent);
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+.nav-identity-name {
+  font-size: 24px;
+  line-height: 1;
+}
+.nav-identity-role {
+  font-size: var(--text-body);
+  line-height: 1.21;
+}
+
+/* ── Eyebrow chip — reused by nav identity + featured project ──
+   Padding is 12px/4px by design intent, not the 8pt grid. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: fit-content;
+  padding: 4px 12px;
+  background: var(--overlay-08);
+  border: var(--border-thin) solid var(--overlay-08);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  line-height: 1.21;
+  color: #fff;
+  white-space: nowrap;
+}
+.eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--status-green);
+  box-shadow: var(--status-green-glow);
+  flex-shrink: 0;
 }
 
 /* Mobile bottom bar — nav */
@@ -118,12 +185,8 @@ nav, .cs-topbar {
 
 /* ══ TABLET+ (700px) ══ */
 @media (min-width: 700px) {
-  nav, .cs-topbar {
+  #nav, .cs-topbar {
     padding: 34px var(--container-wide-px) var(--space-lg);
-  }
-
-  .nav-logo, .cs-topbar-logo {
-    font-size: var(--text-title);
   }
 
   /* Fixed nav — top-right */
@@ -187,7 +250,16 @@ nav, .cs-topbar {
 
 /* ══ DESKTOP (1280px+) ══ */
 @media (min-width: 1280px) {
-  .nav-logo, .cs-topbar-logo {
-    font-size: 22px;
+  /* Home: pill nav always carries its subtle glass shell —
+     the dark hero doesn't need the transparent-until-scroll trick. */
+  .nav-right.home-pill {
+    background: var(--overlay-05);
+    border-color: var(--overlay-10);
   }
+  .nav-right.home-pill a {
+    font-size: var(--text-title);
+  }
+
+  .nav-identity-name { font-size: 32px; }
+  .nav-identity-role { font-size: 24px; }
 }

@@ -1,132 +1,267 @@
-/* ── ABOUT ──────────────────────────────────────── */
-.about-section { padding: 0; }
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-xl);
-  align-items: start;
-}
-.about-photo {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: var(--radius);
-  background: var(--surface);
-  object-fit: cover;
-  position: relative;
-  overflow: hidden;
-}
-.about-photo::after {
-  content: '';
+/* ── ABOUT (standalone page) ───────────────────────
+   Figma: node 595:53738. Dark, coral-accent page in the same
+   visual language as the Home redesign — nav/footer are the
+   shared components (see index.html), this file only owns the
+   three sections in between. */
+
+/* ── Ambient glow (Section) ──────────────────────────
+   Same technique as .glow-zone in hero.css: real ellipses with
+   a solid fill + CSS blur, not a flattened image export — three
+   independent shapes so their colors add via mix-blend-mode:screen
+   instead of alpha-compositing into a muddy tone. Figma's own
+   layer effect here is a plain (non-progressive) Gaussian layer
+   blur — stdDeviation 200 on all three shapes, exported at
+   opacity 0.6 — so this reuses the simple glow-shape recipe, not
+   the stacked progressive-blur/mask technique from .pgrid-blur-*
+   (that one's for a genuine Progressive background blur, which
+   this section doesn't use). Positioned with the same fixed-px,
+   Figma-literal coordinates convention as the Home glow-zone.
+
+   .about-content deliberately has no overflow property — these
+   shapes are large enough that their blur naturally bleeds a bit
+   past the section's own box (lilac's negative top already reaches
+   up into the hero). Clipping that with overflow:hidden was the
+   original bug: it drew a hard rectangular edge right where the
+   soft blur met the next section's background, instead of letting
+   it fade out on its own. .about-hero and .about-extra sit at a
+   higher z-index than .about-content so their own text/background
+   always paints above that bleed — the glow can spill into their
+   space without ever showing through their content. */
+.about-glow-shape {
   position: absolute;
-  inset: 0;
-  border: 1px solid var(--border);
-  border-radius: inherit;
+  border-radius: 50%;
+  opacity: 0.6;
+  mix-blend-mode: screen;
   pointer-events: none;
+  z-index: 0;
+  filter: blur(200px);
 }
-.about-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+.about-glow-pink {
+  left: 419px;
+  top: 52px;
+  width: 764px;
+  height: 671px;
+  background: rgba(177, 83, 255, 0.2);
 }
-.about-content h2 {
-  font-family: var(--font-heading);
-  font-size: var(--text-heading);
-  line-height: var(--leading-snug);
-  letter-spacing: var(--tracking-tight);
-  font-weight: var(--weight-normal);
-  color: var(--text);
-  margin-top: 0;
-  margin-bottom: var(--space-xl);
+.about-glow-orange {
+  left: 568px;
+  top: 20px;
+  width: 764px;
+  height: 671px;
+  background: rgba(227, 176, 114, 0.2);
 }
-.about-content p {
-  color: var(--text-muted);
-  font-size: var(--text-body);
-  font-weight: var(--weight-normal);
-  line-height: var(--leading-normal);
-  margin-bottom: var(--space-lg);
-}
-.about-bullets {
-  list-style: none;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-}
-.about-bullets li {
-  font-size: var(--text-body);
-  color: var(--text-muted);
-  line-height: var(--leading-normal);
-  font-weight: var(--weight-normal);
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-}
-.about-bullets li::before {
-  content: '•';
-  color: var(--text-muted);
-  flex-shrink: 0;
+.about-glow-lilac {
+  left: 120px;
+  top: -208px;
+  width: 973px;
+  height: 532px;
+  background: rgba(85, 83, 255, 0.2);
 }
 
-/* Download CV link */
-.about-cv-link {
+/* ── Hero (Main frame) — slogan intro ──
+   .about-slogan sits flush at .about-hero's own side padding
+   (120px at desktop, matching .about-content/.about-extra) rather
+   than centering in a .center-col — its left edge lines up with
+   the rest of the page's content margin. */
+.about-hero {
+  position: relative;
+  z-index: 2; /* above .about-content's z-index:1, so its glow bleed never shows through this text */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 140px var(--container-wide-px) var(--space-4xl);
+}
+.about-slogan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  transform: translateY(-96px); /* nudge up off dead-center, same technique as .hero-content on Home */
+}
+.about-eyebrow-line {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-body);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+.about-eyebrow-line strong { font-weight: var(--weight-semibold); }
+.about-slogan-title {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-display);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-high));
+  max-width: 775px;
+}
+
+/* ── Content section (glow + intro + values) ── */
+.about-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4xl);
+  padding: var(--space-4xl) var(--container-wide-px);
+}
+.about-intro {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-serif-lg);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-high));
+  max-width: 635px;
+}
+
+.about-values {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  width: 100%;
+}
+.about-values-kicker {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+.about-values-list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-xl);
+  width: 100%;
+}
+
+/* Figma shows this row as uniform-height cards, so the row uses
+   align-items:stretch (set on .about-values-list above the 700px
+   breakpoint) rather than sizing each card to its own content —
+   robust to copy-length changes since it's the container doing the
+   stretching, not a fixed height on the card. */
+.about-value-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between; /* chips row pins to the bottom once cards stretch to equal height */
+  gap: 56px; /* Figma literal — falls between --space-3xl(48) and --space-4xl(80) */
+  padding: var(--space-lg);
+  background: var(--overlay-05);
+  border: var(--border-thin) solid var(--overlay-05);
+  border-radius: var(--radius);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.about-value-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+}
+.about-value-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-header);
+  letter-spacing: -1px;
+  line-height: 1.2;
+  color: #fff;
+}
+.about-value-desc {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-md);
+  line-height: 1.18;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+.about-value-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+}
+.about-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-top: var(--space-2xl);
-  color: var(--text);
-  font-size: 18px;
-  font-weight: var(--weight-normal);
-  transition: opacity var(--duration-normal);
-}
-.about-cv-link:hover { opacity: 0.6; }
-.about-cv-link svg { opacity: 0.7; }
-
-/* About photo light/dark switching */
-.about-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
-}
-.about-img-dark { display: none; }
-[data-theme="dark"] .about-img-light { display: none; }
-[data-theme="dark"] .about-img-dark { display: block; }
-
-/* About placeholder */
-.about-img-placeholder {
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--bg-alt);
-  display: flex;
-  align-items: center;
   justify-content: center;
+  padding: 4px var(--space-sm); /* Figma space-4 — no matching token */
+  background: var(--overlay-08);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(12.5px);
+  -webkit-backdrop-filter: blur(12.5px);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 16px; /* Figma Label S CAPS — fixed 16px, not the responsive --text-body token (that bumps to 18px at 1280px+) */
+  line-height: 1.21;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, var(--opacity-high));
+  white-space: nowrap;
+}
+
+/* ── Additional info (fun facts) ── */
+.about-extra {
+  position: relative;
+  z-index: 2; /* above .about-content's z-index:1, same reasoning as .about-hero */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+  padding: var(--space-4xl) var(--container-wide-px);
+}
+.about-extra-kicker {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
   font-size: var(--text-body);
-  color: var(--text-muted);
-  opacity: var(--opacity-mid);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+.about-extra-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+}
+.about-extra-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: var(--space-xs);
+  width: 100%;
+}
+.about-extra-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-header);
+  letter-spacing: -1px;
+  line-height: 1.2;
+  color: #fff;
+}
+.about-extra-desc {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-md);
+  line-height: 1.18;
+  color: rgba(255, 255, 255, var(--opacity-high));
 }
 
 @media (min-width: 700px) {
-  .about-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-3xl);
-  }
-  .about-photo { aspect-ratio: 3/4; }
-  .about-content h2 { font-size: var(--text-heading); }
-  .about-content p,
-  .about-bullets li {
-    font-size: var(--text-title);
-  }
+  .about-hero { min-height: 70vh; padding-top: 160px; }
+  .about-values-list { flex-direction: row; align-items: stretch; }
+  .about-value-card { flex: 1 0 0; min-width: 0; }
+  .about-extra-item { gap: var(--space-sm); }
 }
 
 @media (min-width: 1280px) {
-  .about-grid {
-    grid-template-columns: 1fr 2fr;
+  .about-hero { min-height: 90vh; padding-left: var(--space-section); padding-right: var(--space-section); }
+  .about-content {
     gap: var(--space-4xl);
+    padding: var(--space-section) var(--space-section) 240px; /* Figma literal bottom padding */
   }
-  .about-content h2 { font-size: 48px; }
-  .about-content p,
-  .about-bullets li {
-    font-size: 22px;
-  }
+  .about-extra { padding: var(--space-section); } /* 120px on all sides, per Figma */
+  .about-extra-list { gap: 56px; } /* Figma literal — between --space-3xl and --space-4xl */
 }

@@ -6,21 +6,17 @@
 
 /* Top bar + logo + close — defined in nav.css (shared) */
 
-/* ── Title ── */
-.cs-hero-title {
-  font-family: var(--font-heading); font-weight: var(--weight-normal);
-  font-size: var(--text-heading); line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-tight);
-}
+/* ── Title ──
+   Type set via .type-h1 (css/typography.css). */
 
 /* ── Intro ── */
 .cs-intro {
   display: flex; flex-direction: column; gap: var(--space-2xl);
 }
+/* Type set via .type-body-lg (css/typography.css); this
+   rule only owns color. */
 .cs-intro-text {
-  font-size: var(--text-body); line-height: var(--leading-normal);
-  font-weight: var(--weight-normal);
-  letter-spacing: var(--tracking-tight); color: var(--text);
+  color: var(--text);
 }
 .cs-intro-meta {
   display: flex; flex-direction: column; gap: var(--space-lg);
@@ -114,9 +110,7 @@
 /* ══ TABLET (700px+) ══ */
 @media (min-width: 700px) {
   .cs { padding: 0 var(--space-3xl); }
-  .cs-hero-title { font-size: var(--text-display); }
   .cs-intro { gap: var(--space-3xl); }
-  .cs-intro-text { font-size: var(--text-title); }
   .cs-meta-label { width: 100px; font-size: var(--text-body); }
   .cs-meta-val { font-size: var(--text-title); }
   .cs-tag { font-size: var(--text-body); padding: var(--space-md) 20px; }
@@ -134,9 +128,8 @@
 /* ══ DESKTOP (1280px+) ══ */
 @media (min-width: 1280px) {
   .cs { padding: 0 240px; }
-  .cs-hero-title { font-size: 72px; }
   .cs-intro { flex-direction: row; gap: var(--space-4xl); }
-  .cs-intro-text { flex: 1; max-width: none; font-size: var(--text-title); }
+  .cs-intro-text { flex: 1; max-width: none; }
   .cs-intro-meta { flex: 1; }
   .cs-meta-row { gap: var(--space-2xl); }
   .cs-meta-label { font-size: 14px; }

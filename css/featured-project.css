@@ -1,0 +1,140 @@
+/* ── FEATURED PROJECT (Currently at Mendi) ─────────
+   The one "deep" case-study feature on Home: image + write-up,
+   CTA into the case study, and a quiet text-nav into its chapters.
+   No local glow here — no overflow:hidden either, so the ambient
+   light from .glow-zone above (hero + quote) bleeds down through
+   into this section instead of being cut off at a hard edge.
+   z-index:1 matches .hero/.quote-section (their own stacking
+   contexts) so this section still paints above them via normal DOM
+   order — without an explicit z-index here, .hero's z-index:1 alone
+   would otherwise rank its entire subtree (glow included) above this
+   section regardless of source order. */
+.featured-project {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-4xl) var(--container-wide-px);
+}
+
+.featured-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.featured-media {
+  display: block;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 404 / 521.5;
+}
+.featured-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.featured-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.featured-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.featured-title {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-normal);
+  font-size: 32px;
+  line-height: 1.18;
+  letter-spacing: var(--tracking-tight);
+  color: #fff;
+}
+
+.featured-intro {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-serif-lg);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+
+/* ── Explore chapters ── */
+/* align-self:flex-start so this shrinks to its own content width
+   (it was stretching to match .featured-text's full column width
+   by default, making the divider run much longer than the actual
+   text/links it sits above). */
+.chapters {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: var(--border-thin) solid var(--overlay-10);
+}
+.chapters-label {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+.chapters-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.chapter-tertiary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  width: fit-content;
+  font-family: var(--font-accent);
+  font-size: var(--fs-home-md);
+  line-height: 1;
+  color: var(--coral);
+  text-decoration: none;
+}
+/* Always visible, matching Figma — a small hover nudge is the
+   only thing still deferred to interaction. */
+.chapter-tertiary svg {
+  flex-shrink: 0;
+  transition: transform var(--duration-medium) var(--ease-default);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .chapter-tertiary:hover svg {
+    transform: translate(3px, 0);
+  }
+}
+.chapter-tertiary.is-muted {
+  color: rgba(255, 255, 255, var(--opacity-75));
+}
+.chapter-tertiary.is-muted em {
+  font-style: italic;
+}
+
+@media (min-width: 700px) {
+  .featured-project { padding: var(--space-section) var(--container-wide-px); }
+  .featured-title { font-size: 40px; }
+}
+
+@media (min-width: 1280px) {
+  .featured-project { padding: var(--space-section) var(--space-section); }
+  .featured-grid { flex-direction: row; gap: var(--space-3xl); align-items: stretch; }
+  /* Fixed 588px height (Figma's literal value) overrides the
+     404/521.5 aspect-ratio used below this breakpoint — the
+     container needs the explicit height too, since it clips the
+     img via overflow:hidden and would otherwise still cap it at
+     the aspect-ratio-derived 521.5px regardless of the img's own
+     height. */
+  .featured-media { flex-shrink: 0; width: 404px; height: 588px; aspect-ratio: auto; }
+  .featured-media img { height: 588px; }
+  .featured-text {
+    flex: 1;
+    justify-content: space-between;
+  }
+  .featured-title { font-size: 48px; }
+}

@@ -1,111 +1,246 @@
-/* ── WORK CAROUSEL ──────────────────────────────── */
+/* ── WORK: two levels ───────────────────────────────
+   "Currently at Mendi" = depth: one anchor case-study card,
+   plus a quiet text nav into its three chapters — navigation,
+   not more cards. "Other work" = breadth: the original
+   horizontal-scroll trailer row. Material is the shared
+   .atmo-surface recipe: the site's existing --glass-* tokens
+   (dark tinted translucency, already used for nav/FAQ) plus a
+   low-opacity tint/vignette and fine grain. Typography from
+   css/typography.css; default state stays calm, personality
+   only shows up on hover. */
+
 .work-section { padding: 0; }
-.work-scroll {
+
+.work-kicker {
+  display: block;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: var(--space-lg);
+}
+
+/* ── Shared atmospheric surface (project + Mendi media) ── */
+.atmo-surface {
+  position: relative;
+  overflow: hidden;
+  border: var(--border-thin) solid var(--glass-border);
+  background: var(--glass-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.atmo-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(255, 90, 31, 0.07), transparent 55%),
+    radial-gradient(circle at 80% 85%, rgba(79, 124, 255, 0.06), transparent 55%),
+    radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.12) 100%);
+  pointer-events: none;
+}
+.atmo-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  transition: opacity var(--duration-medium) var(--ease-default);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .project-card:hover .atmo-surface::after,
+  .mendi-feature:hover .atmo-surface::after {
+    opacity: 0.08;
+  }
+}
+
+/* ── Project media ──
+   Trailer cards: image fills the frame (cover) so the actual
+   interface reads clearly — this is proof-of-work, not a
+   floating render. --img-zoom lets each project push past its
+   own source image's padding to frame its real UI; set per
+   card below since the source crops aren't uniform. Mendi's
+   card is the one exception, kept as a contained, spacious
+   render — a deliberate difference: Mendi gets a considered
+   presentation, trailers get dense, scannable proof. */
+.project-media {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius);
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.project-media img {
+  --img-zoom: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--duration-slow) var(--ease-default);
+  transform: scale(var(--img-zoom));
+}
+.mendi-feature .project-media img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+}
+#card-daylight .project-media img { --img-zoom: 1.25; object-position: 35% 42%; }
+#card-workmate .project-media img { --img-zoom: 1.3; object-position: 50% 18%; }
+#card-slingshot .project-media img { --img-zoom: 1.15; object-position: 50% 35%; }
+#card-patreon .project-media img { --img-zoom: 1.2; object-position: 45% 35%; }
+@media (prefers-reduced-motion: no-preference) {
+  .project-card:hover .project-media img,
+  .mendi-feature:hover .project-media img {
+    transform: scale(calc(var(--img-zoom) * 1.02));
+  }
+}
+
+/* Tiny "peek" detail — invisible until hover, the one
+   unexpected touch on an otherwise very calm card. */
+.project-peek {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--glass-surface-hover);
+  border: var(--border-thin) solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  opacity: 0;
+  transform: translate(-3px, 3px) rotate(-8deg);
+  transition: opacity var(--duration-medium) var(--ease-default),
+              transform var(--duration-medium) var(--ease-default);
+}
+/* Mendi's peek carries a small label instead of just an icon */
+.project-peek--label {
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-pill);
+  padding: 6px 12px;
+  gap: 4px;
+  color: var(--text);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .project-card:hover .project-peek,
+  .mendi-feature:hover .project-peek {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-peek { display: none; }
+}
+
+/* ── Info: kicker + title only — extremely restrained ── */
+.project-card-info {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.project-meta {
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.project-card-title {
+  color: var(--text);
+  font-weight: var(--weight-medium);
+}
+
+/* ── Currently at Mendi: anchor card + quiet chapter nav ── */
+.mendi-feature {
+  display: block;
+  max-width: 440px;
+  color: inherit;
+  text-decoration: none;
+}
+.mendi-feature .project-card-title { font-weight: var(--weight-medium); }
+
+.mendi-chapters-nav {
+  max-width: 440px;
+  margin-top: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+}
+.chapter-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  border-top: var(--border-thin) solid var(--glass-border);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--duration-medium) var(--ease-default);
+}
+.mendi-chapters-nav .chapter-link:last-child {
+  border-bottom: var(--border-thin) solid var(--glass-border);
+}
+.chapter-index {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.chapter-name {
+  flex: 1;
+  color: var(--text);
+}
+.chapter-arrow {
+  flex-shrink: 0;
+  opacity: 0;
+  transform: translate(-3px, 0);
+  transition: opacity var(--duration-medium) var(--ease-default),
+              transform var(--duration-medium) var(--ease-default);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .chapter-link:hover { color: var(--text); }
+  .chapter-link:hover .chapter-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chapter-arrow { opacity: 1; }
+}
+
+/* ── Other work: horizontal browse (unchanged mechanics) ── */
+.work-other {
+  margin-top: var(--space-4xl);
+}
+.work-scroll {
+  --card-w: 76vw;
+  --card-w-max: 310px;
+  display: flex;
+  align-items: flex-start;
   gap: var(--space-md);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  padding: var(--space-xs) var(--container-wide-px);
+  padding: var(--space-xs) var(--container-wide-px) var(--space-md);
   scrollbar-width: none;
-  background: transparent;
 }
 .work-scroll::-webkit-scrollbar { display: none; }
-.work-card {
+
+.project-card {
   flex-shrink: 0;
-  width: 75vw;
-  max-width: 448px;
-  scroll-snap-align: center;
-  cursor: pointer;
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--glass-surface);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: var(--border-thin) solid var(--glass-border);
-  box-shadow: var(--shadow-md);
-  transition: transform var(--duration-medium) var(--ease-default);
-  padding: var(--space-xs);
-  display: flex;
-  flex-direction: column;
-}
-.work-card:hover {
-  transform: scale(1.01);
-}
-img.work-card-img,
-div.work-card-img {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
+  width: var(--card-w);
+  max-width: var(--card-w-max);
+  scroll-snap-align: start;
   display: block;
-  border-radius: var(--radius);
-  transition: transform var(--duration-slow) var(--ease-default);
-  background: transparent;
-  opacity: 1;
-}
-/* Icon placeholder for project cards */
-.work-card-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-alt);
-  color: var(--text-muted);
-  mix-blend-mode: normal;
-}
-.work-card-icon svg { opacity: var(--opacity-mid); }
-.work-card:hover .work-card-img { transform: scale(1.03); }
-.work-card-overlay {
-  padding: var(--space-md) var(--space-xs);
-  color: var(--text);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-}
-.work-card-title {
-  font-family: var(--font-heading);
-  font-size: var(--text-title);
-  font-weight: var(--weight-normal);
-  letter-spacing: var(--tracking-tight);
-}
-.work-card-desc {
-  font-size: var(--text-body);
-  color: var(--text-muted);
-}
-.work-card-index {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: var(--space-sm);
-  background: var(--bg-alt);
-  color: var(--text-muted);
-  border-radius: var(--radius);
-  aspect-ratio: 1;
-  height: 100%;
-}
-.work-card-index .folder-icon {
-  font-size: 2rem;
-  opacity: var(--opacity-mid);
-}
-.work-card-index span {
-  font-size: var(--text-caption);
-  font-weight: var(--weight-normal);
+  color: inherit;
+  text-decoration: none;
 }
 
 @media (min-width: 700px) {
-  .work-scroll { gap: var(--space-lg); }
-  .work-card { width: 315px; }
-  .work-card-title { font-size: var(--text-title); }
-  .work-card-overlay { padding: var(--space-md) var(--space-sm); }
+  .work-other { margin-top: var(--space-section); }
+  .work-scroll { --card-w: 295px; gap: var(--space-lg); }
+  .project-card { max-width: none; }
 }
 
 @media (min-width: 1280px) {
-  .work-scroll { gap: var(--space-xl); }
-  .work-card { width: 403px; }
-  .work-card-title { font-size: var(--text-heading); }
-  .work-card-index { aspect-ratio: auto; }
+  .work-other { margin-top: var(--space-section-lg); }
+  .work-scroll { --card-w: 320px; }
 }

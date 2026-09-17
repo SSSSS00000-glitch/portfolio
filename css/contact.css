@@ -6,6 +6,12 @@
   gap: var(--space-3xl);
   align-items: start;
 }
+.contact-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
 .contact-left .section-title {
   margin-bottom: 0;
 }
@@ -30,9 +36,7 @@
   width: fit-content;
   cursor: pointer;
 }
-.social-btn svg {
-  width: 20px;
-  height: 20px;
+.btn-arrow {
   flex-shrink: 0;
   opacity: var(--opacity-mid);
 }

@@ -1,0 +1,850 @@
+/* ── BEAMINGO CASE STUDY ────────────────────────────
+   Figma: node 413:39472. Same dark/coral visual language as
+   About — nav, footer, and the .pgrid-card / .phone-mockup
+   components are shared (see about.html, projects-grid.css,
+   phone-mockup.css); this file only owns the sections unique to
+   this page: hero, brief, work grid, selected-work spotlight and
+   impact stats. */
+
+/* ── Shared chip (Figma "Chip") ──
+   Same recipe as .about-chip / .eyebrow — this project doesn't
+   have one central chip class, each section defines its own using
+   the same tokens, so this follows that convention rather than
+   introducing a cross-page dependency on about.css. */
+.proj-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px var(--space-sm);
+  background: var(--overlay-08);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(12.5px);
+  -webkit-backdrop-filter: blur(12.5px);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  line-height: 1.21;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* ── Eyebrow label (section kicker) — reused across all sections
+   below, same recipe as .about-values-kicker. ── */
+.proj-kicker {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 16px; /* Figma fixed Label size, not the responsive --text-body token */
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+
+/* ── Hero ──
+   min-height:100vh (viewport-relative, not a fixed px height) with the
+   grid vertically centered inside it — previously justify-content:flex-end
+   pinned content to the bottom of the box, which was harmless as long as
+   the box's natural height matched min-height, but the image column's
+   own aspect-ratio (see .proj-hero-image below) could make the actual
+   content taller than that, and flex-end has no correcting effect once
+   content already exceeds the container — the box just grows and the
+   image trails off past the fold. Centering keeps it contained instead. */
+.proj-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 30px var(--container-wide-px) var(--space-4xl); /* top reduced from 140px */
+}
+.proj-hero-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+  width: 100%;
+}
+/* Grid, not flex + space-between: a 1fr row for the top group + an
+   auto row for "My role" keeps "My role" pinned to the bottom (the
+   auto row only takes its own content height) while the top group
+   centers within whatever space is left above it (align-self:center
+   below) instead of sitting flush at the very top. */
+.proj-hero-text {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: var(--space-3xl);
+}
+.proj-hero-top {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md); /* 16px: title → tagline, confirmed in Figma */
+}
+.proj-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-light);
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: #fff;
+}
+.proj-tagline {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-serif-lg);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+.proj-hero-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--space-md); /* minimum spacing if chips wrap to multiple lines */
+  margin-top: var(--space-md); /* stacks onto .proj-hero-top's 16px gap for 32px total tagline → chips, confirmed in Figma */
+}
+.proj-role {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.proj-role-label {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+.proj-role-value {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-title);
+  color: #fff;
+}
+/* Fixed aspect-ratio box: 584:480 on this single-column mobile layout,
+   584:684 (Figma's "Link" node) once the row layout kicks in at 700px
+   — see that breakpoint below for why height, not width or max-height,
+   is the definite value there.
+   The img is position:absolute + inset:0 (same technique as
+   .pgrid-card img in projects-grid.css) rather than plain width/
+   height:100% — a plain 100%/100% child is what the container would
+   need to size itself against, a circular dependency that collapses
+   the box to 0×0 once nothing else in flow gives it a size. object-
+   fit:cover + object-position:center is what keeps the POS tablet as
+   the focal point once the box is sized. */
+.proj-hero-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 584 / 480;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.proj-hero-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: var(--opacity-75);
+}
+
+/* ── Brief ── */
+.proj-brief {
+  padding: var(--space-4xl) var(--container-wide-px);
+}
+.proj-brief-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 600px;
+}
+.proj-brief-text {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-serif-lg);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+
+/* ── Work grid ("What I worked on") ── */
+.proj-work {
+  padding: var(--space-4xl) var(--container-wide-px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+}
+.proj-work-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+}
+.proj-work-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--overlay-02);
+  border: var(--border-thin) solid var(--overlay-05);
+  border-radius: var(--radius);
+}
+.proj-work-image {
+  width: 100%;
+  max-width: 320px;
+  height: 212px;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.proj-work-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Number-ready screen: this source image's own aspect ratio doesn't
+   match the fixed box, and object-fit:cover was cropping its "Tillagas"
+   / "Klar för upphämtning" header labels off the top edge. contain
+   shows the full image instead — its surrounding padding is transparent
+   (same convention as the other work-grid mockups), so it still blends
+   into the card rather than leaving a visible letterbox. Small inset
+   padding on the container keeps the flush-left "Tillagas" label from
+   touching (and getting clipped by) the box's own rounded corner. */
+.proj-work-image--contain {
+  padding: 6px;
+}
+.proj-work-image--contain img {
+  object-fit: contain;
+}
+/* Variant: 3 stacked images instead of one (the white-label-products
+   cell) — same card shell, different media slot. */
+.proj-work-stack {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-end;
+  width: 100%;
+  max-width: 320px;
+  height: 212px;
+}
+.proj-work-stack img {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+.proj-work-caption {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-body);
+  line-height: 1.28;
+  color: rgba(255, 255, 255, var(--opacity-80));
+  text-align: center;
+}
+
+/* ── Selected work spotlight ── */
+.proj-selected {
+  padding: var(--space-4xl) var(--container-wide-px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+}
+.proj-selected-intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 600px;
+}
+.proj-selected-kicker {
+  display: flex;
+  gap: var(--space-xs);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+.proj-selected-headline {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 32px;
+  letter-spacing: -1px;
+  line-height: 1.18;
+  color: #fff;
+}
+.proj-selected-body {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-title);
+  letter-spacing: 0.1px;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, var(--opacity-80));
+}
+
+/* ── Frosted panel (shared) ──
+   The "backdrop-blur-[2px] bg-[rgba(255,255,255,0.02)] rounded-[40px]"
+   recipe recurs on every case-study page around a different kind of
+   content — the phone row here, plus the design-system swatches and
+   screenshot gallery on radeito.html — so it's one class, not copied
+   per section. Padding is the Figma literal (72/48), same as the old
+   .phone-mockup-row values it replaces. */
+.proj-panel {
+  width: 100%;
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--overlay-02);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: var(--radius-lg);
+}
+@media (min-width: 700px) {
+  .proj-panel { padding: var(--space-3xl) var(--space-4xl); }
+}
+@media (min-width: 1280px) {
+  .proj-panel { padding: 48px 72px; } /* Figma literal */
+}
+
+/* ── Intro block (headline + body) ──
+   Reused as-is for every "just a headline and a paragraph" section on
+   a case-study page — same recipe as .proj-selected-headline/-body,
+   just without the "Selected work・X" kicker line above it. Radeito
+   uses it twice: the booking-journey intro and the "foundation for
+   growth" design-system intro. */
+.proj-intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 600px;
+}
+.proj-intro-headline {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 32px;
+  letter-spacing: -1px;
+  line-height: 1.18;
+  color: #fff;
+}
+.proj-intro-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-title);
+  letter-spacing: 0.1px;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, var(--opacity-80));
+}
+
+/* ── Design-system swatches (Radeito "Building a foundation for
+   growth") — a colour-scale image over two typography-specimen
+   strips, all inside .proj-panel. Images are flat exported graphics,
+   not UI mockups, so a plain aspect-ratio box + object-fit:cover is
+   enough (no crop/lorem-ipsum concerns here). ── */
+.proj-swatches {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  align-items: center;
+}
+.proj-swatch-colours {
+  width: 100%;
+  aspect-ratio: 2568 / 1279;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.proj-swatch-type {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: 0 var(--space-md);
+}
+.proj-swatch-type-1 { aspect-ratio: 2144 / 248; }
+.proj-swatch-type-2 { aspect-ratio: 2144 / 236; }
+.proj-swatches img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Screenshot gallery (Radeito) — one full-width shot over two
+   side-by-side shots, all inside .proj-panel. The row's two images
+   stack on mobile; at 700px+ the wide one sets the row's height via
+   its own aspect-ratio (a definite-width-derives-height case, which
+   resolves reliably) and the tall one simply stretches to match
+   (default flex align-items:stretch) rather than trying to derive its
+   own width from that height, which does not reliably resolve. ── */
+.proj-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+}
+.proj-gallery-main {
+  width: 100%;
+  aspect-ratio: 948 / 469;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.proj-gallery-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+}
+.proj-gallery-wide,
+.proj-gallery-tall {
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.proj-gallery-wide { aspect-ratio: 1378 / 720; }
+.proj-gallery-tall { aspect-ratio: 902 / 714; }
+.proj-gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+@media (min-width: 700px) {
+  .proj-gallery-row { flex-direction: row; align-items: stretch; gap: var(--space-2xl); }
+  .proj-gallery-wide { flex: 1.5 0 0; min-width: 0; }
+  .proj-gallery-tall { flex: 1 0 0; min-width: 0; aspect-ratio: unset; }
+}
+
+/* ── Impact stats ── */
+.proj-impact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  width: 100%;
+}
+.proj-impact-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+}
+.proj-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--overlay-02);
+  border: var(--border-thin) solid var(--overlay-05);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 292px;
+}
+.proj-stat-number {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: 64px;
+  line-height: 1.15;
+  color: #fff;
+}
+.proj-stat-label {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-body);
+  line-height: 1.28;
+  color: rgba(255, 255, 255, var(--opacity-80));
+}
+
+/* ── Impact row (stats beside accompanying copy) — Baemingo and
+   Neurosight both pair the stat cards with a line of copy alongside
+   them rather than below; .proj-impact-grid keeps doing exactly what
+   it already did (the 2-card column→row switch), this just wraps it
+   next to text. Stacked on mobile, side by side from desktop. ── */
+.proj-impact-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  width: 100%;
+}
+.proj-impact-lead {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--fs-home-md);
+  color: #fff;
+}
+/* Serif callout line (Baemingo's "Beamingo now powers ordering for
+   4,000+ restaurants…") — same recipe as .proj-brief-text but at a
+   fixed 40px per Figma rather than the clamped --fs-home-serif-lg,
+   and opacity-80 rather than opacity-high. */
+.proj-impact-quote {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: 40px;
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-80));
+}
+
+/* Impact-row body copy (Neurosight): Figma assigns this text the
+   "Intro/Intro Serif" style — Instrument Serif 40px/1.21, no letter-
+   spacing — the same recipe .proj-impact-quote already uses for
+   Baemingo's single-line callout in this same row slot. Scoped to
+   .proj-impact-row so the plain .proj-intro-body used elsewhere on
+   the page (e.g. the "Mendi user"/"two jobs" intros) keeps its
+   regular Manrope body styling. */
+.proj-impact-row > .proj-intro-body {
+  font-family: var(--font-accent);
+  font-size: 40px;
+  line-height: 1.21;
+  letter-spacing: 0;
+}
+
+@media (min-width: 1280px) {
+  .proj-impact-row { flex-direction: row; align-items: flex-start; gap: var(--space-4xl); }
+  /* .proj-impact-grid's own base rule sets width:100% (correct when
+     it's alone) — flex-basis:auto defers to that width on a row flex
+     item, so without resetting it here the grid claims the whole
+     row and the text collapses to 0. */
+  .proj-impact-row > .proj-impact-grid { width: auto; flex: 0 0 auto; }
+  .proj-impact-row > .proj-intro-body,
+  .proj-impact-row > .proj-impact-quote { flex: 1 1 0; min-width: 0; }
+
+  /* Modifier (Baemingo): centers the quote against the stat cards
+     instead of top-aligning — opt-in per page since Neurosight's
+     longer two-paragraph impact copy reads better top-aligned. */
+  .proj-impact-row--center { align-items: center; }
+}
+
+/* ── Confidentiality note (Länsförsäkringar hero) — sits under
+   "My role" when the case can't show detailed product interfaces. ── */
+.proj-role-note {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-body);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-mid));
+  max-width: 480px;
+}
+
+/* ── Highlight cards ("What I worked on", Länsförsäkringar) ──
+   Unlike Caree/Baemingo's evenly-sized image cards, these are text-led:
+   a small decorative crop + title + subtitle + description. The four
+   crops all come from one shared abstract graphic (the confidentiality
+   note means there are no real screens to show) — object-position
+   samples a different quadrant per card instead of hand-cropping four
+   separate image files. Figma lays these out as two independently
+   authored columns; a plain 2-col grid in DOM order reproduces the
+   same 2×2 arrangement without that extra nesting. */
+.proj-highlights {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  width: 100%;
+}
+.proj-highlight-card {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: var(--space-md);
+  padding: var(--space-xl) var(--space-2xl);
+  background: var(--overlay-02);
+  border: var(--border-thin) solid var(--overlay-05);
+  border-radius: var(--radius);
+}
+/* The exported asset was one 2×2 sprite sheet (four distinct icons in
+   one image — Figma re-used the same fill on all four cards). Each
+   glyph is its own alpha-preserved PNG, tightly cropped to its own ink
+   and then composited onto one shared canvas size (bottom-left
+   anchored) so all four files share an identical aspect ratio — that's
+   what makes "contain" scale every icon by the same factor here.
+   In Figma each icon's own container is sized to that icon's own crop
+   (165×160.3, 176×139, 165×159.5, 190.3×124.3 — no single fixed value),
+   so a fixed square box is a deliberate departure from that: 80×80,
+   top-left aligned, gives every card an identical icon footprint and
+   start position regardless of each illustration's own proportions. */
+.proj-highlight-icon {
+  max-width: 100%;
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: contain;
+}
+/* Each icon rendered near its own Figma size (not a shared uniform
+   box) — 165×160, 176×139, 165×159.5, 190×124 respectively. They're
+   individual illustrations with their own natural proportions, not a
+   vector icon set with one canonical size. What actually keeps the
+   cards visually consistent is every icon starting from the same
+   top-left position (background-position: left top, and .proj-
+   highlight-card's own align-items:start) — the varying heights just
+   mean the title sits a little closer or further below depending on
+   the icon, same as Figma itself does. */
+.proj-highlight-icon--1 { width: 165px; height: 160px; background-image: url('../assets/lansforsakringar-icon-1-alf.png?v=3'); }
+.proj-highlight-icon--2 { width: 165px; height: 160px; background-image: url('../assets/lansforsakringar-icon-2-pension.png?v=3'); }
+.proj-highlight-icon--3 { width: 176px; height: 139px; background-image: url('../assets/lansforsakringar-icon-3-life.png?v=3'); }
+.proj-highlight-icon--4 { width: 190px; height: 124px; background-image: url('../assets/lansforsakringar-icon-4-lumera.png?v=3'); }
+.proj-highlight-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-heading);
+  line-height: 1.2;
+  color: #fff;
+}
+.proj-highlight-subtitle {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--fs-home-md);
+  letter-spacing: 0.1px;
+  line-height: 1.2;
+  color: #fff;
+}
+.proj-highlight-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-body);
+  line-height: 1.28;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+
+/* ── Story subheading (Länsförsäkringar "Bringing the offices into
+   the process") — one step below .proj-selected-headline, used inside
+   a .proj-intro-body-bearing block to introduce a sub-narrative. ── */
+.proj-story-subheading {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-heading);
+  letter-spacing: 0.1px;
+  line-height: 1.2;
+  color: #fff;
+}
+
+/* ── Larger body copy modifier (Länsförsäkringar Lumera + Impact
+   sections use 24px where the default .proj-intro-body is 20px) —
+   and the bold closing line ("Being heard mattered before anything
+   shipped.") is just a <strong> inside it rather than a one-off class. ── */
+.proj-intro-body--lg {
+  font-size: var(--fs-home-md);
+}
+.proj-intro-body strong {
+  font-weight: var(--weight-medium);
+  color: #fff;
+}
+
+/* ── Process steps (Länsförsäkringar research→prototype) ── Each
+   circle's border/number colour is a literal Figma sample — five
+   one-off accents used nowhere else on the site, so kept local as
+   modifiers instead of new global tokens (cf. --coral, --status-green,
+   which back reusable components). The arrow is Figma's own "→"
+   glyph, not an icon asset. ── */
+.proj-process-section {
+  padding: 0 var(--container-wide-px);
+}
+.proj-process {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-lg);
+  width: 100%;
+}
+.proj-process-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 152px;
+  height: 152px;
+  padding: 22px var(--space-sm) 0;
+  border: var(--border-thin) solid;
+  border-radius: 50%;
+  text-align: center;
+}
+.proj-process-step--1 { border-color: #ffeebb; }
+.proj-process-step--1 .proj-process-number { color: #f2e6c1; }
+.proj-process-step--2 { border-color: #fde281; }
+.proj-process-step--2 .proj-process-number { color: #fde281; }
+.proj-process-step--3 { border-color: #d2ea8e; }
+.proj-process-step--3 .proj-process-number { color: #d2ea8e; }
+.proj-process-step--4 { border-color: #9ebaff; }
+.proj-process-step--4 .proj-process-number { color: #9ebaff; }
+.proj-process-step--5 { border-color: #d65f83; }
+.proj-process-step--5 .proj-process-number { color: #d65f83; }
+.proj-process-number {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-title);
+  letter-spacing: 0.05px;
+}
+.proj-process-label {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-title);
+  letter-spacing: 0.05px;
+  color: #fff;
+}
+.proj-process-desc {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-caption);
+  line-height: 1.28;
+  color: rgba(255, 255, 255, var(--opacity-mid));
+}
+.proj-process-arrow {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 24px;
+  color: #fff;
+}
+
+/* ── Right-aligned intro (Caree "One experience, two sides") ──
+   Same .proj-intro recipe, but Figma pins this particular intro block
+   to the right edge of the section instead of the left (items-end on
+   the "Experience section" frame). Text inside stays left-aligned —
+   only the block's own position shifts — so this is a placement
+   modifier, not a new text recipe. Single column on mobile like every
+   other intro block; the shift only appears once there's room for it
+   at tablet+. */
+@media (min-width: 700px) {
+  .proj-intro--right { margin-left: auto; }
+}
+
+/* ── Ecosystem diagram (Caree "Mapping the product ecosystem") ──
+   One full-bleed image inside .proj-panel — same idea as
+   .proj-gallery-main, kept as its own class since it's a standalone
+   panel rather than part of the wide+row gallery composition. */
+.proj-diagram {
+  width: 100%;
+  aspect-ratio: 3352 / 1208;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.proj-diagram img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Journey flow diagram (Caree "One experience, two sides") ──
+   Three phone screens (reuses .phone-mockup) feeding into a glowing
+   "Step 1" graphic, connected to a desktop landing-page screenshot
+   below. Figma composes this with absolute-positioned connector
+   lines; the two connector SVGs (real exported vectors, not
+   hand-drawn) are kept as plain flow content instead of pinned
+   coordinates so the whole thing reflows at the project's two
+   breakpoints rather than depending on a fixed 1440px frame. Mobile
+   stacks everything in one column with the connector rotated to
+   point down; tablet+ switches to Figma's side-by-side arrangement. */
+.proj-journey {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3xl);
+  width: 100%;
+}
+.proj-journey-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+}
+.proj-journey-phones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xl);
+}
+.proj-journey-connector {
+  flex-shrink: 0;
+  opacity: var(--opacity-mid);
+}
+.proj-journey-flow > .proj-journey-connector {
+  transform: rotate(90deg);
+}
+/* Exported pointing left (Figma applies its own -90deg rotate to turn
+   it into the down-connector between "Step 1" and the landing page) —
+   always down, independent of the row/column switch above. */
+.proj-journey-connector--down {
+  transform: rotate(-90deg);
+}
+.proj-journey-step {
+  width: 110px;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--violet-glow);
+}
+.proj-journey-landing {
+  width: 100%;
+  max-width: 620px;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.proj-journey-landing img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (min-width: 700px) {
+  .proj-journey-flow { flex-direction: row; justify-content: center; }
+  .proj-journey-flow > .proj-journey-connector { transform: none; }
+  .proj-journey-step { width: 130px; }
+}
+
+@media (min-width: 1280px) {
+  .proj-journey-step { width: 146px; }
+  .proj-journey-landing { max-width: 690px; }
+}
+
+@media (min-width: 700px) {
+  .proj-highlights { grid-template-columns: repeat(2, 1fr); }
+  .proj-process-step { width: 176px; height: 176px; padding: 26px var(--space-md) 0; }
+}
+
+@media (min-width: 1280px) {
+  .proj-process-step { width: 192px; height: 192px; padding: 28px var(--space-md) 0; } /* Figma literal */
+}
+
+@media (min-width: 700px) {
+  .proj-hero { padding-top: 40px; } /* reduced from 160px */
+  /* align-items:stretch — matches Figma's "Image and description
+     container" (self-stretch against the image column). The text
+     column's own justify-content:space-between (see .proj-hero-text)
+     then pins "My role" to the bottom of that stretched height and the
+     heading/tagline/chips group to the top, so "My role" lines up with
+     the image's bottom edge instead of floating with a gap beneath it. */
+  .proj-hero-grid { flex-direction: row; gap: var(--space-4xl); align-items: stretch; } /* 80px, widened from Figma's 56px */
+  .proj-hero-text { flex: 1 0 0; min-width: 0; }
+  /* Equal-width, fluid column — width comes from the flex share (same
+     as .proj-hero-text, both flex:1 0 0), so it scales continuously with
+     the viewport/column width instead of sitting at a size derived from
+     viewport HEIGHT (a calc(100vh...) height, tried previously, doesn't
+     react to the window's WIDTH at all, which read as "stuck fixed" when
+     resizing horizontally). Height then derives from that fluid width
+     via aspect-ratio — the reverse (deriving width from a fixed height)
+     doesn't reliably resolve for a flex row item, confirmed earlier. */
+  .proj-hero-image {
+    flex: 1 0 0;
+    min-width: 0;
+    aspect-ratio: 584 / 684;
+  }
+  .proj-title { font-size: 52px; }
+
+  .proj-work-grid { grid-template-columns: repeat(2, 1fr); }
+  .proj-selected-headline { font-size: 40px; }
+  .proj-impact-grid { flex-direction: row; }
+}
+
+@media (min-width: 1280px) {
+  .proj-hero { padding-left: var(--space-section); padding-right: var(--space-section); }
+  .proj-title { font-size: 64px; }
+
+  .proj-brief { padding: var(--space-section); }
+  .proj-brief-inner { gap: var(--space-lg); }
+
+  .proj-work { padding: var(--space-section); }
+  .proj-work-grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); }
+
+  .proj-selected { padding: var(--space-section); }
+  .proj-selected-headline { font-size: 48px; }
+
+  .proj-stat-number { font-size: 64px; }
+  /* Figma specifies a fixed 292px stat-card width at desktop (not a
+     cap) — width:100% + max-width was correct for the mobile/tablet
+     responsive shrink, but at 1280px+ the card should sit at exactly
+     292px rather than however much its flex/grid row context leaves it. */
+  .proj-stat-card { width: 292px; }
+}

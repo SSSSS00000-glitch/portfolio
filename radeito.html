@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radeito — Sophia Nilsson</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/typography.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/nav.css" />
+  <link rel="stylesheet" href="css/project-page.css" />
+  <link rel="stylesheet" href="css/phone-mockup.css" />
+  <link rel="stylesheet" href="css/projects-grid.css" />
+  <link rel="stylesheet" href="css/footer.css" />
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <nav id="nav">
+    <div class="nav-identity" id="nav-logo">
+      <div class="nav-identity-text">
+        <a href="index.html" class="nav-identity-name">Sophia Nilsson</a>
+        <span class="nav-identity-role">Product Designer</span>
+      </div>
+      <span class="eyebrow"><span class="eyebrow-dot"></span>At Mendi Innovations</span>
+    </div>
+    <ul class="nav-right home-pill" id="nav-buttons">
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============ HERO ============ -->
+  <section class="proj-hero">
+    <div class="proj-hero-grid">
+      <div class="proj-hero-text">
+        <div class="proj-hero-top">
+          <h1 class="proj-title">Radeito</h1>
+          <p class="proj-tagline">Giving an early idea shape, structure and direction.</p>
+          <div class="proj-hero-chips">
+            <span class="proj-chip">AUTOMOTIVE</span>
+            <span class="proj-chip">B2C</span>
+            <span class="proj-chip">MOBILE</span>
+            <span class="proj-chip">2022: 4 months</span>
+          </div>
+        </div>
+        <div class="proj-role">
+          <span class="proj-role-label">My role</span>
+          <span class="proj-role-value">Product Designer</span>
+        </div>
+      </div>
+      <div class="proj-hero-image">
+        <img src="assets/radeito-hero.jpg" alt="Radeito app showing nearby automotive service points on a map" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE BRIEF ============ -->
+  <section class="proj-brief">
+    <div class="proj-brief-inner">
+      <span class="proj-kicker">The brief</span>
+      <p class="proj-brief-text">Radeito connected car owners with workshops. I joined the project to shape the B2C mobile experience and turn an early product idea into an MVP.</p>
+      <p class="proj-brief-text">With growth in mind from the start, I kept the design system lean and the components versatile, creating a foundation that could evolve with the product.</p>
+    </div>
+  </section>
+
+  <!-- ============ DESIGNING THE CORE BOOKING JOURNEY ============ -->
+  <section class="proj-selected">
+    <div class="proj-intro">
+      <h2 class="proj-intro-headline">Designing the core booking journey</h2>
+      <p class="proj-intro-body">I structured the experience around four key steps, from discovering the right workshop and exploring its services to booking a time and managing the appointment.</p>
+    </div>
+
+    <!-- Rendered by js/phone-mockup.js — one shared component, no duplicated frame markup -->
+    <div class="proj-panel phone-mockup-row" id="phone-mockups"></div>
+  </section>
+
+  <!-- ============ BUILDING A FOUNDATION FOR GROWTH ============ -->
+  <section class="proj-selected">
+    <div class="proj-intro">
+      <h2 class="proj-intro-headline">Building a foundation for growth</h2>
+      <p class="proj-intro-body">Radeito was still defining its product and audience, so the visual identity needed room to evolve. Through regular workshops with the client, we established the foundations of the brand, including the green they wanted at its core.</p>
+      <p class="proj-intro-body">I created a lean system of typography, colour scales and versatile components, giving the MVP consistency while leaving room to evolve as we learned more about its users.</p>
+    </div>
+
+    <div class="proj-panel">
+      <div class="proj-swatches">
+        <div class="proj-swatch-colours">
+          <img src="assets/radeito-swatch-colours.png" alt="Radeito colour palette: neutral greys, teal brand scale and UI status colours" loading="lazy" />
+        </div>
+        <div class="proj-swatch-type">
+          <div class="proj-swatch-type-1">
+            <img src="assets/radeito-swatch-type-1.png" alt="Radeito typography specimen, headline styles" loading="lazy" />
+          </div>
+          <div class="proj-swatch-type-2">
+            <img src="assets/radeito-swatch-type-2.png" alt="Radeito typography specimen, body styles" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-panel">
+      <div class="proj-gallery">
+        <div class="proj-gallery-main">
+          <img src="assets/radeito-gallery-main.png" alt="Radeito workshop cards and booking calendar screens" loading="lazy" />
+        </div>
+        <div class="proj-gallery-row">
+          <div class="proj-gallery-wide">
+            <img src="assets/radeito-gallery-wide.png" alt="Radeito calendar date picker component" loading="lazy" />
+          </div>
+          <div class="proj-gallery-tall">
+            <img src="assets/radeito-gallery-tall.png" alt="Radeito rating and review component" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MORE WORK, IN BRIEF ============ -->
+  <section class="projects-section">
+    <span class="projects-kicker">More work, in brief</span>
+    <!-- Rendered by js/project-card.js + js/projects-data.js — the
+         same ProjectCard component and data used on Home, minus this
+         page's own project -->
+    <div class="pgrid-scroll" id="project-cards"></div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer home-footer" id="contact">
+    <div class="footer-inner">
+      <div class="footer-cta-block reveal">
+        <div class="footer-cta-text">
+          <h2 class="footer-cta-headline">So, what are you building?</h2>
+          <p class="footer-cta-subline">– Tell me where it gets messy.</p>
+        </div>
+        <a href="mailto:your@email.com" class="btn-coral">Get in touch</a>
+      </div>
+      <div class="footer-contact-row">
+        <div class="footer-contact-name-block">
+          <a href="index.html" class="footer-contact-name">Sophia Nilsson</a>
+          <span class="footer-contact-location">Stockholm, Sweden</span>
+        </div>
+        <div class="footer-contact-methods">
+          <a href="mailto:your@email.com" class="footer-contact-link">
+            Email
+            <svg width="20" height="20" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H3.5M9.5 2.5V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/yourprofile" target="_blank" class="footer-contact-link">
+            LinkedIn
+            <svg width="20" height="20" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H3.5M9.5 2.5V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#" class="footer-contact-link">
+            CV
+            <svg width="20" height="20" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 9.5L9.5 2.5M9.5 2.5H3.5M9.5 2.5V8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/theme.js"></script>
+  <script src="js/nav-scroll.js"></script>
+  <script src="js/reveal.js"></script>
+  <script src="js/phone-mockup.js"></script>
+  <script src="js/project-card.js"></script>
+  <script src="js/projects-data.js"></script>
+  <script>
+    renderPhoneMockups('phone-mockups', [
+      { image: 'assets/radeito-phone-discover.png', caption: 'Discover' },
+      { image: 'assets/radeito-phone-choose.png', caption: 'Choose' },
+      { image: 'assets/radeito-phone-book.png', caption: 'Book' },
+      { image: 'assets/radeito-phone-manage.png', caption: 'Manage' },
+    ]);
+
+    renderProjects('project-cards', 'radeito'); // excludes this page's own project
+  </script>
+  <script src="js/pgrid-blur-align.js"></script>
+  <script src="js/debug.js"></script>
+</body>
+</html>

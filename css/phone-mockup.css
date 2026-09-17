@@ -1,0 +1,69 @@
+/* ── PHONE MOCKUP (reusable component) ─────────────
+   .phone-mockup-frame is a plain <img> — a full "iPhone 14 Pro"
+   export straight from Figma (device chrome + screen composited
+   together by Figma itself), not a hand-built CSS frame around a
+   separate screen image. That's what makes it pixel-exact instead of
+   an approximation of the device: no shadows/buttons/camera detail
+   to get subtly wrong. See js/phone-mockup.js for the markup. */
+.phone-mockup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 262px; /* Figma frame width — cap, not a fixed size, so rows of 3 still fit one line at 1280px */
+}
+.phone-mockup-frame {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+.phone-mockup-caption {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-title);
+  letter-spacing: 0.05px;
+  color: #fff;
+}
+/* Optional caption + description pair (Figma: title + one muted line
+   below it) — wrap both in .phone-mockup-text instead of using
+   .phone-mockup-caption alone when a description exists. */
+.phone-mockup-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  text-align: center;
+}
+.phone-mockup-desc {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 16px;
+  line-height: 1.28;
+  color: rgba(255, 255, 255, var(--opacity-70, 0.7));
+}
+
+/* Row wrapper — layout only. The frosted-panel look itself (background/
+   blur/radius) lives in .proj-panel (project-page.css) so it can be
+   shared with the other frosted panels (design-system swatches,
+   screenshot gallery) on case study pages — see radeito.html. Figma
+   literal gap (88px) and padding (72/48) don't land on the spacing
+   scale, kept as-is. */
+.phone-mockup-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xl);
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (min-width: 700px) {
+  .phone-mockup-row { gap: 56px; }
+}
+
+@media (min-width: 1280px) {
+  .phone-mockup-row { gap: 88px; } /* Figma literal */
+}

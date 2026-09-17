@@ -1,0 +1,48 @@
+/* ── QUOTE ──────────────────────────────────────── */
+.quote-section {
+  position: relative;
+  z-index: 1; /* see .hero's matching z-index:1 in hero.css */
+  padding: var(--space-section) var(--container-wide-px) calc(var(--space-section) * 2);
+}
+
+/* Width/centering comes from the shared .center-col (base.css)
+   applied alongside this class in markup. Title and body diverge
+   here too: headline center-set, paragraph stays left-aligned. */
+.quote-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.quote-headline {
+  text-align: center;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-normal);
+  font-size: 32px;
+  line-height: 1.18;
+  letter-spacing: var(--tracking-tight);
+  color: #fff;
+}
+.quote-headline .weight-light {
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+
+/* Only the paragraph gets a readable line-length cap (Figma fixes
+   it at 635px) — the short headline fills the column so it keeps
+   reading as one line rather than wrapping against a narrow box. */
+.quote-subtitle {
+  font-family: var(--font-accent);
+  font-weight: var(--weight-normal);
+  font-size: var(--fs-home-serif-lg);
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-high));
+  max-width: 635px;
+}
+
+@media (min-width: 700px) {
+  .quote-headline { font-size: 40px; }
+}
+
+@media (min-width: 1280px) {
+  .quote-headline { font-size: 48px; }
+}

@@ -1,0 +1,870 @@
+/* ── MENDI CHAPTER 1: USER PROBLEMS ──────────────────
+   Figma: node 343:22150. Page-specific styles only — nav, footer,
+   .btn-coral and spacing/type tokens all come from the shared
+   stylesheets linked before this one in mendi-user-problems.html.
+   Figma's own spacing variables for this file map onto the existing
+   scale by pixel value (Spacing/1=8→--space-xs, Spacing/1,5=12→
+   --space-sm, Spacing/2=16→--space-md, Spacing/3=24→--space-lg). */
+
+/* Root fill matches the hub page's own gradient (body.mh in mendi.css)
+   confirmed by sampling the Figma render directly — #0d141b at the
+   top fading to #0b1016, not a flat tone. */
+.mch1 {
+  background: linear-gradient(to bottom, #0d141b, #0b1016);
+  color: #fff;
+}
+
+/* Nav overlay — same treatment as body.mh #nav (mendi.css): the nav
+   sits transparently on top of the hero's own glow instead of being
+   a row that pushes it down, matching the hub page's hero. */
+body.mch1 #nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background: transparent;
+}
+
+/* ── Hero ambient glow (experimental) ──
+   Background applied directly to the section itself: one small,
+   fixed-radius (px, not %) radial gradient over the flat #0d141b
+   fill, animated with a barely-perceptible background-position
+   drift. No wrapper element, no blur — nothing for sizing to drift
+   on. Matches the same technique as .mch2-hero (mendi-product-
+   experience.css). */
+.mch1-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 140px var(--container-wide-px) var(--space-4xl);
+  background:
+    radial-gradient(550px circle at 63% 42%,
+      rgba(168, 150, 115, 0.26) 0%,
+      rgba(168, 150, 115, 0.14) 30%,
+      rgba(168, 150, 115, 0.05) 55%,
+      rgba(168, 150, 115, 0) 100%),
+    #0d141b;
+  animation: bgDriftCh1 100s ease-in-out infinite;
+}
+@keyframes bgDriftCh1 {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: -3% 3%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mch1-hero { animation: none; }
+}
+.mch1-hero-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+  max-width: 1200px;
+  width: 100%;
+}
+.mch1-hero-top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.mch1-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 4px var(--space-sm);
+  background: var(--overlay-08);
+  border: var(--border-thin) solid var(--overlay-08);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 16px; /* Figma fixed Label size, not the responsive --text-body token */
+  color: #fff;
+}
+.mch1-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: 32px;
+  line-height: 1.18;
+  letter-spacing: -1px;
+  color: #fff;
+}
+.mch1-intro {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-title);
+  line-height: 1.21;
+  color: #fff;
+  max-width: 600px;
+}
+.mch1-confidentiality {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.21; /* Figma leading-[1.21] on both the label and body text — was falling back to the inherited 1.5 */
+  color: rgba(255, 255, 255, var(--opacity-mid));
+  max-width: 600px;
+}
+.mch1-confidentiality strong {
+  font-weight: var(--weight-semibold);
+  color: rgba(255, 255, 255, var(--opacity-mid));
+}
+
+/* ── Patterns from user research (compact card grid) ──
+   position+z-index:1 needed now that .mch1-hero no longer clips its
+   glow (overflow:hidden was removed there to stop the hard blur-clip
+   seam) — the glow's own explicit z-index:0 would otherwise paint
+   above this section's static-positioned content wherever the blur
+   bleeds down into it. Same fix as .featured-project (featured-
+   project.css) for the equivalent Home-page bug. */
+.mch1-patterns {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-4xl) var(--container-wide-px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.mch1-patterns-kicker {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 16px; /* Figma fixed Label size, not the responsive --text-body token */
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+.mch1-patterns-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+.mch1-pattern-card {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--overlay-02);
+  border: var(--border-thin) solid var(--overlay-05);
+  border-radius: var(--radius);
+}
+.mch1-pattern-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal); /* h3 defaults to bold — Figma spec is regular */
+  font-size: var(--fs-home-md);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  color: #fff;
+}
+.mch1-pattern-body {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.28;
+  color: #fff;
+}
+
+/* ── From insight to product ── */
+.mch1-insight {
+  padding: var(--space-4xl) var(--container-wide-px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.mch1-insight-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal); /* h2 defaults to bold — Figma spec is regular */
+  font-size: 32px;
+  letter-spacing: -1px;
+  line-height: 1.18;
+  color: #fff;
+}
+.mch1-insight-body {
+  font-family: var(--font-accent);
+  font-size: var(--fs-home-serif-lg);
+  line-height: 1.21;
+  color: #fff;
+  max-width: 600px;
+}
+
+/* ── Numbered sections (01–04) ──
+   Each is title+subtitle, a sub-block (heading + status chip + body),
+   then a media row whose items keep their own Figma aspect ratio
+   instead of a forced uniform box — max-width caps each at its
+   own natural size and lets it shrink on narrow viewports. */
+.mch1-section {
+  padding: var(--space-4xl) var(--container-wide-px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4xl);
+}
+.mch1-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 600px;
+}
+.mch1-section-number {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal); /* h2 defaults to bold — Figma spec is regular */
+  font-size: 32px;
+  line-height: 1;
+  color: #fff;
+}
+.mch1-section-question {
+  font-family: var(--font-body);
+  font-size: var(--text-title);
+  letter-spacing: 0.1px;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, var(--opacity-80));
+}
+.mch1-subblock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  max-width: 600px;
+}
+.mch1-subhead-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+.mch1-subhead {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--fs-home-md);
+  letter-spacing: 0.1px;
+  line-height: 1.2;
+  color: #fff;
+}
+.mch1-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 4px var(--space-sm);
+  background: var(--overlay-08);
+  border: var(--border-thin) solid var(--overlay-08);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 16px; /* Figma fixed Label size, not the responsive --text-body token */
+  color: #fff;
+  white-space: nowrap;
+}
+.mch1-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--status-green);
+  box-shadow: var(--status-green-glow);
+  flex-shrink: 0;
+}
+/* "In development" uses Figma's orange status dot (#FF9D61) — "Shipped"
+   and "Early release" both use the green dot above. */
+.mch1-status-dot--dev {
+  background: var(--status-orange);
+  box-shadow: var(--status-orange-glow);
+}
+.mch1-subblock-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  font-family: var(--font-body);
+  font-size: var(--text-title);
+  letter-spacing: 0.1px;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, var(--opacity-80));
+}
+.mch1-subblock-note {
+  font-family: var(--font-body);
+  font-size: var(--text-title);
+  letter-spacing: 0.1px;
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-mid));
+}
+
+/* Wraps .mch1-section-head + .mch1-subblock together so the media
+   next to them (portrait/square image, phone-pair) top-aligns with
+   the section head, not just the subblock — matches Figma's own
+   nesting (title+subblock share one 600px column beside the media). */
+.mch1-media-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  max-width: 600px;
+  flex: 1 1 600px;
+  min-width: 0;
+}
+
+.mch1-media-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+  width: 100%;
+}
+/* "Introducing Streak Freeze" row: text sits bottom-left of the image,
+   not top-aligned/space-between like the other media rows. */
+.mch1-media-row--bottom {
+  align-items: flex-end;
+}
+.mch1-media-square {
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.mch1-media-square img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Figma (node 396:34175, "Link"): a 500×500 crop of this screenshot
+   showing the notification + first question. The asset is now
+   pre-cropped to that exact square directly from Figma's own raw
+   source (not the earlier flattened export, which had a stray white
+   background bleed on its left edge that Figma's own asset doesn't
+   have), so a plain cover fit is enough. */
+.mch1-media-portrait {
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.mch1-media-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Wraps a square/portrait hero shot with its phones-row so the phones
+   sit directly under that one image, matching its own width, instead
+   of spanning the full 1200px row beneath both columns. */
+.mch1-media-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+  max-width: 500px;
+}
+.mch1-phones-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--space-xl);
+  width: 100%;
+}
+/* When this row sits directly in .mch1-media-row (not nested inside
+   .mch1-media-col), its own width:100% otherwise inflates its flex-
+   basis to the full row width and crushes .mch1-media-text next to
+   it — cap it to content instead. */
+.mch1-media-row > .mch1-phones-row {
+  /* width:auto here would let the flex-wrap:wrap + flex-shrink
+     children collapse toward min-content (img intrinsic min-width is
+     effectively 0) instead of their real 234px each — pin it to the
+     actual two-phone width instead. */
+  width: 500px;
+  flex: 0 0 500px;
+}
+.mch1-phones-row.mch1-phones-row--stacked {
+  flex-direction: column;
+  align-items: center;
+}
+.mch1-phone {
+  /* Figma: each phone frame is a fixed 234.09×491.12px box — never
+     grows past that, only shrinks on narrow viewports. The asset
+     itself is now a transparent PNG cropped tight to the phone (with
+     a soft feathered edge standing in for the drop-shadow, instead of
+     a hard rectangular background) at its own 740×1535 aspect, so
+     object-fit:contain shows the whole phone with no clipping and no
+     visible box. */
+  flex: 0 1 234px;
+  width: 100%;
+  max-width: 234px;
+  aspect-ratio: 740 / 1535;
+  object-fit: contain;
+}
+.mch1-phone-pair {
+  width: 100%;
+  max-width: 508px;
+  height: auto;
+  display: block;
+}
+.mch1-media-wide {
+  width: 100%;
+  max-width: 796px;
+  height: auto;
+  border-radius: var(--radius);
+  display: block;
+}
+.mch1-app-shot {
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  display: block;
+}
+
+/* ── Results / stat row (section 01) ── */
+.mch1-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  width: 100%;
+}
+.mch1-results-kicker {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 16px; /* Figma fixed Label size, not the responsive --text-body token */
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+.mch1-results-intro {
+  font-family: var(--font-body);
+  font-size: var(--fs-home-md);
+  line-height: 1.21;
+  color: #fff;
+  max-width: 660px;
+}
+.mch1-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+}
+.mch1-stat-card {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-xl) var(--space-lg);
+  background: var(--overlay-02);
+  border: var(--border-thin) solid var(--overlay-05);
+  border-radius: var(--radius);
+}
+.mch1-stat-number {
+  font-family: var(--font-accent);
+  font-size: 64px;
+  line-height: 1.2;
+  color: #fff;
+}
+.mch1-stat-label {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.28;
+  color: rgba(255, 255, 255, var(--opacity-80));
+}
+.mch1-results-disclaimer {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-mid));
+}
+
+/* ── Key Focus lifecycle diagram (section 01 "Onboardings and
+   check-ins") — illustrates the loop described in that subblock's
+   copy: onboarding sets up a Key Focus, then Train → Check-in → See
+   your progress repeats, looping back into Train. Sits as a sibling
+   of .mch1-media-row inside .mch1-section, so the section's own 80px
+   column gap gives the spacing above/below it for free. ── */
+.mch1-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg); /* 24px */
+  width: 100%;
+}
+.mch1-flow-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs); /* 8px */
+  text-align: center;
+}
+.mch1-flow-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 20px;
+  line-height: 1.2;
+  color: #fff;
+}
+/* Shared secondary-copy style (onboarding subtitle, card descriptions,
+   "Repeat at your chosen frequency") — all Figma "Label S": Manrope
+   Medium 16px/1.21, opacity-60. */
+.mch1-flow-caption {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 16px;
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-60));
+  text-align: center;
+}
+.mch1-flow-arrow-down {
+  width: 15px;
+  height: 56px;
+}
+/* Row needs ~1006px (3 cards + 2 arrows + gaps) to lay out
+   horizontally without wrapping — below that, flex-wrap produced an
+   uneven partial wrap (looked broken on "a bit smaller than desktop"
+   widths, e.g. 1024–1279px) instead of a clean stack. Stack in a
+   single column by default and only switch to a row once there's
+   room, matching the 1280px breakpoint the rest of this file uses
+   for similar row/column switches. */
+.mch1-flow-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg); /* 24px */
+  width: 100%;
+}
+.mch1-flow-arrow-right {
+  width: 74px;
+  height: 14.73px;
+  flex-shrink: 0;
+  transform: rotate(90deg); /* points down between stacked cards */
+}
+@media (min-width: 1280px) {
+  .mch1-flow-row {
+    flex-direction: row;
+  }
+  .mch1-flow-arrow-right {
+    transform: none;
+  }
+}
+.mch1-flow-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 254px;
+  height: 254px;
+  padding: 0 var(--space-lg); /* 24px */
+  background: rgba(169, 153, 255, 0.03);
+  border: var(--border-thin) solid var(--overlay-05);
+  border-radius: 32px; /* Figma "space/32" alias, not a --radius token */
+  flex-shrink: 0;
+}
+/* Train's icon sits in its own gap-24 slot; Check-in/See your progress
+   use a tighter gap-16 directly around a larger icon — an intentional
+   difference in the source file, kept as-is for exactness. */
+.mch1-flow-card--train { gap: var(--space-lg); /* 24px */ }
+.mch1-flow-card--checkin,
+.mch1-flow-card--progress { gap: var(--space-md); /* 16px */ }
+.mch1-flow-card--train .mch1-flow-card-icon { width: 48px; height: 48px; }
+.mch1-flow-card--checkin .mch1-flow-card-icon { width: 56px; height: 56px; }
+.mch1-flow-card--progress .mch1-flow-card-icon { width: 64px; height: 64px; }
+.mch1-flow-card-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs); /* 8px */
+  width: 100%;
+}
+.mch1-flow-card-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 20px;
+  line-height: 1.2;
+  color: #fff;
+}
+.mch1-flow-loop-arrow {
+  width: 744px;
+  max-width: 100%;
+  height: 86px;
+}
+
+/* ── Hero screen preview row (section 01 "Onboardings and check-ins")
+   — two gradient "Link" tiles, each with a device mockup peeking out
+   and clipped by the tile's own overflow:hidden.
+   .mch1-hero-phone starts from Figma's own isolated render of the
+   "iPhone 14 Pro" mockup node (get_screenshot with contentsOnly:true
+   — a real pixel render of the chrome/shadow/buttons with the
+   background stripped to transparency), not a hand-built CSS bezel:
+   the earlier CSS approximation was visibly softer/less detailed than
+   the actual mockup. That export is capped at Figma's native render
+   size for the node (~380×423 / ~536×433) though, which reads soft at
+   the size these tiles display it — so each asset is a composite: the
+   Figma export cropped tight to its opaque phone body (dropping the
+   noisy transparent shadow-bleed margin, which turned to visible
+   speckle when upscaled), then upscaled, with the ORIGINAL high-res
+   screen-content screenshot from Figma (750×1624 / 780×1688) pasted
+   over the on-screen area for sharp text at any density. Both assets
+   are pre-built PNGs (assets/mendi-ch1-s1-hero-*-mockup.png), not
+   generated at runtime. Position math:
+   - checkin: tight-cropped to its opaque phone body, so its own top
+     edge already is the phone's top — pinned at the validated 48px
+     phone-top offset with no extra compensation needed.
+   - progress: the visible crop is entirely screen (no notch/home
+     indicator in frame — Figma's own ancestor-clipping middle-crops
+     this one), so it's simply pinned to the tile top with no offset. ── */
+.mch1-hero-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-lg); /* 24px */
+  width: 100%;
+}
+.mch1-hero-card {
+  position: relative;
+  flex: 1 1 320px;
+  min-width: 0;
+  height: 433px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+  border-radius: var(--radius-lg); /* 40px */
+  overflow: hidden;
+}
+.mch1-hero-phone {
+  display: block;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.mch1-hero-phone--checkin {
+  top: 48px; /* validated phone-top position — this export is now tightly cropped to the phone body, no shadow pad to offset */
+  width: 260px;
+  height: auto;
+}
+.mch1-hero-phone--progress {
+  top: 0;
+  height: 100%;
+  width: auto;
+}
+
+/* ── Testing results (section 02 "Learning how to train") — pairs
+   the existing .mch1-stat-card (introduced by the 01 results row)
+   with a participant-count eyebrow and an insight blurb. Sits as a
+   sibling of .mch1-media-row inside .mch1-section, so the section's
+   own 80px column gap gives the spacing above it for free. ── */
+.mch1-testing-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg); /* 24px, eyebrow → row */
+  width: 100%;
+}
+.mch1-testing-eyebrow {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 16px; /* Figma fixed Label size, not the responsive --text-body token */
+  line-height: 1.21;
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+.mch1-testing-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+}
+/* Fixed-width variant of .mch1-stat-card: Figma specs a static 276px
+   card + 1px border here, unlike the evenly-split flexible width and
+   --border-thin hairline the 01 results row uses for the same base
+   component. */
+.mch1-stat-card--fixed {
+  flex: 0 0 276px;
+  width: 276px;
+  border-width: 1px;
+  justify-content: center;
+}
+.mch1-stat-card--fixed .mch1-stat-number {
+  text-align: left;
+}
+.mch1-stat-card--fixed .mch1-stat-label {
+  font-size: 16px; /* Figma fixed Label size for this block, unlike the responsive --text-body the 01 results row uses */
+}
+.mch1-testing-insight {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md); /* 16px */
+  max-width: 600px;
+  flex: 1 1 600px;
+  min-width: 0;
+}
+.mch1-testing-headline {
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 24px;
+  line-height: 1.2;
+  color: #fff;
+}
+.mch1-testing-body {
+  font-family: var(--font-body);
+  font-size: var(--text-title); /* 20px fixed, matches Figma */
+  letter-spacing: 0.1px;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, var(--opacity-80));
+}
+@media (min-width: 1280px) {
+  .mch1-testing-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 56px;
+  }
+}
+
+/* ── Aside note (section 04 "Introducing Streak Freeze") ── */
+.mch1-aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 600px;
+}
+.mch1-aside-title {
+  font-family: var(--font-body);
+  font-size: 24px;
+  letter-spacing: -1px;
+  line-height: 1.2;
+  color: #fff;
+}
+.mch1-aside-title .mch1-aside-title-light {
+  font-weight: var(--weight-light);
+}
+.mch1-aside-title .mch1-aside-title-strong {
+  font-weight: var(--weight-semibold);
+}
+.mch1-aside-body {
+  font-family: var(--font-body);
+  font-size: var(--text-title);
+  letter-spacing: -0.1px;
+  line-height: 1.2;
+  color: #fff;
+}
+
+/* ── Next-chapter CTA ──
+   Figma (node 387:31169): a single pink ellipse (#FD3E7E, 20% alpha,
+   blur 200px, 716×410 before bleed) sitting behind the panel — its
+   translucent rgba(38,38,38,0.2) + backdrop-blur(2px) picks up the
+   glow's colour through the blur. Panel row is text-first (flex:1),
+   image second (408:527 aspect, h-588 at desktop). */
+.mch1-cta-section {
+  position: relative;
+  padding: 64px var(--container-wide-px) var(--space-4xl);
+}
+/* Anchored to .mch1-cta-image (not fixed section coordinates) so it
+   stays right behind the image regardless of viewport width or the
+   column→row layout switch at 700px. */
+.mch1-cta-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150%;
+  height: 90%;
+  border-radius: 50%;
+  background: rgba(253, 62, 126, 0.2);
+  filter: blur(200px);
+  pointer-events: none;
+  z-index: 0;
+}
+.mch1-cta-kicker {
+  display: block; /* it's a <span> — margin-bottom is a no-op on inline elements */
+  position: relative;
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: 16px; /* Figma fixed Label size, not the responsive --text-body token */
+  color: rgba(255, 255, 255, var(--opacity-65));
+  margin-bottom: var(--space-lg);
+}
+.mch1-cta-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding: var(--space-xl);
+  background: rgba(38, 38, 38, 0.2);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: var(--radius-lg);
+}
+.mch1-cta-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 408 / 527;
+}
+.mch1-cta-image img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius-lg);
+}
+.mch1-cta-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-xl);
+}
+.mch1-cta-title {
+  font-family: var(--font-body);
+  font-weight: var(--weight-normal); /* h2 defaults to bold — Figma spec is regular */
+  font-size: 48px;
+  letter-spacing: -1px;
+  line-height: 1.18;
+  color: #fff;
+}
+.mch1-cta-intro {
+  font-family: var(--font-accent);
+  font-size: 24px;
+  line-height: 1.18;
+  color: rgba(255, 255, 255, var(--opacity-85, 0.85));
+}
+.mch1-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  width: fit-content;
+  font-family: var(--font-accent);
+  font-size: 32px;
+  letter-spacing: -0.3px;
+  line-height: 31.2px;
+  color: var(--coral);
+  text-decoration: none;
+}
+.mch1-cta-link svg {
+  flex-shrink: 0;
+  transition: transform var(--duration-medium) var(--ease-default);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mch1-cta-link:hover svg { transform: translate(3px, 0); }
+}
+
+@media (min-width: 700px) {
+  .mch1-title { font-size: 40px; }
+  .mch1-patterns-grid { flex-direction: row; flex-wrap: wrap; }
+  .mch1-pattern-card { flex-basis: calc(50% - 16px); }
+  .mch1-insight-title { font-size: 40px; }
+  .mch1-phones-row { flex-direction: row; }
+  .mch1-stats { flex-direction: row; }
+  .mch1-cta-panel { flex-direction: row; align-items: stretch; gap: 56px; padding: var(--space-3xl); }
+  .mch1-cta-image { width: auto; height: 588px; flex-shrink: 0; }
+  .mch1-cta-text { flex: 1; justify-content: center; }
+}
+
+@media (min-width: 1280px) {
+  .mch1-hero { height: 1024px; min-height: 0; padding: var(--space-section); }
+  .mch1-title { font-size: 48px; }
+  .mch1-patterns { padding: var(--space-section) var(--space-section); }
+  .mch1-insight { padding: var(--space-section) var(--container-px); }
+  .mch1-insight-title { font-size: 48px; }
+  .mch1-section { padding: 64px var(--container-px) var(--space-section); }
+  .mch1-section-number { font-size: 32px; }
+  .mch1-media-row { flex-direction: row; align-items: flex-start; justify-content: space-between; }
+  /* The stacked phone pair (chapter 04) is much narrower than the
+     square/portrait media in the other rows, so space-between shoves
+     it all the way to the far edge, leaving a huge dead gap next to
+     the text. Group them closer with a fixed gap instead. */
+  .mch1-media-row--tight { justify-content: flex-start; gap: 56px; }
+  .mch1-media-row--tight > .mch1-phones-row { margin-left: auto; }
+  .mch1-media-row--bottom { align-items: flex-end; justify-content: flex-start; gap: var(--space-3xl); }
+  .mch1-cta-section { padding: 64px var(--container-px) var(--space-section); }
+}

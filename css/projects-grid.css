@@ -1,0 +1,211 @@
+/* ── PROJECTS GRID (More work, in brief) ───────────
+   Horizontal scroll row — same interaction pattern as the
+   trailer cards used to use (see the reveal.js / snap-scroll
+   convention below), just with a different card recipe: a dimmed
+   full-bleed photo instead of a glass panel. */
+.projects-section {
+  padding: var(--space-4xl) 0 var(--space-4xl) var(--container-wide-px);
+}
+.projects-kicker {
+  display: block;
+  padding: 0 var(--space-lg) var(--space-lg);
+  color: rgba(255, 255, 255, var(--opacity-65));
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+}
+
+.pgrid-scroll {
+  --card-w: 78vw;
+  --card-w-max: 340px;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xl);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--space-xs) var(--container-wide-px) var(--space-md) 0;
+  scrollbar-width: none;
+}
+.pgrid-scroll::-webkit-scrollbar { display: none; }
+
+.pgrid-card {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--card-w);
+  max-width: var(--card-w-max);
+  aspect-ratio: 415 / 536;
+  scroll-snap-align: start;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  background: #000;
+}
+.pgrid-card img {
+  --img-zoom: 1;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  transform: scale(var(--img-zoom));
+  transition: transform var(--duration-slow) var(--ease-default), opacity var(--duration-medium) var(--ease-default);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pgrid-card:hover img { transform: scale(calc(var(--img-zoom) * 1.04)); opacity: 0.6; }
+}
+
+/* Radeito's source photo has a lot of blurred hand/background
+   padding around the phone, leaving the subject small relative
+   to the other cards' images — zoom in and recenter on the phone. */
+.pgrid-card img[src*="home-radeito"] {
+  --img-zoom: 1.45;
+  object-position: 50% 40%;
+}
+
+.pgrid-chips {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: var(--space-lg);
+  z-index: 2;
+}
+.pgrid-chip {
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12.5px);
+  -webkit-backdrop-filter: blur(12.5px);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* ── Progressive blur behind the info panel ──
+   Figma uses a "Background blur" effect that ramps 0→25px top-to-
+   bottom; CSS backdrop-filter can't animate its own blur radius,
+   so this fakes it with 4 stacked layers, each a flat blur masked
+   to its own horizontal band, with soft overlap between bands so
+   the steps read as one continuous gradient instead of 4 rings.
+   The dark scrim sits behind all of it (visible through the blur,
+   same as the photo) and is deliberately light — the blur, not
+   the darkening, is what carries the readability here. */
+.pgrid-scrim {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 50%;
+  z-index: 1;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.32), transparent);
+  pointer-events: none;
+}
+.pgrid-blur-zone {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 50%;
+  z-index: 2;
+  pointer-events: none;
+}
+/* will-change forces the browser to promote each layer to its own
+   GPU compositing layer up front. Without it, backdrop-filter can
+   render stale on first paint — especially with loading="lazy"
+   images — showing the pre-blur backdrop until some later repaint
+   (e.g. scroll) forces a recomposite. Confirmed by comparing a fresh
+   page load (blur missing on the first card) against the same page
+   after scrolling (blur renders correctly on every card). */
+.pgrid-blur {
+  position: absolute;
+  inset: 0;
+  will-change: backdrop-filter;
+}
+.pgrid-blur-1 {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 20%, transparent 45%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 20%, transparent 45%);
+}
+.pgrid-blur-2 {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  mask-image: linear-gradient(to bottom, transparent 10%, #000 30%, #000 50%, transparent 70%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 10%, #000 30%, #000 50%, transparent 70%);
+}
+.pgrid-blur-3 {
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  mask-image: linear-gradient(to bottom, transparent 35%, #000 55%, #000 75%, transparent 90%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 35%, #000 55%, #000 75%, transparent 90%);
+}
+.pgrid-blur-4 {
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  mask-image: linear-gradient(to bottom, transparent 60%, #000 80%, #000 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 60%, #000 80%, #000 100%);
+}
+
+.pgrid-info {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-lg) var(--space-xl);
+}
+.pgrid-info-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.pgrid-title {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-heading);
+  line-height: 1;
+  color: #fff;
+}
+.pgrid-subtitle {
+  font-family: var(--font-accent);
+  font-size: var(--fs-home-md);
+  line-height: 1.18;
+  color: rgba(255, 255, 255, var(--opacity-80));
+}
+.pgrid-arrow-btn {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+}
+
+@media (min-width: 700px) {
+  .projects-section { padding: var(--space-section) 0 var(--space-section) var(--container-wide-px); }
+  .pgrid-scroll { --card-w: 340px; gap: var(--space-xl); }
+}
+
+@media (min-width: 1280px) {
+  .projects-section { padding: var(--space-section) 0 var(--space-section) var(--space-section); }
+  /* --card-w-max must track --card-w here — leaving it at the
+     tablet value silently capped every card back down to 340px,
+     which happened to make all 4 fit with no scroll/peek at all. */
+  /* 420px is the smallest width that keeps the Länsförsäkringar
+     card's subtitle to 2 lines instead of 3 (measured tipping
+     point is 410px; 420px adds a small safety margin). */
+  .pgrid-scroll { --card-w: 420px; --card-w-max: 420px; }
+}

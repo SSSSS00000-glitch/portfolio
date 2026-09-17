@@ -6,7 +6,7 @@
   <title>Design System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/base.css" />
   <style>
@@ -219,10 +219,59 @@
     <!-- ═══ TYPOGRAPHY ═══ -->
     <section id="typography">
       <h2>Typography</h2>
-      <p class="sec-desc">Inter, 5 type roles. Weight 400 default, 500 for emphasis.</p>
+      <p class="sec-desc">Manrope (primary) + Instrument Serif Italic (expressive accent). The scale below is the new foundation — fluid across viewports, not fixed breakpoints. The legacy 5-role scale further down still powers most existing pages during rollout.</p>
 
       <div class="sub">
-        <div class="sub-title">Type scale</div>
+        <div class="sub-title">Type scale v2 — foundation (fluid, mobile 375px → desktop 1280px)</div>
+        <div class="specimen">
+          <div class="specimen-label">Display <span>44–80px / 1.05 · Manrope Medium</span></div>
+          <div style="font-family:var(--font-heading);font-weight:var(--weight-medium);font-size:var(--fs-display);line-height:var(--leading-display);letter-spacing:var(--tracking-tight);">Editorial clarity</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-label">Display Accent <span>40–88px / 1.05 · Instrument Serif Italic</span></div>
+          <div style="font-family:var(--font-accent);font-style:italic;font-weight:var(--weight-normal);font-size:var(--fs-display-accent);line-height:var(--leading-display);letter-spacing:var(--tracking-tight);">A belief, not a feature</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-label">H1 <span>34–56px / 1.15 · Manrope Medium</span></div>
+          <div style="font-family:var(--font-heading);font-weight:var(--weight-medium);font-size:var(--fs-h1);line-height:var(--leading-tight);letter-spacing:var(--tracking-tight);">Section headline</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-label">H2 <span>28–40px / 1.15 · Manrope Medium</span></div>
+          <div style="font-family:var(--font-heading);font-weight:var(--weight-medium);font-size:var(--fs-h2);line-height:var(--leading-tight);letter-spacing:var(--tracking-heading);">Subsection headline</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-label">H3 <span>22–28px / 1.3 · Manrope Medium</span></div>
+          <div style="font-family:var(--font-heading);font-weight:var(--weight-medium);font-size:var(--fs-h3);line-height:var(--leading-snug);letter-spacing:var(--tracking-heading);">Card and block heading</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-label">Body Large <span>17–20px / 1.5 · Manrope Regular</span></div>
+          <div style="font-family:var(--font-body);font-weight:var(--weight-normal);font-size:var(--fs-body-lg);line-height:var(--leading-normal);">Intro paragraphs, emphasized copy that needs room to breathe.</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-label">Body <span>15–16px / 1.5 · Manrope Regular</span></div>
+          <div style="font-family:var(--font-body);font-weight:var(--weight-normal);font-size:var(--fs-body);line-height:var(--leading-normal);">Paragraph text, descriptions, general reading copy.</div>
+        </div>
+        <div class="specimen">
+          <div class="specimen-label">Label <span>13–14px / 1.3 · Manrope Medium</span></div>
+          <div style="font-family:var(--font-body);font-weight:var(--weight-medium);font-size:var(--fs-label);line-height:var(--leading-snug);letter-spacing:var(--tracking-label);">Metadata, tags, UI labels</div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title">Instrument Serif usage — target ~85% Manrope / 15% accent</div>
+        <table class="spec">
+          <thead><tr><th>Use</th><th>Do</th></tr></thead>
+          <tbody>
+            <tr><td>Selected words/phrases in large headlines</td><td>Yes</td></tr>
+            <tr><td>Key insights, reflective statements, chapter transitions</td><td>Yes</td></tr>
+            <tr><td>Standard UI, navigation, metadata</td><td>No</td></tr>
+            <tr><td>Body copy, general case-study headings</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="sub">
+        <div class="sub-title">Type scale (legacy — still live on Home, Case Study, etc.)</div>
         <div class="specimen">
           <div class="specimen-label">Display <span>40px / 1.15</span></div>
           <div style="font-size:var(--text-display);line-height:var(--leading-tight);letter-spacing:var(--tracking-tight);">Hero headlines</div>
@@ -246,7 +295,7 @@
       </div>
 
       <div class="sub">
-        <div class="sub-title">Responsive overrides</div>
+        <div class="sub-title">Responsive overrides (legacy scale, fixed breakpoints)</div>
         <table class="spec">
           <thead><tr><th>Element</th><th>Mobile</th><th>Tablet</th><th>Desktop</th></tr></thead>
           <tbody>

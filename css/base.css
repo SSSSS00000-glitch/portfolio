@@ -20,6 +20,21 @@ button { font-family: inherit; }
 .container-wide { width: 100%; padding: 0 var(--container-wide-px); }
 .container { width: 100%; max-width: 100%; margin: 0 auto; padding: 0 var(--container-px); }
 
+/* Centered content column (Home redesign) — a max-width cap
+   centered via margin, not a padding-to-the-edge box. Sections
+   still carry their own small side padding as a mobile/tablet
+   safety gutter; this is what gives wide viewports real, equal
+   breathing room on both sides instead of stretching to a fixed
+   inset. 1200px matches the Figma frame's own content width
+   (1440px canvas minus its 120px side margins). Shared by any
+   section that should read as one consistent column — currently
+   hero + quote; apply the same class to bring others in line. */
+.center-col {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .spacer-sm { height: var(--space-3xl); }
 .spacer { height: var(--space-4xl); }
 .spacer-lg { height: var(--space-4xl); }

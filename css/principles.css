@@ -1,0 +1,68 @@
+/* ── PRINCIPLES (Things I come back to) ────────────
+   Single left-aligned column, matching hero/quote: the eyebrow
+   and all three principle items share the same left margin via
+   the shared .center-col — not a two-column/right-aligned split. */
+.principles-section {
+  position: relative;
+  padding: var(--space-4xl) var(--container-wide-px);
+}
+.principles-section::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  width: 900px;
+  height: 500px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(233, 130, 104, 0.12) 0%, rgba(233, 130, 104, 0.06) 30%, transparent 60%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+.principles-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+}
+
+.principles-kicker {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-body);
+  color: rgba(255, 255, 255, var(--opacity-65));
+}
+
+.principles-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xl);
+}
+
+.principle-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.principle-headline {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-normal);
+  font-size: var(--text-heading);
+  line-height: 1.2;
+  letter-spacing: var(--tracking-tight);
+  color: #fff;
+}
+
+.principle-subtext {
+  font-family: var(--font-accent);
+  font-size: var(--fs-home-md);
+  line-height: 1.18;
+  color: rgba(255, 255, 255, var(--opacity-high));
+}
+
+@media (min-width: 1280px) {
+  .principles-section { padding-top: var(--space-section); padding-bottom: var(--space-section); }
+}
