@@ -750,17 +750,43 @@ body.mch1 #nav {
 }
 /* Anchored to .mch1-cta-image (not fixed section coordinates) so it
    stays right behind the image regardless of viewport width or the
-   column→row layout switch at 700px. */
+   column→row layout switch at 700px.
+   The ellipse is 150%x90% of the image; this box is that plus 600px
+   (3σ) on every side, painted with a radial-gradient carrying the
+   exact blurred falloff — same technique as .glow-frame-img in
+   hero.css; a real filter:blur(200px) rendered as pixelated banding.
+   The falloff is computed for the desktop size (683x529 ellipse);
+   gradient stops are % of this box, so it scales with the image. */
 .mch1-cta-glow {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 150%;
-  height: 90%;
-  border-radius: 50%;
-  background: rgba(253, 62, 126, 0.2);
-  filter: blur(200px);
+  width: calc(150% + 1200px);
+  height: calc(90% + 1200px);
+  background:
+    radial-gradient(ellipse 50% 50% at 50% 50%,
+      rgba(253, 62, 126, 0.1335) 0%,
+      rgba(253, 62, 126, 0.1317) 5%,
+      rgba(253, 62, 126, 0.1264) 10%,
+      rgba(253, 62, 126, 0.118) 15%,
+      rgba(253, 62, 126, 0.1069) 20%,
+      rgba(253, 62, 126, 0.094) 25%,
+      rgba(253, 62, 126, 0.0801) 30%,
+      rgba(253, 62, 126, 0.066) 35%,
+      rgba(253, 62, 126, 0.0525) 40%,
+      rgba(253, 62, 126, 0.0403) 45%,
+      rgba(253, 62, 126, 0.0298) 50%,
+      rgba(253, 62, 126, 0.0211) 55%,
+      rgba(253, 62, 126, 0.0144) 60%,
+      rgba(253, 62, 126, 0.0094) 65%,
+      rgba(253, 62, 126, 0.0059) 70%,
+      rgba(253, 62, 126, 0.0036) 75%,
+      rgba(253, 62, 126, 0.002) 80%,
+      rgba(253, 62, 126, 0.0011) 85%,
+      rgba(253, 62, 126, 0.0006) 90%,
+      rgba(253, 62, 126, 0.0003) 95%,
+      rgba(253, 62, 126, 0) 100%);
   pointer-events: none;
   z-index: 0;
 }

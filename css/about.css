@@ -5,57 +5,115 @@
    three sections in between. */
 
 /* ── Ambient glow (Section) ──────────────────────────
-   Same technique as .glow-zone in hero.css: real ellipses with
-   a solid fill + CSS blur, not a flattened image export — three
-   independent shapes so their colors add via mix-blend-mode:screen
-   instead of alpha-compositing into a muddy tone. Figma's own
-   layer effect here is a plain (non-progressive) Gaussian layer
-   blur — stdDeviation 200 on all three shapes, exported at
-   opacity 0.6 — so this reuses the simple glow-shape recipe, not
-   the stacked progressive-blur/mask technique from .pgrid-blur-*
-   (that one's for a genuine Progressive background blur, which
-   this section doesn't use). Positioned with the same fixed-px,
-   Figma-literal coordinates convention as the Home glow-zone.
+   Same technique as .glow-frame-img in hero.css. Painted with plain CSS radial-gradients, no blur at all: browsers
+   render large blurs (CSS filter:blur() and SVG feGaussianBlur alike)
+   at reduced resolution and scale them back up, which showed as
+   blocky/pixelated banding on big and Retina displays. Gradients are
+   drawn at full resolution. The gradient stops aren't eyeballed —
+   each one is the exact brightness of the Figma shape after its
+   Gaussian blur, computed numerically (shape convolved with the
+   blur kernel, sampled along the ellipse), so the look matches the
+   original blurred shapes.
+   Figma values: plain Gaussian layer blur, stdDeviation 200 on all
+   three shapes, opacity 0.6, each shape blended with screen so their
+   colors add instead of alpha-compositing into a muddy tone —
+   background-blend-mode blends the three gradient layers with each
+   other, mix-blend-mode blends the result with the page.
+   Shape boxes in section coordinates (Figma-literal, fixed px):
+     pink   left:419 top:52   764x671  rgba(177,83,255,.2)
+     orange left:568 top:20   764x671  rgba(227,176,114,.2)
+     lilac  left:120 top:-208 973x532  rgba(85,83,255,.2)
+   This box is their bounding box padded by 3σ (600px) on every side
+   so the glow fades fully before its edge — hence the -480/-808
+   offset; gradient positions below are relative to this box.
 
-   .about-content deliberately has no overflow property — these
-   shapes are large enough that their blur naturally bleeds a bit
-   past the section's own box (lilac's negative top already reaches
-   up into the hero). Clipping that with overflow:hidden was the
-   original bug: it drew a hard rectangular edge right where the
-   soft blur met the next section's background, instead of letting
-   it fade out on its own. .about-hero and .about-extra sit at a
-   higher z-index than .about-content so their own text/background
-   always paints above that bleed — the glow can spill into their
-   space without ever showing through their content. */
-.about-glow-shape {
+   .about-content deliberately has no overflow property — the glow
+   is large enough that its blur naturally bleeds a bit past the
+   section's own box (lilac's negative top already reaches up into
+   the hero). Clipping that with overflow:hidden was the original
+   bug: it drew a hard rectangular edge right where the soft blur
+   met the next section's background, instead of letting it fade out
+   on its own. .about-hero and .about-extra sit at a higher z-index
+   than .about-content so their own text/background always paints
+   above that bleed — the glow can spill into their space without
+   ever showing through their content. */
+.about-glow {
   position: absolute;
-  border-radius: 50%;
-  opacity: 0.6;
+  left: -480px;
+  top: -808px;
+  width: 2412px;
+  height: 2131px;
+  background:
+    radial-gradient(ellipse 982px 935.5px at 1281px 1195.5px,
+      rgba(177, 83, 255, 0.0955) 0%,
+      rgba(177, 83, 255, 0.0945) 5%,
+      rgba(177, 83, 255, 0.0912) 10%,
+      rgba(177, 83, 255, 0.0859) 15%,
+      rgba(177, 83, 255, 0.0788) 20%,
+      rgba(177, 83, 255, 0.0703) 25%,
+      rgba(177, 83, 255, 0.0607) 30%,
+      rgba(177, 83, 255, 0.0507) 35%,
+      rgba(177, 83, 255, 0.0409) 40%,
+      rgba(177, 83, 255, 0.0317) 45%,
+      rgba(177, 83, 255, 0.0235) 50%,
+      rgba(177, 83, 255, 0.0168) 55%,
+      rgba(177, 83, 255, 0.0114) 60%,
+      rgba(177, 83, 255, 0.0074) 65%,
+      rgba(177, 83, 255, 0.0046) 70%,
+      rgba(177, 83, 255, 0.0027) 75%,
+      rgba(177, 83, 255, 0.0015) 80%,
+      rgba(177, 83, 255, 0.0008) 85%,
+      rgba(177, 83, 255, 0.0004) 90%,
+      rgba(177, 83, 255, 0.0002) 95%,
+      rgba(177, 83, 255, 0) 100%),
+    radial-gradient(ellipse 982px 935.5px at 1430px 1163.5px,
+      rgba(227, 176, 114, 0.0955) 0%,
+      rgba(227, 176, 114, 0.0945) 5%,
+      rgba(227, 176, 114, 0.0912) 10%,
+      rgba(227, 176, 114, 0.0859) 15%,
+      rgba(227, 176, 114, 0.0788) 20%,
+      rgba(227, 176, 114, 0.0703) 25%,
+      rgba(227, 176, 114, 0.0607) 30%,
+      rgba(227, 176, 114, 0.0507) 35%,
+      rgba(227, 176, 114, 0.0409) 40%,
+      rgba(227, 176, 114, 0.0317) 45%,
+      rgba(227, 176, 114, 0.0235) 50%,
+      rgba(227, 176, 114, 0.0168) 55%,
+      rgba(227, 176, 114, 0.0114) 60%,
+      rgba(227, 176, 114, 0.0074) 65%,
+      rgba(227, 176, 114, 0.0046) 70%,
+      rgba(227, 176, 114, 0.0027) 75%,
+      rgba(227, 176, 114, 0.0015) 80%,
+      rgba(227, 176, 114, 0.0008) 85%,
+      rgba(227, 176, 114, 0.0004) 90%,
+      rgba(227, 176, 114, 0.0002) 95%,
+      rgba(227, 176, 114, 0) 100%),
+    radial-gradient(ellipse 1086.5px 866px at 1086.5px 866px,
+      rgba(85, 83, 255, 0.0904) 0%,
+      rgba(85, 83, 255, 0.0894) 5%,
+      rgba(85, 83, 255, 0.0866) 10%,
+      rgba(85, 83, 255, 0.0818) 15%,
+      rgba(85, 83, 255, 0.0754) 20%,
+      rgba(85, 83, 255, 0.0677) 25%,
+      rgba(85, 83, 255, 0.0589) 30%,
+      rgba(85, 83, 255, 0.0496) 35%,
+      rgba(85, 83, 255, 0.0404) 40%,
+      rgba(85, 83, 255, 0.0316) 45%,
+      rgba(85, 83, 255, 0.0237) 50%,
+      rgba(85, 83, 255, 0.017) 55%,
+      rgba(85, 83, 255, 0.0117) 60%,
+      rgba(85, 83, 255, 0.0077) 65%,
+      rgba(85, 83, 255, 0.0048) 70%,
+      rgba(85, 83, 255, 0.0028) 75%,
+      rgba(85, 83, 255, 0.0016) 80%,
+      rgba(85, 83, 255, 0.0009) 85%,
+      rgba(85, 83, 255, 0.0004) 90%,
+      rgba(85, 83, 255, 0.0002) 95%,
+      rgba(85, 83, 255, 0) 100%);
+  background-blend-mode: screen;
   mix-blend-mode: screen;
   pointer-events: none;
   z-index: 0;
-  filter: blur(200px);
-}
-.about-glow-pink {
-  left: 419px;
-  top: 52px;
-  width: 764px;
-  height: 671px;
-  background: rgba(177, 83, 255, 0.2);
-}
-.about-glow-orange {
-  left: 568px;
-  top: 20px;
-  width: 764px;
-  height: 671px;
-  background: rgba(227, 176, 114, 0.2);
-}
-.about-glow-lilac {
-  left: 120px;
-  top: -208px;
-  width: 973px;
-  height: 532px;
-  background: rgba(85, 83, 255, 0.2);
 }
 
 /* ── Hero (Main frame) — slogan intro ──

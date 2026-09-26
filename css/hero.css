@@ -11,20 +11,25 @@
 .glow-zone {
   position: relative;
 }
-/* Figma's own exported SVG fill for this glow (node 756:15742), not
-   a CSS reconstruction — three solid-color blurred ellipses via CSS
-   filter:blur() got the color/position math right (verified against
-   the node's own SVG defs) but still diverged from Figma visually:
-   CSS blur vs. SVG feGaussianBlur don't composite identically. Using
-   Figma's actual filter markup as a live SVG <img> sidesteps that
-   entirely — no banding to fight, no dither/seam trade-off.
-   (A flattened PNG export was tried too: Figma's download_assets
-   "export" for this node renders clipped to the page's own 1440px
-   artboard width rather than the SVG fill's wider 2464px bleed
-   canvas, leaving a hard vertical edge on viewports wider than 1440;
-   a PNG rendered from the wide SVG directly avoided that but baked
-   the result into a static snapshot that stops tracking the Figma
-   file. Reverted to the live SVG.)
+/* Figma glow node 756:15742: three blurred ellipses, values from the
+   node's own exported SVG defs (in .glow-frame-img's 2464x1742 box):
+     blue          cx1232   cy871  rx632   ry271  #7980FF  opacity .6        blur σ300
+     orange shadow cx1268.5 cy947  rx489.5 ry308  #FF6A00  opacity .6×.6     blur σ200
+     orange        cx1286.5 cy1048 rx310.5 ry152  #FF6600  opacity .6        blur σ200
+   Painted with plain CSS radial-gradients, no blur at all: browsers
+   render large blurs (CSS filter:blur() and SVG feGaussianBlur alike)
+   at reduced resolution and scale them back up, which showed as
+   blocky/pixelated banding on big and Retina displays. Gradients are
+   drawn at full resolution. The gradient stops aren't eyeballed —
+   each one is the exact brightness of the Figma shape after its
+   Gaussian blur, computed numerically (shape convolved with the
+   blur kernel, sampled along the ellipse), so the look matches the
+   original blurred shapes.
+   Background layers are listed top-first, so orange sits on top of
+   orange shadow on top of blue, same as Figma's layer order.
+   (Earlier attempts, for the record: CSS filter:blur() ellipses and
+   then Figma's own SVG export as an <img> — both pixelated. A flat
+   PNG export clipped to the 1440px artboard and left a hard edge.)
    .glow-frame is the tight 1264x655 box at Figma's literal
    hero-relative offset (left:88, top:854); .glow-frame-img is pushed
    out by the same negative insets Figma's own node uses (top:-600/
@@ -46,7 +51,73 @@
   top: -600px;
   width: 2464px;
   height: 1742px;
-  max-width: none;
+  background:
+    radial-gradient(ellipse 910.5px 752px at 1286.5px 1048px,
+      rgba(255, 102, 0, 0.252) 0%,
+      rgba(255, 102, 0, 0.2487) 5%,
+      rgba(255, 102, 0, 0.2383) 10%,
+      rgba(255, 102, 0, 0.2218) 15%,
+      rgba(255, 102, 0, 0.2002) 20%,
+      rgba(255, 102, 0, 0.1754) 25%,
+      rgba(255, 102, 0, 0.1488) 30%,
+      rgba(255, 102, 0, 0.1224) 35%,
+      rgba(255, 102, 0, 0.0973) 40%,
+      rgba(255, 102, 0, 0.0749) 45%,
+      rgba(255, 102, 0, 0.0557) 50%,
+      rgba(255, 102, 0, 0.04) 55%,
+      rgba(255, 102, 0, 0.0277) 60%,
+      rgba(255, 102, 0, 0.0185) 65%,
+      rgba(255, 102, 0, 0.0119) 70%,
+      rgba(255, 102, 0, 0.0074) 75%,
+      rgba(255, 102, 0, 0.0044) 80%,
+      rgba(255, 102, 0, 0.0026) 85%,
+      rgba(255, 102, 0, 0.0014) 90%,
+      rgba(255, 102, 0, 0.0008) 95%,
+      rgba(255, 102, 0, 0) 100%),
+    radial-gradient(ellipse 1089.5px 908px at 1268.5px 947px,
+      rgba(255, 106, 0, 0.2941) 0%,
+      rgba(255, 106, 0, 0.2912) 5%,
+      rgba(255, 106, 0, 0.2823) 10%,
+      rgba(255, 106, 0, 0.2678) 15%,
+      rgba(255, 106, 0, 0.2479) 20%,
+      rgba(255, 106, 0, 0.2235) 25%,
+      rgba(255, 106, 0, 0.1954) 30%,
+      rgba(255, 106, 0, 0.1653) 35%,
+      rgba(255, 106, 0, 0.1348) 40%,
+      rgba(255, 106, 0, 0.1057) 45%,
+      rgba(255, 106, 0, 0.0794) 50%,
+      rgba(255, 106, 0, 0.057) 55%,
+      rgba(255, 106, 0, 0.039) 60%,
+      rgba(255, 106, 0, 0.0254) 65%,
+      rgba(255, 106, 0, 0.0158) 70%,
+      rgba(255, 106, 0, 0.0093) 75%,
+      rgba(255, 106, 0, 0.0052) 80%,
+      rgba(255, 106, 0, 0.0027) 85%,
+      rgba(255, 106, 0, 0.0014) 90%,
+      rgba(255, 106, 0, 0.0006) 95%,
+      rgba(255, 106, 0, 0) 100%),
+    radial-gradient(ellipse 1532px 1171px at 1232px 871px,
+      rgba(121, 128, 255, 0.3311) 0%,
+      rgba(121, 128, 255, 0.327) 5%,
+      rgba(121, 128, 255, 0.3146) 10%,
+      rgba(121, 128, 255, 0.2948) 15%,
+      rgba(121, 128, 255, 0.2687) 20%,
+      rgba(121, 128, 255, 0.2379) 25%,
+      rgba(121, 128, 255, 0.2043) 30%,
+      rgba(121, 128, 255, 0.1699) 35%,
+      rgba(121, 128, 255, 0.1365) 40%,
+      rgba(121, 128, 255, 0.1059) 45%,
+      rgba(121, 128, 255, 0.0791) 50%,
+      rgba(121, 128, 255, 0.0569) 55%,
+      rgba(121, 128, 255, 0.0393) 60%,
+      rgba(121, 128, 255, 0.0261) 65%,
+      rgba(121, 128, 255, 0.0166) 70%,
+      rgba(121, 128, 255, 0.0101) 75%,
+      rgba(121, 128, 255, 0.0059) 80%,
+      rgba(121, 128, 255, 0.0033) 85%,
+      rgba(121, 128, 255, 0.0018) 90%,
+      rgba(121, 128, 255, 0.0009) 95%,
+      rgba(121, 128, 255, 0) 100%);
 }
 
 .hero {

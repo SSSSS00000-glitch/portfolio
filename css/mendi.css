@@ -109,10 +109,20 @@ body.mh #nav {
   opacity: 0.2;
   display: block;
 }
+/* Same linear fade as before down to 60%, so the phone and hand keep
+   their look; below that it speeds up and reaches the full background
+   colour at 84% instead of 100%, so the lower arm's silhouette
+   dissolves before the hero ends rather than showing as a curved
+   dark edge above .mh-about. */
 .mh-hero-scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(13, 20, 27, 0), #0d141b);
+  background: linear-gradient(to bottom,
+    rgba(13, 20, 27, 0) 0%,
+    rgba(13, 20, 27, 0.6) 60%,
+    rgba(13, 20, 27, 0.8) 67%,
+    rgba(13, 20, 27, 0.93) 75%,
+    #0d141b 84%);
 }
 .mh-hero-content {
   position: relative;
@@ -155,7 +165,10 @@ body.mh #nav {
 
 /* ── About / My role ──
    Figma: single cyan glow (Ellipse 6, #6EF0FF, blur 200, no extra
-   opacity) at 294×204 near the divider between the two columns. */
+   opacity) at 294×204 near the divider between the two columns.
+   Painted as a radial-gradient with the exact blurred falloff — same
+   technique as .glow-frame-img (hero.css); a real 200px blur rendered
+   pixelated at this size. */
 .mh-about {
   position: relative;
   padding: var(--space-4xl) var(--container-wide-px);
@@ -322,8 +335,10 @@ body.mh #nav {
    Figma: two overlapping cyan/magenta glows behind the section —
    exact values from the exported shapes: Ellipse 5 #FC006D
    opacity 0.5, Ellipse 6 #6EF0FF opacity 0.6, both blur 200 — same
-   real-blurred-div + mix-blend-mode:screen recipe as .glow-shape
-   (hero.css) / .about-glow-shape (about.css), not a flattened image. */
+   gradient technique as .glow-frame-img (hero.css) / .about-glow
+   (about.css): each ellipse is a radial-gradient with the exact
+   blurred falloff, blended with screen, because a real 200px blur
+   rendered pixelated. */
 .mh-reflection {
   position: relative;
   display: flex;
@@ -344,20 +359,9 @@ body.mh #nav {
    page's own body-level overflow-x:hidden. */
 .mh-reflection-glow {
   display: none;
-  border-radius: 50%;
   mix-blend-mode: screen;
   pointer-events: none;
   z-index: 0;
-}
-.mh-reflection-glow--a {
-  background: #fc006d;
-  opacity: 0.5;
-  filter: blur(200px);
-}
-.mh-reflection-glow--b {
-  background: #6ef0ff;
-  opacity: 0.6;
-  filter: blur(200px);
 }
 .mh-reflection > *:not(.mh-reflection-glow) {
   position: relative;
@@ -428,27 +432,110 @@ body.mh #nav {
   .mh-hero { min-height: 0; height: 1024px; }
   .mh-hero-title { font-size: 64px; letter-spacing: -2px; white-space: nowrap; }
   .mh-about { padding: var(--space-section) var(--container-wide-px); }
+  /* Ellipse box is 294x204 at left:587 top:300 (Figma literal).
+     Falloff measured from a Figma render of this frame (not assumed):
+     half-brightness width ~471x449px and a centre of ~22% cyan, which
+     fits this ellipse blurred with σ≈185 — so the gradient is computed
+     for σ185 and scaled to that 22% centre. This box pads the ellipse
+     by 3σ (555px) per side so the glow fades out fully inside it. */
   .mh-about-glow {
     display: block;
     position: absolute;
-    left: 587px;
-    top: 300px;
-    width: 294px;
-    height: 204px;
-    background: #6ef0ff;
-    filter: blur(200px);
+    left: 32px;
+    top: -255px;
+    width: 1404px;
+    height: 1314px;
+    background:
+      radial-gradient(ellipse 702px 657px at 702px 657px,
+        rgba(110, 240, 255, 0.2199) 0%,
+        rgba(110, 240, 255, 0.217) 5%,
+        rgba(110, 240, 255, 0.2078) 10%,
+        rgba(110, 240, 255, 0.1931) 15%,
+        rgba(110, 240, 255, 0.1742) 20%,
+        rgba(110, 240, 255, 0.1524) 25%,
+        rgba(110, 240, 255, 0.1294) 30%,
+        rgba(110, 240, 255, 0.1066) 35%,
+        rgba(110, 240, 255, 0.0853) 40%,
+        rgba(110, 240, 255, 0.0661) 45%,
+        rgba(110, 240, 255, 0.0497) 50%,
+        rgba(110, 240, 255, 0.0363) 55%,
+        rgba(110, 240, 255, 0.0257) 60%,
+        rgba(110, 240, 255, 0.0176) 65%,
+        rgba(110, 240, 255, 0.0117) 70%,
+        rgba(110, 240, 255, 0.0076) 75%,
+        rgba(110, 240, 255, 0.0047) 80%,
+        rgba(110, 240, 255, 0.0029) 85%,
+        rgba(110, 240, 255, 0.0017) 90%,
+        rgba(110, 240, 255, 0.001) 95%,
+        rgba(110, 240, 255, 0) 100%);
     pointer-events: none;
   }
   .mh-challenges { padding: var(--space-3xl) var(--container-px) var(--space-section-lg); gap: var(--space-3xl); }
   .mh-challenge-title { font-size: 48px; }
   .mh-reflection { padding: var(--space-section) var(--container-px); }
+  /* Figma: magenta 803x494 at left:container+206, cyan 745x453 at
+     left:container+348, both top:163 (section's own top padding 120px
+     + Figma's 43px), blur 200. Deliberately smaller and flatter than
+     Figma: both ellipses and their spacing are scaled to 90% width /
+     75% height around the glow's centre, blur σ150, with each colour's
+     centre kept at Figma's brightness. (Shrinking only the blur read
+     as rectangular; scaling evenly read as a round dome — this wider
+     oval sits between the two.) This box is the glow's extent padded
+     by 3σ (450px). */
   .mh-reflection-glow {
     display: block;
     position: absolute;
-    top: 163px; /* section's own top padding (120px) + Figma's 43px */
+    left: calc(var(--container-px) + 206px - 404.2px);
+    top: calc(163px - 390.8px);
+    width: 1698.3px;
+    height: 1270.5px;
+    background:
+      radial-gradient(ellipse 811.4px 635.3px at 811.4px 635.3px,
+        rgba(252, 0, 109, 0.3412) 0%,
+        rgba(252, 0, 109, 0.3376) 5%,
+        rgba(252, 0, 109, 0.3264) 10%,
+        rgba(252, 0, 109, 0.3082) 15%,
+        rgba(252, 0, 109, 0.2836) 20%,
+        rgba(252, 0, 109, 0.2538) 25%,
+        rgba(252, 0, 109, 0.2205) 30%,
+        rgba(252, 0, 109, 0.1853) 35%,
+        rgba(252, 0, 109, 0.1504) 40%,
+        rgba(252, 0, 109, 0.1175) 45%,
+        rgba(252, 0, 109, 0.0882) 50%,
+        rgba(252, 0, 109, 0.0634) 55%,
+        rgba(252, 0, 109, 0.0436) 60%,
+        rgba(252, 0, 109, 0.0286) 65%,
+        rgba(252, 0, 109, 0.0179) 70%,
+        rgba(252, 0, 109, 0.0107) 75%,
+        rgba(252, 0, 109, 0.0061) 80%,
+        rgba(252, 0, 109, 0.0033) 85%,
+        rgba(252, 0, 109, 0.0017) 90%,
+        rgba(252, 0, 109, 0.0008) 95%,
+        rgba(252, 0, 109, 0) 100%),
+      radial-gradient(ellipse 785.3px 619.9px at 913.1px 619.9px,
+        rgba(110, 240, 255, 0.376) 0%,
+        rgba(110, 240, 255, 0.3718) 5%,
+        rgba(110, 240, 255, 0.3587) 10%,
+        rgba(110, 240, 255, 0.3374) 15%,
+        rgba(110, 240, 255, 0.309) 20%,
+        rgba(110, 240, 255, 0.2751) 25%,
+        rgba(110, 240, 255, 0.2375) 30%,
+        rgba(110, 240, 255, 0.1984) 35%,
+        rgba(110, 240, 255, 0.1601) 40%,
+        rgba(110, 240, 255, 0.1245) 45%,
+        rgba(110, 240, 255, 0.0931) 50%,
+        rgba(110, 240, 255, 0.0668) 55%,
+        rgba(110, 240, 255, 0.046) 60%,
+        rgba(110, 240, 255, 0.0302) 65%,
+        rgba(110, 240, 255, 0.019) 70%,
+        rgba(110, 240, 255, 0.0114) 75%,
+        rgba(110, 240, 255, 0.0066) 80%,
+        rgba(110, 240, 255, 0.0036) 85%,
+        rgba(110, 240, 255, 0.0019) 90%,
+        rgba(110, 240, 255, 0.0009) 95%,
+        rgba(110, 240, 255, 0) 100%);
+    background-blend-mode: screen;
   }
-  .mh-reflection-glow--a { left: calc(var(--container-px) + 206px); width: 803px; height: 494px; }
-  .mh-reflection-glow--b { left: calc(var(--container-px) + 348px); width: 745px; height: 453px; }
 }
 
 /* ── Explore more projects (node 306:16241) ──

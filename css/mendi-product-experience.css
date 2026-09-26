@@ -34,11 +34,21 @@ body.mch2 #nav {
    over the screen on a small one. Every ellipse dimension below is a
    percentage OF THE GROUP (a box with a definite size), not of the
    viewport — that's what makes the proportions hold at any size.
-   Don't convert these back to fixed px/vw values. The blur amount
-   scales via its own clamp() tied to the same viewport width so the
-   glow-size:blur-softness ratio stays constant everywhere — hardcode
-   it to one pixel value and it reads as a flat blob at small sizes or
-   a hard-edged shape at large ones. */
+   Don't convert these back to fixed px/vw values.
+   The two ellipses are radial-gradients with the exact blurred
+   falloff (same technique as .glow-frame-img in hero.css) — the
+   earlier CSS filter:blur(clamp(170px,14vw,230px)) rendered as
+   blocky, pixelated banding. The falloff is computed in the group's
+   native Figma units (466.5x456) with blur σ204, the old 14vw-blur :
+   32vw-size ratio; every gradient size/position is a percentage of
+   .glow-group-img, so the softness scales with the glow and the
+   glow-size:blur-softness ratio still stays constant everywhere.
+   Ellipses (in group units): warm 442.5x307 at left:24 top:0,
+   rgb(255,176,108) opacity .5; purple 442.5x307 at left:0 top:149,
+   rgb(159,57,255) opacity .6 (drawn on top). The box pads the group
+   by 620 units (~3σ) per side so the glow fades out inside it, hence the
+   percentage insets below (620/466.5, 620/456, 1706.5/466.5,
+   1696/456). */
 .mch2-hero {
   position: relative;
   overflow: hidden;
@@ -59,24 +69,57 @@ body.mch2 #nav {
   pointer-events: none;
   z-index: 1;
 }
-.glow-ellipse {
+.glow-group-img {
   position: absolute;
-  width: 94.86%; /* 442.5 / 466.5 — proportional to the group, not the viewport */
-  height: 67.32%; /* 307 / 456 */
-  border-radius: 50%;
-  filter: blur(clamp(170px, 14vw, 230px));
-}
-.glow-ellipse--warm {
-  left: 5.14%; /* 24 / 466.5 */
-  top: 0;
-  background: rgb(255, 176, 108);
-  opacity: 0.5;
-}
-.glow-ellipse--purple {
-  left: 0;
-  top: 32.68%; /* 149 / 456 */
-  background: rgb(159, 57, 255);
-  opacity: 0.6;
+  left: -132.9%;
+  top: -135.96%;
+  width: 365.81%;
+  height: 371.93%;
+  background:
+    radial-gradient(ellipse 48.828% 45.136% at 49.297% 54.393%,
+      rgba(159, 57, 255, 0.1961) 0%,
+      rgba(159, 57, 255, 0.1933) 5%,
+      rgba(159, 57, 255, 0.1848) 10%,
+      rgba(159, 57, 255, 0.1713) 15%,
+      rgba(159, 57, 255, 0.1539) 20%,
+      rgba(159, 57, 255, 0.134) 25%,
+      rgba(159, 57, 255, 0.1131) 30%,
+      rgba(159, 57, 255, 0.0925) 35%,
+      rgba(159, 57, 255, 0.0732) 40%,
+      rgba(159, 57, 255, 0.0562) 45%,
+      rgba(159, 57, 255, 0.0417) 50%,
+      rgba(159, 57, 255, 0.0299) 55%,
+      rgba(159, 57, 255, 0.0208) 60%,
+      rgba(159, 57, 255, 0.014) 65%,
+      rgba(159, 57, 255, 0.0091) 70%,
+      rgba(159, 57, 255, 0.0057) 75%,
+      rgba(159, 57, 255, 0.0035) 80%,
+      rgba(159, 57, 255, 0.002) 85%,
+      rgba(159, 57, 255, 0.0012) 90%,
+      rgba(159, 57, 255, 0.0006) 95%,
+      rgba(159, 57, 255, 0) 100%),
+    radial-gradient(ellipse 48.828% 45.136% at 50.703% 45.607%,
+      rgba(255, 176, 108, 0.1634) 0%,
+      rgba(255, 176, 108, 0.1611) 5%,
+      rgba(255, 176, 108, 0.154) 10%,
+      rgba(255, 176, 108, 0.1427) 15%,
+      rgba(255, 176, 108, 0.1282) 20%,
+      rgba(255, 176, 108, 0.1117) 25%,
+      rgba(255, 176, 108, 0.0943) 30%,
+      rgba(255, 176, 108, 0.0771) 35%,
+      rgba(255, 176, 108, 0.061) 40%,
+      rgba(255, 176, 108, 0.0468) 45%,
+      rgba(255, 176, 108, 0.0347) 50%,
+      rgba(255, 176, 108, 0.025) 55%,
+      rgba(255, 176, 108, 0.0173) 60%,
+      rgba(255, 176, 108, 0.0117) 65%,
+      rgba(255, 176, 108, 0.0076) 70%,
+      rgba(255, 176, 108, 0.0048) 75%,
+      rgba(255, 176, 108, 0.0029) 80%,
+      rgba(255, 176, 108, 0.0017) 85%,
+      rgba(255, 176, 108, 0.001) 90%,
+      rgba(255, 176, 108, 0.0005) 95%,
+      rgba(255, 176, 108, 0) 100%);
 }
 .mch2-hero-inner {
   position: relative;
