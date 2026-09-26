@@ -92,9 +92,12 @@ button { font-family: inherit; }
   display: none !important;
 }
 /* Chapter 1: hero glow. Painted into the section's own background
-   (mendi-user-problems.css), so its switch resets that background to
-   the plain fill and stops its drift animation. Delete to bring back. */
+   (mendi-user-problems.css), so its switch removes that background and
+   stops its drift animation. Removed rather than set to flat #0d141b:
+   the page's own gradient (body.mch1) is a shade darker by the hero's
+   bottom edge, so a flat fill showed as a visible line there. Delete
+   to bring back. */
 .mch1-hero {
-  background: #0d141b !important;
+  background: none !important;
   animation: none !important;
 }
