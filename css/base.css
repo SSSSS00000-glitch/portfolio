@@ -101,3 +101,20 @@ button { font-family: inherit; }
   background: none !important;
   animation: none !important;
 }
+
+/* ── EXAMPLE: homepage lighting (dark theme only) ──
+   Replaces the glows with soft vertical gradients — no shapes, and
+   every one fades from/to the exact base colour, so no seams:
+   1. Intro: faint dusty mauve at the top (a quiet echo of the old
+      blue + orange hero glow) fading into the base over 1100px.
+   2. Work (Mendi + project grid): left flat and dark on purpose, so
+      the project images carry the colour — like a gallery wall.
+   3. Closing light: a faint coral warmth rising from the page bottom
+      into the contact footer (coral = the "Get in touch" accent).
+   Delete this rule to remove it all. */
+[data-theme="dark"] body.home {
+  background:
+    linear-gradient(to bottom, #1c1a21 0px, var(--bg) 1100px) top / 100% 1100px no-repeat,
+    linear-gradient(to top, #1c1414 0px, var(--bg) 900px) bottom / 100% 900px no-repeat,
+    var(--bg);
+}

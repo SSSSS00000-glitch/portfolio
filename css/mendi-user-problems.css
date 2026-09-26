@@ -186,7 +186,7 @@ body.mch1 #nav {
 }
 .mch1-insight-body {
   font-family: var(--font-accent);
-  font-size: var(--fs-home-serif-lg);
+  font-size: var(--serif-statement);
   line-height: 1.21;
   color: #fff;
   max-width: 600px;

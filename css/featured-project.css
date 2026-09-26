@@ -45,6 +45,12 @@
   flex-direction: column;
   gap: var(--space-md);
 }
+/* Figma (node 268:14465): the button sits 32px below the intro, twice
+   the 16px between eyebrow, title and intro — the extra 16px here on
+   top of the shared gap. */
+.featured-heading .btn-coral {
+  margin-top: var(--space-md);
+}
 
 .featured-title {
   font-family: var(--font-heading);
@@ -58,9 +64,17 @@
 .featured-intro {
   font-family: var(--font-accent);
   font-weight: var(--weight-normal);
-  font-size: var(--fs-home-serif-lg);
+  /* The "lead" step, not "statement": here the serif supports a 48px
+     title rather than being the statement itself (hero, quote, footer
+     keep 40px). Trial — Figma still says 40px. */
+  font-size: var(--serif-lead);
+  text-wrap: balance; /* even lines instead of a lone last word */
   line-height: 1.21;
   color: rgba(255, 255, 255, var(--opacity-high));
+  /* 24px from the title (16px shared gap + 8px): two large text blocks
+     need more room than the small eyebrow above the title gets.
+     Deliberately more than Figma's 16px — trial, not yet in Figma. */
+  margin-top: var(--space-xs);
 }
 
 /* ── Explore chapters ── */
@@ -72,14 +86,22 @@
   display: flex;
   flex-direction: column;
   align-self: flex-start;
-  gap: var(--space-sm);
+  gap: var(--space-md); /* label → list: a bit more than the 12px between links, so the label heads the list */
   padding-top: var(--space-md);
-  border-top: var(--border-thin) solid var(--overlay-10);
+  /* Grey hairline that fades in from a faint start on the left and
+     out to nothing on the right, brightest in the middle, instead of
+     a hard-ended rule. */
+  border-top: var(--border-thin) solid;
+  border-image: linear-gradient(to right,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0)) 1;
 }
 .chapters-label {
   font-family: var(--font-body);
   font-weight: var(--weight-medium);
-  font-size: var(--text-body);
+  font-size: 16px; /* fixed label size — not --text-body, which grows to 18px at 1280px+ */
+  line-height: 1; /* no invisible half-leading, so its gaps match what you see (the links are line-height 1 too) */
   color: rgba(255, 255, 255, var(--opacity-65));
 }
 .chapters-list {
@@ -87,19 +109,32 @@
   flex-direction: column;
   gap: var(--space-sm);
 }
+/* Coral links that light up on hover like the "See full case study"
+   button above, one step smaller: the text brightens to a lighter
+   coral with a faint ember glow and the arrow nudges the way it
+   points. */
 .chapter-tertiary {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
   width: fit-content;
   font-family: var(--font-accent);
-  font-size: var(--fs-home-md);
+  font-size: var(--serif-body);
   line-height: 1;
   color: var(--coral);
   text-decoration: none;
+  transition: color 300ms ease-out, text-shadow 300ms ease-out;
 }
-/* Always visible, matching Figma — a small hover nudge is the
-   only thing still deferred to interaction. */
+a.chapter-tertiary:hover {
+  color: #ff9a92;
+  text-shadow: 0 0 14px rgba(255, 107, 104, 0.45);
+}
+a.chapter-tertiary:focus-visible {
+  outline: 2px solid rgba(255, 107, 104, 0.9);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+/* Always visible, matching Figma. */
 .chapter-tertiary svg {
   flex-shrink: 0;
   transition: transform var(--duration-medium) var(--ease-default);
@@ -109,8 +144,11 @@
     transform: translate(3px, 0);
   }
 }
+/* Dimmer than the live coral links so it reads as not available yet,
+   but still WCAG AA for normal text: 50% white on the #0b0b0c page
+   is #858586, 5.34:1 (AA needs 4.5:1 at this 18–24px size). */
 .chapter-tertiary.is-muted {
-  color: rgba(255, 255, 255, var(--opacity-75));
+  color: rgba(255, 255, 255, 0.5);
 }
 .chapter-tertiary.is-muted em {
   font-style: italic;
@@ -135,6 +173,7 @@
   .featured-text {
     flex: 1;
     justify-content: space-between;
+    max-width: 688px; /* Figma's text container width (node 268:14465) */
   }
   .featured-title { font-size: 48px; }
 }

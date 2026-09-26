@@ -27,7 +27,7 @@
   padding: var(--space-lg);
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: var(--space-lg); /* quote → name: a clear pause before who said it */
 }
 
 .testimonial-quote {
@@ -40,11 +40,17 @@
 }
 .testimonial-quote p + p { margin-top: var(--space-xs); }
 
+/* Who said it is the credible part, so the name is full white and the
+   dash, role and company step back to a softer grey (60% white on the
+   card is ~#9e9e9e — about 7:1, well above WCAG AA's 4.5:1). */
 .testimonial-author {
   font-family: var(--font-accent);
-  font-size: var(--text-body);
+  font-size: var(--serif-caption);
   line-height: 1.18;
-  color: rgba(255, 255, 255, var(--opacity-high));
+  color: rgba(255, 255, 255, 0.6);
+}
+.testimonial-name {
+  color: #fff;
 }
 
 @media (min-width: 700px) {

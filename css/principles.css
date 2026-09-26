@@ -86,7 +86,7 @@
 
 .principle-subtext {
   font-family: var(--font-accent);
-  font-size: var(--fs-home-md);
+  font-size: var(--serif-body);
   line-height: 1.18;
   color: rgba(255, 255, 255, var(--opacity-high));
 }

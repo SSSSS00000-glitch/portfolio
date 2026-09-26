@@ -213,7 +213,7 @@ body.mch2 #nav {
 .mch2-section-body {
   font-family: var(--font-accent);
   font-weight: var(--weight-normal);
-  font-size: var(--fs-home-md);
+  font-size: var(--serif-body);
   line-height: 1.18;
   color: rgba(255, 255, 255, var(--opacity-high));
 }
@@ -354,7 +354,7 @@ body.mch2 #nav {
 .mch2-feature-card-desc {
   font-family: var(--font-accent);
   font-weight: var(--weight-normal);
-  font-size: var(--fs-home-md);
+  font-size: var(--serif-body);
   line-height: 1.18; /* matches .mch2-section-body — identical font/size/weight */
   color: rgba(255, 255, 255, var(--opacity-70, 0.7));
 }

@@ -83,8 +83,18 @@
      sections that don't map onto the scale above: a 24px dual-use
      size (Manrope body copy and Instrument Serif captions/links
      share it) and a 40px Instrument Serif intro/quote size. */
-  --fs-home-md: clamp(18px, 15.51px + 0.66vw, 24px);
-  --fs-home-serif-lg: clamp(24px, 17.37px + 1.77vw, 40px);
+  --fs-home-md: clamp(18px, 15.51px + 0.66vw, 24px); /* Manrope body copy; the serif uses moved to --serif-body */
+
+  /* Instrument Serif scale — every serif size should use one of these.
+     Four steps, each with one job (sizes at desktop → smallest phone):
+     statement  40 → 24  hero subline, quote, footer CTA line, case-study intros
+     lead       32 → 24  the text right under a project title (home Mendi intro)
+     body       24 → 18  links, captions, card subtitles, descriptions
+     caption    18 → 16  small attributions (testimonial authors) */
+  --serif-statement: clamp(24px, 17.37px + 1.77vw, 40px);
+  --serif-lead: clamp(24px, 17.37px + 1.77vw, 32px);
+  --serif-body: clamp(18px, 15.51px + 0.66vw, 24px);
+  --serif-caption: var(--text-body);
   /* About page addition — Manrope Regular headline used by value-item
      and additional-info-item titles (Figma "Header M", 32px fixed desktop,
      -1px tracking). Same clamp methodology as the tokens above. */

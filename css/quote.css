@@ -33,7 +33,7 @@
 .quote-subtitle {
   font-family: var(--font-accent);
   font-weight: var(--weight-normal);
-  font-size: var(--fs-home-serif-lg);
+  font-size: var(--serif-statement);
   line-height: 1.21;
   color: rgba(255, 255, 255, var(--opacity-high));
   max-width: 635px;

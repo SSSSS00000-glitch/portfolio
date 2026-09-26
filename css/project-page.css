@@ -87,7 +87,7 @@
 .proj-tagline {
   font-family: var(--font-accent);
   font-weight: var(--weight-normal);
-  font-size: var(--fs-home-serif-lg);
+  font-size: var(--serif-statement);
   line-height: 1.21;
   color: rgba(255, 255, 255, var(--opacity-high));
 }
@@ -157,7 +157,7 @@
 .proj-brief-text {
   font-family: var(--font-accent);
   font-weight: var(--weight-normal);
-  font-size: var(--fs-home-serif-lg);
+  font-size: var(--serif-statement);
   line-height: 1.21;
   color: rgba(255, 255, 255, var(--opacity-high));
 }
@@ -467,7 +467,7 @@
 }
 /* Serif callout line (Baemingo's "Beamingo now powers ordering for
    4,000+ restaurants…") — same recipe as .proj-brief-text but at a
-   fixed 40px per Figma rather than the clamped --fs-home-serif-lg,
+   fixed 40px per Figma rather than the clamped --serif-statement,
    and opacity-80 rather than opacity-high. */
 .proj-impact-quote {
   font-family: var(--font-accent);

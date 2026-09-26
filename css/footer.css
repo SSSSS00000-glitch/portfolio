@@ -1,6 +1,19 @@
 /* ── Coral CTA pill — shared look for "See full case study" / "Get in touch" ──
-   One fixed style, no glow by default, for both buttons — a crisp
-   outline. Lives here (not featured-project.css, where "See full
+   The base is a "quiet ember": the same materials as the footer's
+   full ember CTA (below), turned down so the two don't compete —
+   dark glass, a border brightest at the bottom and fading toward the
+   top, a faint warmth along the bottom edge and only a small glow.
+   On hover the ember lights up. The warmth is an inset shadow rather
+   than part of the fill, because shadows can fade smoothly and
+   gradients can't. Colours follow an ember: a touch of orange at the
+   hottest point (the bottom edge and the warmth inside it) cooling
+   into the site's coral (#ff6b68, the same hue as the chapter and
+   contact links) toward the top and in the glow on the page. The
+   border never drops far in opacity, and where it's softer (at rest)
+   it uses lighter coral tints: see-through coral on the near-black
+   page mixes into a muddy brick red instead of reading as coral. The footer CTA
+   overrides this with the full
+   ember. Lives here (not featured-project.css, where "See full
    case study" is used) because footer.css is the one stylesheet
    every page linking .btn-coral actually loads — featured-project.css
    is only linked on index.html, which left every other page's footer
@@ -11,16 +24,74 @@
   justify-content: center;
   width: fit-content;
   padding: var(--space-sm) var(--space-lg);
-  border: var(--border-thin) solid var(--coral-border);
+  line-height: 24px; /* 12 + 24 + 12 + 2px border = Figma's 50px button height */
+  border: 1px solid transparent; /* twice --border-thin (0.5px) so the ember gradient reads */
   border-radius: var(--radius);
   font-family: var(--font-body);
   font-weight: var(--weight-medium);
   font-size: var(--text-title);
   color: rgba(255, 255, 255, var(--opacity-high));
-  transition: background var(--duration-normal) var(--ease-default);
+  /* At rest the button is already softly lit — a coral warmth rising
+     from the bottom over the page's own colour (a tint, not a grey
+     box), a bright edge and a small glow — but kept below the footer's
+     full ember CTA. The hover warms it further and lifts it 1px, so
+     there's still a clear step up. */
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0) 45%) padding-box,
+    radial-gradient(130% 150% at 50% 130%,
+      rgba(255, 140, 104, 0.29) 0%,
+      rgba(255, 107, 104, 0.145) 45%,
+      rgba(255, 107, 104, 0.06) 100%) padding-box,
+    linear-gradient(var(--bg), var(--bg)) padding-box,
+    linear-gradient(to top,
+      rgba(255, 170, 125, 0.86) 0%,
+      rgba(255, 139, 120, 0.78) 45%,
+      rgba(255, 122, 118, 0.72) 100%) border-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -13px 22px -6px rgba(255, 146, 100, 0.3),
+    0 8px 22px -10px rgba(255, 90, 87, 0.4);
+  transition:
+    box-shadow 300ms ease-out,
+    color 300ms ease-out,
+    transform 200ms ease-out;
 }
 .btn-coral:hover {
-  background: rgba(255, 107, 104, 0.08);
+  color: #fff;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 45%) padding-box,
+    radial-gradient(130% 150% at 50% 130%,
+      rgba(255, 140, 104, 0.4) 0%,
+      rgba(255, 107, 104, 0.2) 45%,
+      rgba(255, 107, 104, 0.08) 100%) padding-box,
+    linear-gradient(var(--bg), var(--bg)) padding-box,
+    linear-gradient(to top,
+      rgba(255, 170, 120, 1) 0%,
+      rgba(255, 132, 108, 0.95) 45%,
+      rgba(255, 107, 104, 0.9) 100%) border-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -14px 24px -6px rgba(255, 146, 100, 0.55),
+    0 12px 30px -10px rgba(255, 90, 87, 0.7);
+  transform: translateY(-1px);
+}
+.btn-coral:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -10px 16px -6px rgba(255, 146, 100, 0.3),
+    0 4px 12px -8px rgba(255, 90, 87, 0.4);
+}
+.btn-coral:focus-visible {
+  outline: 2px solid rgba(255, 107, 104, 0.9);
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-coral,
+  .footer-cta-block .btn-coral { transition: none; }
+  .btn-coral:hover,
+  .btn-coral:active,
+  .footer-cta-block .btn-coral:active { transform: none; }
 }
 
 /* ── FOOTER (base, shared) ──────────────────────── */
@@ -85,7 +156,7 @@
 }
 .footer-cta-subline {
   font-family: var(--font-accent);
-  font-size: var(--fs-home-serif-lg);
+  font-size: var(--serif-statement);
   line-height: 1.21;
   color: rgba(255, 255, 255, var(--opacity-high));
 }
@@ -125,7 +196,7 @@
   align-items: center;
   gap: 4px;
   font-family: var(--font-accent);
-  font-size: var(--fs-home-md);
+  font-size: var(--serif-body);
   color: var(--coral);
 }
 .footer-contact-link svg { flex-shrink: 0; }
@@ -163,14 +234,6 @@
   .footer-cta-headline { font-size: 72px; }
   .footer-contact-row { margin-top: auto; flex-direction: row; justify-content: space-between; text-align: left; }
   .footer-contact-name-block { align-items: flex-start; }
-  /* Get in touch CTA (node 626:12238) — the coral outline was already
-     right, but the glow drop-shadow around it was never implemented.
-     Scoped to just the footer CTA, not .btn-coral globally, since the
-     other .btn-coral use ("See full case study") has its own separate
-     no-glow spec. */
-  .footer-cta-block .btn-coral {
-    box-shadow: var(--coral-glow);
-  }
 }
 
 /* ── FOOTER (case-study) ────────────────────────── */
@@ -212,3 +275,69 @@
   height: 18px;
 }
 .footer-bottom { display: none; }
+
+/* ── Footer "Get in touch" CTA — "ember" ──
+   Every page's footer CTA (not "See full case study", which keeps the
+   plain .btn-coral outline). Replaces Figma's thin outline + even
+   16px halo (node 626:12238), which read as a neon rim around a dark
+   hole: here the light lives inside the button instead.
+   Same recipe as the shared "quiet ember" .btn-coral above, at full
+   strength, so the two buttons read as siblings and this one is the
+   brightest thing on the page:
+   - Fill: hot orange at the bottom edge rising into the site coral
+     (#ff6b68), over the page's own colour, so the top stays a warm
+     coral tint rather than a grey-brown box. Faint gloss on top.
+   - Border: 1px, orange at the bottom to coral at the top, near full
+     opacity (see-through coral on this page turns brick red), via
+     the padding-box/border-box background trick.
+   - Glow: coral, thrown down onto the page (offset shadows), not an
+     even ring.
+   - Hover: warms up slowly (brightness + a larger glow), pressed:
+     sinks 1px with the glow pulling in, keyboard focus: soft coral
+     ring (focus-visible only, so mouse clicks don't show it).
+   Focus ring and reduced-motion handling come from the shared
+   .btn-coral rules above. */
+.footer-cta-block .btn-coral {
+  --ember-bg:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 40%) padding-box,
+    radial-gradient(130% 160% at 50% 130%,
+      rgba(255, 160, 112, 0.95) 0%,
+      rgba(255, 122, 104, 0.72) 38%,
+      rgba(255, 107, 104, 0.4) 70%,
+      rgba(255, 107, 104, 0.22) 100%) padding-box,
+    linear-gradient(var(--bg), var(--bg)) padding-box,
+    linear-gradient(to top,
+      rgba(255, 178, 128, 1) 0%,
+      rgba(255, 140, 116, 0.95) 45%,
+      rgba(255, 122, 118, 0.9) 100%) border-box;
+  border: 1px solid transparent;
+  background: var(--ember-bg);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -10px 18px rgba(255, 160, 104, 0.25),
+    0 12px 32px -10px rgba(255, 90, 87, 0.6),
+    0 3px 10px -2px rgba(255, 90, 87, 0.3);
+  color: #fff;
+  transition:
+    filter 300ms ease-out,
+    box-shadow 300ms ease-out,
+    transform 120ms ease-out;
+}
+.footer-cta-block .btn-coral:hover {
+  background: var(--ember-bg); /* keep the full ember over the shared hover fill */
+  filter: brightness(1.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -10px 18px rgba(255, 160, 104, 0.34),
+    0 16px 40px -10px rgba(255, 90, 87, 0.75),
+    0 3px 12px -2px rgba(255, 90, 87, 0.4);
+}
+.footer-cta-block .btn-coral:active {
+  transform: translateY(1px);
+  filter: brightness(1.04);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -8px 14px rgba(255, 160, 104, 0.22),
+    0 6px 18px -8px rgba(255, 90, 87, 0.55),
+    0 2px 6px -2px rgba(255, 90, 87, 0.3);
+}
