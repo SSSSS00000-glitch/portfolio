@@ -7,33 +7,35 @@
    turned this into its own internal scroll container and broke page
    scrolling entirely. body already clips horizontal overflow
    (base.css), so this needs no clipping of its own — the blur is
-   simply left free to bleed down past the quote section into #work. */
+   simply left free to bleed down past the quote section into #work.
+   overflow-x:clip is the exception: unlike hidden it never creates a
+   scroll container (overflow-y stays visible), and without it the
+   2464px-wide glow box widened the layout viewport on phones
+   (mobile browsers ignore body's overflow-x:hidden for that). */
 .glow-zone {
   position: relative;
+  overflow-x: clip;
 }
-/* Figma's own exported SVG fill for this glow (node 756:15742), not
-   a CSS reconstruction — three solid-color blurred ellipses via CSS
-   filter:blur() got the color/position math right (verified against
-   the node's own SVG defs) but still diverged from Figma visually:
-   CSS blur vs. SVG feGaussianBlur don't composite identically. Using
-   Figma's actual filter markup as a live SVG <img> sidesteps that
-   entirely — no banding to fight, no dither/seam trade-off.
-   (A flattened PNG export was tried too: Figma's download_assets
-   "export" for this node renders clipped to the page's own 1440px
-   artboard width rather than the SVG fill's wider 2464px bleed
-   canvas, leaving a hard vertical edge on viewports wider than 1440;
-   a PNG rendered from the wide SVG directly avoided that but baked
-   the result into a static snapshot that stops tracking the Figma
-   file. Reverted to the live SVG.)
-   .glow-frame is the tight 1264x655 box at Figma's literal
-   hero-relative offset (left:88, top:854); .glow-frame-img is pushed
-   out by the same negative insets Figma's own node uses (top:-600/
-   left:-600, padded to the fill's native 2464x1742 canvas) so the
-   blur that extends past the tight box in the source file bleeds
-   exactly as far in the page. */
+/* Figma's glow (node 756:15742) rebuilt as plain radial-gradients —
+   no blur of any kind. Earlier attempts all rendered pixelated on
+   large/Retina displays: CSS filter:blur() and Figma's exported SVG
+   (feGaussianBlur stdDeviation 200–300) both hit the browser's
+   large-radius blur path, which blurs a heavily downscaled copy and
+   stretches it back up; a PNG export clipped at 1440px or went stale.
+   A Gaussian-blurred ellipse is closely approximated by a radial
+   gradient with a Gaussian falloff, and gradients are computed per
+   pixel, so they stay sharp at any DPR. Each layer below is one of
+   the SVG's three ellipses — same colors, centers and canvas coords,
+   with blur σ + layer opacity (0.6) baked into the alpha stops.
+   .glow-frame is the tight 1264x655 box at Figma's hero-relative
+   offset (top:854; left:88 at the 1440 artboard, i.e. centered —
+   calc(50% - 632px) keeps it centered on wider/narrower viewports);
+   .glow-frame-img is pushed out by Figma's own negative insets
+   (top:-600/left:-600, the fill's 2464x1742 bleed canvas) so the
+   glow bleeds exactly as far as it does in the source file. */
 .glow-frame {
   position: absolute;
-  left: 88px;
+  left: calc(50% - 632px);
   top: 854px;
   width: 1264px;
   height: 655px;
@@ -46,7 +48,28 @@
   top: -600px;
   width: 2464px;
   height: 1742px;
-  max-width: none;
+  background:
+    /* Orange (top layer) */
+    radial-gradient(835px 707px at 1286.5px 1048px,
+      rgba(255,102,0,.2683) 0%, rgba(255,102,0,.2624) 7.1%, rgba(255,102,0,.2451) 14.3%,
+      rgba(255,102,0,.2184) 21.4%, rgba(255,102,0,.1853) 28.6%, rgba(255,102,0,.1493) 35.7%,
+      rgba(255,102,0,.1138) 42.9%, rgba(255,102,0,.0819) 50%, rgba(255,102,0,.0554) 57.1%,
+      rgba(255,102,0,.0352) 64.3%, rgba(255,102,0,.0209) 71.4%, rgba(255,102,0,.0117) 78.6%,
+      rgba(255,102,0,.0061) 85.7%, rgba(255,102,0,.0029) 92.9%, rgba(255,102,0,0) 100%),
+    /* Orange shadow */
+    radial-gradient(1006px 833px at 1268.5px 947px,
+      rgba(255,106,0,.2861) 0%, rgba(255,106,0,.2825) 7.1%, rgba(255,106,0,.2714) 14.3%,
+      rgba(255,106,0,.2525) 21.4%, rgba(255,106,0,.2259) 28.6%, rgba(255,106,0,.1926) 35.7%,
+      rgba(255,106,0,.1550) 42.9%, rgba(255,106,0,.1166) 50%, rgba(255,106,0,.0813) 57.1%,
+      rgba(255,106,0,.0522) 64.3%, rgba(255,106,0,.0306) 71.4%, rgba(255,106,0,.0164) 78.6%,
+      rgba(255,106,0,.0080) 85.7%, rgba(255,106,0,.0035) 92.9%, rgba(255,106,0,0) 100%),
+    /* Blue (bottom layer) */
+    radial-gradient(1409px 1090px at 1232px 871px,
+      rgba(121,128,255,.3375) 0%, rgba(121,128,255,.3314) 7.1%, rgba(121,128,255,.3136) 14.3%,
+      rgba(121,128,255,.2851) 21.4%, rgba(121,128,255,.2479) 28.6%, rgba(121,128,255,.2051) 35.7%,
+      rgba(121,128,255,.1605) 42.9%, rgba(121,128,255,.1180) 50%, rgba(121,128,255,.0810) 57.1%,
+      rgba(121,128,255,.0517) 64.3%, rgba(121,128,255,.0305) 71.4%, rgba(121,128,255,.0167) 78.6%,
+      rgba(121,128,255,.0084) 85.7%, rgba(121,128,255,.0039) 92.9%, rgba(121,128,255,0) 100%);
 }
 
 .hero {
