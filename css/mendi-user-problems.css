@@ -746,6 +746,7 @@ body.mch1 #nav {
    image second (408:527 aspect, h-588 at desktop). */
 .mch1-cta-section {
   position: relative;
+  overflow-x: clip; /* trims the glow's off-screen sides so the page can't scroll sideways; unlike hidden, vertical bleed stays */
   padding: 64px var(--container-wide-px) var(--space-4xl);
 }
 /* Anchored to .mch1-cta-image (not fixed section coordinates) so it
@@ -758,11 +759,23 @@ body.mch1 #nav {
   transform: translate(-50%, -50%);
   width: 150%;
   height: 90%;
-  border-radius: 50%;
-  background: rgba(253, 62, 126, 0.2);
-  filter: blur(200px);
   pointer-events: none;
   z-index: 0;
+}
+/* No filter:blur() — large blur radii render pixelated on big/Retina
+   screens (see .glow-frame-img in hero.css). The ::before paints the
+   same blurred shape as a radial-gradient, computed from the shape's
+   size and blur radius; inset:-3σ gives the fade room to finish. */
+.mch1-cta-glow::before {
+  content: "";
+  position: absolute;
+  inset: -600px; /* 3 x the 200px blur */
+  background: radial-gradient(closest-side,
+    rgba(253,62,126,0.1340) 0%, rgba(253,62,126,0.1290) 8.3%, rgba(253,62,126,0.1150) 16.7%,
+    rgba(253,62,126,0.0945) 25%, rgba(253,62,126,0.0711) 33.3%, rgba(253,62,126,0.0486) 41.7%,
+    rgba(253,62,126,0.0300) 50%, rgba(253,62,126,0.0166) 58.3%, rgba(253,62,126,0.0082) 66.7%,
+    rgba(253,62,126,0.0036) 75%, rgba(253,62,126,0.0014) 83.3%, rgba(253,62,126,0.0005) 91.7%,
+    rgba(253,62,126,0) 100%);
 }
 .mch1-cta-kicker {
   display: block; /* it's a <span> — margin-bottom is a no-op on inline elements */

@@ -34,28 +34,57 @@
   mix-blend-mode: screen;
   pointer-events: none;
   z-index: 0;
-  filter: blur(200px);
+}
+/* No filter:blur() — large blur radii render pixelated on big/Retina
+   screens (see .glow-frame-img in hero.css). The ::before paints the
+   same blurred shape as a radial-gradient, computed from the shape's
+   size and blur radius; inset:-3σ gives the fade room to finish. */
+.about-glow-shape::before {
+  content: "";
+  position: absolute;
+  inset: -600px; /* 3 x the 200px blur */
 }
 .about-glow-pink {
   left: 419px;
   top: 52px;
   width: 764px;
   height: 671px;
-  background: rgba(177, 83, 255, 0.2);
+}
+.about-glow-pink::before {
+  background: radial-gradient(closest-side,
+    rgba(177,83,255,0.1592) 0%, rgba(177,83,255,0.1541) 8.3%, rgba(177,83,255,0.1394) 16.7%,
+    rgba(177,83,255,0.1169) 25%, rgba(177,83,255,0.0899) 33.3%, rgba(177,83,255,0.0626) 41.7%,
+    rgba(177,83,255,0.0391) 50%, rgba(177,83,255,0.0216) 58.3%, rgba(177,83,255,0.0106) 66.7%,
+    rgba(177,83,255,0.0045) 75%, rgba(177,83,255,0.0017) 83.3%, rgba(177,83,255,0.0006) 91.7%,
+    rgba(177,83,255,0) 100%);
 }
 .about-glow-orange {
   left: 568px;
   top: 20px;
   width: 764px;
   height: 671px;
-  background: rgba(227, 176, 114, 0.2);
+}
+.about-glow-orange::before {
+  background: radial-gradient(closest-side,
+    rgba(227,176,114,0.1592) 0%, rgba(227,176,114,0.1541) 8.3%, rgba(227,176,114,0.1394) 16.7%,
+    rgba(227,176,114,0.1169) 25%, rgba(227,176,114,0.0899) 33.3%, rgba(227,176,114,0.0626) 41.7%,
+    rgba(227,176,114,0.0391) 50%, rgba(227,176,114,0.0216) 58.3%, rgba(227,176,114,0.0106) 66.7%,
+    rgba(227,176,114,0.0045) 75%, rgba(227,176,114,0.0017) 83.3%, rgba(227,176,114,0.0006) 91.7%,
+    rgba(227,176,114,0) 100%);
 }
 .about-glow-lilac {
   left: 120px;
   top: -208px;
   width: 973px;
   height: 532px;
-  background: rgba(85, 83, 255, 0.2);
+}
+.about-glow-lilac::before {
+  background: radial-gradient(closest-side,
+    rgba(85,83,255,0.1513) 0%, rgba(85,83,255,0.1468) 8.3%, rgba(85,83,255,0.1336) 16.7%,
+    rgba(85,83,255,0.1132) 25%, rgba(85,83,255,0.0881) 33.3%, rgba(85,83,255,0.0623) 41.7%,
+    rgba(85,83,255,0.0393) 50%, rgba(85,83,255,0.0220) 58.3%, rgba(85,83,255,0.0107) 66.7%,
+    rgba(85,83,255,0.0046) 75%, rgba(85,83,255,0.0017) 83.3%, rgba(85,83,255,0.0006) 91.7%,
+    rgba(85,83,255,0) 100%);
 }
 
 /* ── Hero (Main frame) — slogan intro ──
@@ -98,6 +127,7 @@
 /* ── Content section (glow + intro + values) ── */
 .about-content {
   position: relative;
+  overflow-x: clip; /* trims the glow's off-screen sides so the page can't scroll sideways; unlike hidden, vertical bleed stays */
   z-index: 1;
   display: flex;
   flex-direction: column;

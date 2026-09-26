@@ -63,20 +63,41 @@ body.mch2 #nav {
   position: absolute;
   width: 94.86%; /* 442.5 / 466.5 — proportional to the group, not the viewport */
   height: 67.32%; /* 307 / 456 */
-  border-radius: 50%;
-  filter: blur(clamp(170px, 14vw, 230px));
+}
+/* No filter:blur() — large blur radii render pixelated on big/Retina
+   screens (see .glow-frame-img in hero.css). The ::before paints the
+   same blurred shape as a radial-gradient, computed from the shape's
+   size and blur radius; inset:-3σ gives the fade room to finish. */
+.glow-ellipse::before {
+  content: "";
+  position: absolute;
+  inset: calc(-3 * clamp(170px, 14vw, 230px)); /* 3 x the blur radius */
 }
 .glow-ellipse--warm {
   left: 5.14%; /* 24 / 466.5 */
   top: 0;
-  background: rgb(255, 176, 108);
   opacity: 0.5;
+}
+.glow-ellipse--warm::before {
+  background: radial-gradient(closest-side,
+    rgba(255,176,108,0.3308) 0%, rgba(255,176,108,0.3169) 8.3%, rgba(255,176,108,0.2788) 16.7%,
+    rgba(255,176,108,0.2251) 25%, rgba(255,176,108,0.1666) 33.3%, rgba(255,176,108,0.1128) 41.7%,
+    rgba(255,176,108,0.0699) 50%, rgba(255,176,108,0.0395) 58.3%, rgba(255,176,108,0.0204) 66.7%,
+    rgba(255,176,108,0.0096) 75%, rgba(255,176,108,0.0041) 83.3%, rgba(255,176,108,0.0018) 91.7%,
+    rgba(255,176,108,0) 100%);
 }
 .glow-ellipse--purple {
   left: 0;
   top: 32.68%; /* 149 / 456 */
-  background: rgb(159, 57, 255);
   opacity: 0.6;
+}
+.glow-ellipse--purple::before {
+  background: radial-gradient(closest-side,
+    rgba(159,57,255,0.3308) 0%, rgba(159,57,255,0.3169) 8.3%, rgba(159,57,255,0.2788) 16.7%,
+    rgba(159,57,255,0.2251) 25%, rgba(159,57,255,0.1666) 33.3%, rgba(159,57,255,0.1128) 41.7%,
+    rgba(159,57,255,0.0699) 50%, rgba(159,57,255,0.0395) 58.3%, rgba(159,57,255,0.0204) 66.7%,
+    rgba(159,57,255,0.0096) 75%, rgba(159,57,255,0.0041) 83.3%, rgba(159,57,255,0.0018) 91.7%,
+    rgba(159,57,255,0) 100%);
 }
 .mch2-hero-inner {
   position: relative;

@@ -158,6 +158,7 @@ body.mh #nav {
    opacity) at 294×204 near the divider between the two columns. */
 .mh-about {
   position: relative;
+  overflow-x: clip; /* trims the glow's off-screen sides so the page can't scroll sideways; unlike hidden, vertical bleed stays */
   padding: var(--space-4xl) var(--container-wide-px);
 }
 /* Figma literal position (left:587px top:300px) inside the 1249.5px
@@ -326,6 +327,7 @@ body.mh #nav {
    (hero.css) / .about-glow-shape (about.css), not a flattened image. */
 .mh-reflection {
   position: relative;
+  overflow-x: clip; /* trims the glow's off-screen sides so the page can't scroll sideways; unlike hidden, vertical bleed stays */
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
@@ -349,15 +351,41 @@ body.mh #nav {
   pointer-events: none;
   z-index: 0;
 }
-.mh-reflection-glow--a {
-  background: #fc006d;
-  opacity: 0.5;
-  filter: blur(200px);
+/* No filter:blur() — large blur radii render pixelated on big/Retina
+   screens (see .glow-frame-img in hero.css). The ::before paints the
+   same blurred shape as a radial-gradient, computed from the shape's
+   size and blur radius; inset:-3σ gives the fade room to finish. */
+.mh-reflection-glow::before,
+.mh-about-glow::before {
+  content: "";
+  position: absolute;
+  inset: -600px; /* 3 x the 200px blur */
 }
-.mh-reflection-glow--b {
-  background: #6ef0ff;
-  opacity: 0.6;
-  filter: blur(200px);
+.mh-reflection-glow--a { opacity: 0.5; }
+.mh-reflection-glow--a::before {
+  background: radial-gradient(closest-side,
+    rgba(252,0,109,0.6849) 0%, rgba(252,0,109,0.6613) 8.3%, rgba(252,0,109,0.5936) 16.7%,
+    rgba(252,0,109,0.4924) 25%, rgba(252,0,109,0.3745) 33.3%, rgba(252,0,109,0.2585) 41.7%,
+    rgba(252,0,109,0.1606) 50%, rgba(252,0,109,0.0891) 58.3%, rgba(252,0,109,0.0438) 66.7%,
+    rgba(252,0,109,0.0191) 75%, rgba(252,0,109,0.0073) 83.3%, rgba(252,0,109,0.0027) 91.7%,
+    rgba(252,0,109,0) 100%);
+}
+.mh-reflection-glow--b { opacity: 0.6; }
+.mh-reflection-glow--b::before {
+  background: radial-gradient(closest-side,
+    rgba(110,240,255,0.6282) 0%, rgba(110,240,255,0.6055) 8.3%, rgba(110,240,255,0.5406) 16.7%,
+    rgba(110,240,255,0.4451) 25%, rgba(110,240,255,0.3357) 33.3%, rgba(110,240,255,0.2302) 41.7%,
+    rgba(110,240,255,0.1424) 50%, rgba(110,240,255,0.0790) 58.3%, rgba(110,240,255,0.0391) 66.7%,
+    rgba(110,240,255,0.0172) 75%, rgba(110,240,255,0.0068) 83.3%, rgba(110,240,255,0.0025) 91.7%,
+    rgba(110,240,255,0) 100%);
+}
+.mh-about-glow::before {
+  background: radial-gradient(closest-side,
+    rgba(110,240,255,0.1697) 0%, rgba(110,240,255,0.1629) 8.3%, rgba(110,240,255,0.1441) 16.7%,
+    rgba(110,240,255,0.1174) 25%, rgba(110,240,255,0.0880) 33.3%, rgba(110,240,255,0.0607) 41.7%,
+    rgba(110,240,255,0.0386) 50%, rgba(110,240,255,0.0226) 58.3%, rgba(110,240,255,0.0121) 66.7%,
+    rgba(110,240,255,0.0060) 75%, rgba(110,240,255,0.0028) 83.3%, rgba(110,240,255,0.0013) 91.7%,
+    rgba(110,240,255,0) 100%);
 }
 .mh-reflection > *:not(.mh-reflection-glow) {
   position: relative;
@@ -435,8 +463,6 @@ body.mh #nav {
     top: 300px;
     width: 294px;
     height: 204px;
-    background: #6ef0ff;
-    filter: blur(200px);
     pointer-events: none;
   }
   .mh-challenges { padding: var(--space-3xl) var(--container-px) var(--space-section-lg); gap: var(--space-3xl); }
