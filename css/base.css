@@ -91,3 +91,10 @@ button { font-family: inherit; }
 .glow-group {                  /* Chapter 2: hero (mendi-product-experience.css) */
   display: none !important;
 }
+/* Chapter 1: hero glow. Painted into the section's own background
+   (mendi-user-problems.css), so its switch resets that background to
+   the plain fill and stops its drift animation. Delete to bring back. */
+.mch1-hero {
+  background: #0d141b !important;
+  animation: none !important;
+}
